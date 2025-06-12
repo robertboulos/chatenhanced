@@ -73,7 +73,7 @@ function App() {
   const currentImageUrl = images[currentIndex];
 
   return (
-    <div className="min-h-screen bg-zinc-900 flex flex-col md:flex-row">
+    <div className="h-screen bg-zinc-900 flex flex-col md:flex-row overflow-hidden">
       <Toaster 
         position="top-right"
         toastOptions={{
@@ -86,32 +86,36 @@ function App() {
       />
       
       {/* Left Section - Live View / Webcam Display */}
-      <div className="w-full md:w-96 p-4 flex-shrink-0 space-y-4 overflow-x-hidden">
-        <LiveViewContainer
-          images={images}
-          currentIndex={currentIndex}
-          onImageChange={changeImage}
-          pinnedIndex={pinnedIndex}
-          onTogglePin={togglePin}
-          onSendMessage={handleSendMessage}
-          disabled={waiting}
-        />
+      <div className="w-full md:w-96 flex flex-col flex-shrink-0 border-b md:border-b-0 md:border-r border-zinc-700 overflow-hidden">
+        <div className="flex-1 p-4 overflow-hidden">
+          <LiveViewContainer
+            images={images}
+            currentIndex={currentIndex}
+            onImageChange={changeImage}
+            pinnedIndex={pinnedIndex}
+            onTogglePin={togglePin}
+            onSendMessage={handleSendMessage}
+            disabled={waiting}
+          />
+        </div>
         
-        {/* Advanced AI Controls */}
-        <AdvancedControls
-          onWebSearch={performWebSearch}
-          onCodeExecution={executeCode}
-          onTranslation={translateText}
-          onImageAnalysis={analyzeImage}
-          onImageEnhancement={enhanceImage}
-          activeTasks={activeTasks}
-          currentImageUrl={currentImageUrl}
-          disabled={waiting}
-        />
+        {/* Advanced AI Controls - Fixed at bottom */}
+        <div className="flex-shrink-0 p-4 pt-0">
+          <AdvancedControls
+            onWebSearch={performWebSearch}
+            onCodeExecution={executeCode}
+            onTranslation={translateText}
+            onImageAnalysis={analyzeImage}
+            onImageEnhancement={enhanceImage}
+            activeTasks={activeTasks}
+            currentImageUrl={currentImageUrl}
+            disabled={waiting}
+          />
+        </div>
       </div>
       
       {/* Right Section - Chat Interface */}
-      <div className="flex-1 border-t md:border-t-0 md:border-l border-zinc-700">
+      <div className="flex-1 flex flex-col overflow-hidden">
         <ChatContainer
           messages={messages}
           loading={waiting}

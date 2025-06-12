@@ -91,9 +91,15 @@ const ChatBody: React.FC<ChatBodyProps> = ({
   );
 
   return (
-    <div className="flex-1 py-4 overflow-y-auto bg-zinc-900">
+    <div className="flex-1 overflow-y-auto bg-zinc-900" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
+      <style jsx>{`
+        div::-webkit-scrollbar {
+          display: none;
+        }
+      `}</style>
+      
       {messages.length === 0 && !loading && !streamingState?.isStreaming ? (
-        <div className="flex flex-col items-center justify-center h-full text-zinc-500">
+        <div className="flex flex-col items-center justify-center h-full text-zinc-500 px-4">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -105,7 +111,7 @@ const ChatBody: React.FC<ChatBodyProps> = ({
           </motion.div>
         </div>
       ) : (
-        <>
+        <div className="py-4">
           {messages.map((message) => (
             <Message 
               key={message.id} 
@@ -138,7 +144,7 @@ const ChatBody: React.FC<ChatBodyProps> = ({
             )}
           </AnimatePresence>
           <div ref={messagesEndRef} />
-        </>
+        </div>
       )}
     </div>
   );

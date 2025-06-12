@@ -24,9 +24,9 @@ const LiveViewContainer: React.FC<LiveViewContainerProps> = ({
   const currentImageUrl = images[currentIndex];
 
   return (
-    <div className="h-full flex flex-col space-y-3">
+    <div className="h-full flex flex-col space-y-3 overflow-hidden">
       {/* Profile Image Display - Takes most of the space */}
-      <div className="flex-1 min-h-0">
+      <div className="flex-1 min-h-0 overflow-hidden">
         <ProfileImageDisplay
           images={images}
           currentIndex={currentIndex}

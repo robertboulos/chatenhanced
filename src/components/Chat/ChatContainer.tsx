@@ -64,7 +64,7 @@ const ChatContainer: React.FC<ChatContainerProps> = ({
   };
 
   return (
-    <div className="flex flex-col h-screen bg-zinc-800">
+    <div className="flex flex-col h-full bg-zinc-800 overflow-hidden">
       <ChatHeader 
         onOpenSettings={handleOpenSettings}
         onClearChat={onClearChat}
