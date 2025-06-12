@@ -6,6 +6,7 @@ interface SendMessageResult {
   error?: string;
   response?: string;
   additionalResponse?: string;
+  audioUrl?: string;
 }
 
 interface WebhookResponse {
@@ -14,6 +15,7 @@ interface WebhookResponse {
     url?: string;
     message?: string;
     imageUrl?: string;
+    audioUrl?: string;
   };
 }
 
@@ -25,7 +27,7 @@ const handleWebhookError = (error: unknown): string => {
   return error instanceof Error ? error.message : 'An unexpected error occurred';
 };
 
-const parseWebhookResponse = (response: any): { message?: string; imageUrl?: string } => {
+const parseWebhookResponse = (response: any): { message?: string; imageUrl?: string; audioUrl?: string } => {
   console.log('Parsing webhook response:', response);
   try {
     if (typeof response === 'string') {
@@ -42,10 +44,12 @@ const parseWebhookResponse = (response: any): { message?: string; imageUrl?: str
 
     console.log('Extracted image URL:', imageUrl);
     console.log('Extracted message:', webhookResponse.output?.message);
+    console.log('Extracted audio URL:', webhookResponse.output?.audioUrl);
 
     return {
       imageUrl,
-      message: webhookResponse.output?.message
+      message: webhookResponse.output?.message,
+      audioUrl: webhookResponse.output?.audioUrl
     };
 
   } catch (error) {
@@ -57,9 +61,11 @@ const parseWebhookResponse = (response: any): { message?: string; imageUrl?: str
 export const sendMessageToWebhook = async (
   message: Omit<Message, 'status' | 'type'>,
   config: WebhookConfig,
-  requestType: 'text' | 'image' = 'text'
+  requestType: 'text' | 'image' | 'video' = 'text',
+  imageData?: string,
+  currentImageUrl?: string
 ): Promise<SendMessageResult> => {
-  console.log('sendMessageToWebhook called with:', { message, config, requestType });
+  console.log('sendMessageToWebhook called with:', { message, config, requestType, imageData: !!imageData, currentImageUrl });
 
   if (!config.url || !config.enabled) {
     console.log('Webhook not configured or disabled');
@@ -75,13 +81,18 @@ export const sendMessageToWebhook = async (
       modelName: config.modelName || '',
       modifier: config.modifier || '',
       requestType,
+      imageData,
+      currentImageUrl,
     };
 
     console.log('Preparing webhook request:', {
       url: config.url,
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      payload,
+      payload: {
+        ...payload,
+        imageData: payload.imageData ? '[Base64 Data Present]' : undefined
+      },
     });
 
     const response = await fetch(config.url, {
@@ -130,7 +141,8 @@ export const sendMessageToWebhook = async (
     return { 
       success: true,
       response: parsedResponse.imageUrl,
-      additionalResponse: parsedResponse.message
+      additionalResponse: parsedResponse.message,
+      audioUrl: parsedResponse.audioUrl
     };
   } catch (error) {
     console.error('Request failed with error:', error);

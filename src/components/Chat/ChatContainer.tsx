@@ -9,7 +9,7 @@ import { MessageSquare } from 'lucide-react';
 interface ChatContainerProps {
   messages: Message[];
   loading: boolean;
-  onSendMessage: (message: string, requestType: 'text' | 'image') => void;
+  onSendMessage: (message: string, requestType: 'text' | 'image', imageData?: string, currentImageUrl?: string) => void;
   onRetryMessage: (messageId: string) => void;
   onClearChat: () => void;
   webhookConfig: WebhookConfig;
@@ -47,6 +47,10 @@ const ChatContainer: React.FC<ChatContainerProps> = ({
     return success;
   };
 
+  const handleSendMessage = (message: string, requestType: 'text' | 'image', imageData?: string) => {
+    onSendMessage(message, requestType, imageData);
+  };
+
   return (
     <div className="flex flex-col h-screen bg-zinc-800">
       <ChatHeader 
@@ -62,7 +66,7 @@ const ChatContainer: React.FC<ChatContainerProps> = ({
       />
       
       <ChatInput 
-        onSendMessage={onSendMessage}
+        onSendMessage={handleSendMessage}
       />
       
       <SettingsModal 

@@ -5,6 +5,7 @@ export interface Message {
   type: 'sent' | 'received';
   status: 'sending' | 'sent' | 'failed';
   isImage: boolean;
+  audioUrl?: string;
 }
 
 export interface WebhookConfig {
@@ -22,5 +23,7 @@ export interface WebhookPayload {
   isImage: boolean;
   modelName?: string;
   modifier?: string;
-  requestType?: 'text' | 'image';
+  requestType?: 'text' | 'image' | 'video';
+  imageData?: string;
+  currentImageUrl?: string;
 }

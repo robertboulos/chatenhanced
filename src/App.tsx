@@ -40,6 +40,10 @@ function App() {
     }
   };
 
+  const handleSendMessage = (message: string, requestType: 'text' | 'image', imageData?: string, currentImageUrl?: string) => {
+    sendMessage(message, requestType, imageData, currentImageUrl);
+  };
+
   return (
     <div className="min-h-screen bg-zinc-900 flex">
       <Toaster 
@@ -69,7 +73,7 @@ function App() {
         <ChatContainer
           messages={messages}
           loading={waiting}
-          onSendMessage={sendMessage}
+          onSendMessage={handleSendMessage}
           onRetryMessage={retryMessage}
           onClearChat={handleClearAll}
           webhookConfig={webhookConfig}

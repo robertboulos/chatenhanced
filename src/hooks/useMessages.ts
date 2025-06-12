@@ -43,7 +43,7 @@ export const useMessages = (webhookConfig: WebhookConfig, onImageReceived?: (ima
   }, []);
 
   const sendMessage = useCallback(
-    async (content: string, requestType: 'text' | 'image' = 'text') => {
+    async (content: string, requestType: 'text' | 'image' = 'text', imageData?: string, currentImageUrl?: string) => {
       if (!content.trim()) return;
 
       const isImage = isImageUrl(content);
@@ -73,7 +73,9 @@ export const useMessages = (webhookConfig: WebhookConfig, onImageReceived?: (ima
               isImage: newMessage.isImage,
             },
             webhookConfig,
-            requestType
+            requestType,
+            imageData,
+            currentImageUrl
           );
 
           if (result.success) {
@@ -93,6 +95,7 @@ export const useMessages = (webhookConfig: WebhookConfig, onImageReceived?: (ima
                 type: 'received',
                 status: 'sent',
                 isImage: false,
+                audioUrl: result.audioUrl, // Add audio URL if present
               };
               addMessage(textMessage);
             }
@@ -143,6 +146,7 @@ export const useMessages = (webhookConfig: WebhookConfig, onImageReceived?: (ima
               type: 'received',
               status: 'sent',
               isImage: false,
+              audioUrl: result.audioUrl, // Add audio URL if present
             };
             addMessage(textMessage);
           }
