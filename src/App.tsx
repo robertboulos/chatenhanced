@@ -86,7 +86,7 @@ function App() {
       />
       
       {/* Left Section - Live View / Webcam Display (Wider portrait width) */}
-      <div className="w-96 p-4 flex-shrink-0 space-y-4">
+      <div className="w-96 p-4 flex-shrink-0 space-y-4 overflow-x-hidden">
         <LiveViewContainer
           images={images}
           currentIndex={currentIndex}
