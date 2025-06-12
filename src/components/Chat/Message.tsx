@@ -1,17 +1,20 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { formatTimestamp } from '../../utils/formatters';
 import { Message as MessageType } from '../../types';
 import { motion } from 'framer-motion';
-import { RefreshCw, Check, Clock, X } from 'lucide-react';
+import { RefreshCw, Check, Clock, X, Volume2, Play, Pause, Loader2 } from 'lucide-react';
 import ImagePreview from './ImagePreview';
+import AudioPlayer from './AudioPlayer';
 
 interface MessageProps {
   message: MessageType;
   onRetry: (id: string) => void;
+  onRequestAudio?: (messageId: string, content: string) => void;
 }
 
-const Message: React.FC<MessageProps> = ({ message, onRetry }) => {
+const Message: React.FC<MessageProps> = ({ message, onRetry, onRequestAudio }) => {
   const isSent = message.type === 'sent';
+  const [isRequestingAudio, setIsRequestingAudio] = useState(false);
   
   const messageVariants = {
     initial: { 
@@ -40,6 +43,17 @@ const Message: React.FC<MessageProps> = ({ message, onRetry }) => {
         return <X className="h-3 w-3 text-red-500" />;
       default:
         return null;
+    }
+  };
+
+  const handleRequestAudio = async () => {
+    if (!onRequestAudio || isRequestingAudio) return;
+    
+    setIsRequestingAudio(true);
+    try {
+      await onRequestAudio(message.id, message.content);
+    } finally {
+      setIsRequestingAudio(false);
     }
   };
 
@@ -109,12 +123,36 @@ const Message: React.FC<MessageProps> = ({ message, onRetry }) => {
           <div className="text-sm whitespace-pre-wrap break-words">
             {formatMessageContent(message.content, (message as any).imageData)}
           </div>
+          
+          {/* Audio Player - Show if audio URL exists */}
+          {message.audioUrl && (
+            <div className="mt-2 pt-2 border-t border-zinc-600">
+              <AudioPlayer audioUrl={message.audioUrl} />
+            </div>
+          )}
         </div>
         
         <div className={`flex items-center mt-1 text-xs text-zinc-400 ${
           isSent ? 'justify-end' : 'justify-start'
         }`}>
           <span>{formatTimestamp(message.timestamp)}</span>
+          
+          {/* Audio Request Button - Only for received messages without audio */}
+          {!isSent && !message.audioUrl && onRequestAudio && (
+            <button
+              onClick={handleRequestAudio}
+              disabled={isRequestingAudio}
+              className="ml-2 text-blue-400 hover:text-blue-300 flex items-center transition-colors disabled:opacity-50"
+              title="Convert to audio"
+            >
+              {isRequestingAudio ? (
+                <Loader2 className="h-3 w-3 mr-1 animate-spin" />
+              ) : (
+                <Volume2 className="h-3 w-3 mr-1" />
+              )}
+              <span>{isRequestingAudio ? 'Converting...' : 'Audio'}</span>
+            </button>
+          )}
           
           {isSent && (
             <div className="flex items-center ml-2">

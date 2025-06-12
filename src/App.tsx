@@ -4,6 +4,7 @@ import ChatContainer from './components/Chat/ChatContainer';
 import { useWebhook } from './hooks/useWebhook';
 import { useMessages } from './hooks/useMessages';
 import { useProfileImages } from './hooks/useProfileImages';
+import { useAudio } from './hooks/useAudio';
 import { Toaster } from 'react-hot-toast';
 
 function App() {
@@ -31,7 +32,10 @@ function App() {
     sendMessage,
     retryMessage,
     clearMessages,
+    updateMessageWithAudio,
   } = useMessages(webhookConfig, addImage);
+
+  const { requestAudio } = useAudio(webhookConfig, updateMessageWithAudio);
 
   const handleClearAll = () => {
     if (window.confirm('Are you sure you want to clear all chat history and images?')) {
@@ -40,7 +44,7 @@ function App() {
     }
   };
 
-  const handleSendMessage = (message: string, requestType: 'text' | 'image', imageData?: string, currentImageUrl?: string) => {
+  const handleSendMessage = (message: string, requestType: 'text' | 'image' | 'video', imageData?: string, currentImageUrl?: string) => {
     sendMessage(message, requestType, imageData, currentImageUrl);
   };
 
@@ -65,6 +69,8 @@ function App() {
           onImageChange={changeImage}
           pinnedIndex={pinnedIndex}
           onTogglePin={togglePin}
+          onSendMessage={handleSendMessage}
+          disabled={waiting}
         />
       </div>
       
@@ -80,6 +86,7 @@ function App() {
           webhookError={webhookError}
           onUpdateWebhook={updateWebhookUrl}
           onToggleWebhook={toggleWebhook}
+          onRequestAudio={requestAudio}
         />
       </div>
     </div>

@@ -16,6 +16,7 @@ interface ChatContainerProps {
   webhookError: string | null;
   onUpdateWebhook: (url: string, sessionId: string, modelName: string, modifier: string) => boolean;
   onToggleWebhook: (enabled: boolean) => boolean;
+  onRequestAudio?: (messageId: string, content: string) => void;
 }
 
 const ChatContainer: React.FC<ChatContainerProps> = ({
@@ -28,6 +29,7 @@ const ChatContainer: React.FC<ChatContainerProps> = ({
   webhookError,
   onUpdateWebhook,
   onToggleWebhook,
+  onRequestAudio,
 }) => {
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
 
@@ -63,6 +65,7 @@ const ChatContainer: React.FC<ChatContainerProps> = ({
         messages={messages} 
         loading={loading}
         onRetryMessage={onRetryMessage}
+        onRequestAudio={onRequestAudio}
       />
       
       <ChatInput 

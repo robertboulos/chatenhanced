@@ -7,9 +7,15 @@ interface ChatBodyProps {
   messages: MessageType[];
   loading: boolean;
   onRetryMessage: (id: string) => void;
+  onRequestAudio?: (messageId: string, content: string) => void;
 }
 
-const ChatBody: React.FC<ChatBodyProps> = ({ messages, loading, onRetryMessage }) => {
+const ChatBody: React.FC<ChatBodyProps> = ({ 
+  messages, 
+  loading, 
+  onRetryMessage, 
+  onRequestAudio 
+}) => {
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const scrollToBottom = () => {
@@ -93,7 +99,8 @@ const ChatBody: React.FC<ChatBodyProps> = ({ messages, loading, onRetryMessage }
             <Message 
               key={message.id} 
               message={message} 
-              onRetry={onRetryMessage} 
+              onRetry={onRetryMessage}
+              onRequestAudio={onRequestAudio}
             />
           ))}
           <AnimatePresence>
