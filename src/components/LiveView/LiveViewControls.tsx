@@ -1,14 +1,9 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { 
-  Image, 
   Video, 
   Mic, 
-  Palette, 
-  Sparkles, 
-  Zap,
-  Camera,
-  Music
+  Sparkles
 } from 'lucide-react';
 import toast from 'react-hot-toast';
 
@@ -48,14 +43,6 @@ const LiveViewControls: React.FC<LiveViewControlsProps> = ({
 
   const controlButtons = [
     {
-      id: 'image',
-      icon: Image,
-      label: 'Image',
-      color: 'bg-purple-600 hover:bg-purple-700',
-      message: 'Generate a creative image',
-      requestType: 'image' as const,
-    },
-    {
       id: 'video',
       icon: Video,
       label: 'Video',
@@ -64,36 +51,20 @@ const LiveViewControls: React.FC<LiveViewControlsProps> = ({
       requestType: 'video' as const,
     },
     {
-      id: 'enhance',
+      id: 'variation',
       icon: Sparkles,
-      label: 'Enhance',
+      label: 'Variation',
       color: 'bg-amber-600 hover:bg-amber-700',
-      message: 'Enhance and improve this image',
+      message: 'Create a variation of this image',
       requestType: 'image' as const,
     },
     {
-      id: 'style',
-      icon: Palette,
-      label: 'Style',
-      color: 'bg-pink-600 hover:bg-pink-700',
-      message: 'Apply artistic style to this image',
-      requestType: 'image' as const,
-    },
-    {
-      id: 'animate',
-      icon: Zap,
-      label: 'Animate',
+      id: 'audio',
+      icon: Mic,
+      label: 'Audio',
       color: 'bg-blue-600 hover:bg-blue-700',
-      message: 'Create an animated version',
-      requestType: 'video' as const,
-    },
-    {
-      id: 'portrait',
-      icon: Camera,
-      label: 'Portrait',
-      color: 'bg-green-600 hover:bg-green-700',
-      message: 'Generate a professional portrait',
-      requestType: 'image' as const,
+      message: 'Generate audio description of this image',
+      requestType: 'text' as const,
     },
   ];
 
