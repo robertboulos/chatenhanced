@@ -3,6 +3,7 @@ import { formatTimestamp } from '../../utils/formatters';
 import { Message as MessageType } from '../../types';
 import { motion } from 'framer-motion';
 import { RefreshCw, Check, Clock, X } from 'lucide-react';
+import ImagePreview from './ImagePreview';
 
 interface MessageProps {
   message: MessageType;
@@ -42,7 +43,25 @@ const Message: React.FC<MessageProps> = ({ message, onRetry }) => {
     }
   };
 
-  const formatMessageContent = (content: string) => {
+  const formatMessageContent = (content: string, imageData?: string) => {
+    // If there's image data, show the image
+    if (imageData) {
+      return (
+        <div className="space-y-2">
+          <ImagePreview url={imageData} />
+          {content && content !== `Uploaded image: ${content.split(': ')[1]}` && (
+            <div className="text-sm">
+              {formatTextContent(content)}
+            </div>
+          )}
+        </div>
+      );
+    }
+
+    return formatTextContent(content);
+  };
+
+  const formatTextContent = (content: string) => {
     // Split content by newlines and handle each line
     const lines = content.split('\n');
     
@@ -88,7 +107,7 @@ const Message: React.FC<MessageProps> = ({ message, onRetry }) => {
           }`}
         >
           <div className="text-sm whitespace-pre-wrap break-words">
-            {formatMessageContent(message.content)}
+            {formatMessageContent(message.content, (message as any).imageData)}
           </div>
         </div>
         

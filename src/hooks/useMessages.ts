@@ -44,7 +44,7 @@ export const useMessages = (webhookConfig: WebhookConfig, onImageReceived?: (ima
 
   const sendMessage = useCallback(
     async (content: string, requestType: 'text' | 'image' = 'text', imageData?: string, currentImageUrl?: string) => {
-      if (!content.trim()) return;
+      if (!content.trim() && !imageData) return;
 
       const isImage = isImageUrl(content);
       const messageId = uuidv4();
@@ -57,6 +57,7 @@ export const useMessages = (webhookConfig: WebhookConfig, onImageReceived?: (ima
         type: 'sent',
         status: 'sending',
         isImage,
+        imageData, // Store the base64 image data
       };
 
       addMessage(newMessage);

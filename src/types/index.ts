@@ -6,6 +6,7 @@ export interface Message {
   status: 'sending' | 'sent' | 'failed';
   isImage: boolean;
   audioUrl?: string;
+  imageData?: string; // Base64 image data for uploaded images
 }
 
 export interface WebhookConfig {
