@@ -60,7 +60,7 @@ const TaskMonitor: React.FC<TaskMonitorProps> = ({ tasks, onClearCompleted }) =>
   if (tasks.length === 0) return null;
 
   return (
-    <div className="fixed bottom-4 right-4 w-80 max-h-96 bg-zinc-800 border border-zinc-700 rounded-lg shadow-xl overflow-hidden z-40">
+    <div className="fixed bottom-4 right-4 w-72 max-w-[calc(100vw-2rem)] max-h-80 bg-zinc-800 border border-zinc-700 rounded-lg shadow-xl overflow-hidden z-30">
       {/* Header */}
       <div className="flex items-center justify-between p-3 bg-zinc-900/50 border-b border-zinc-700">
         <div className="flex items-center space-x-2">
@@ -84,9 +84,9 @@ const TaskMonitor: React.FC<TaskMonitorProps> = ({ tasks, onClearCompleted }) =>
       </div>
 
       {/* Task List */}
-      <div className="max-h-80 overflow-y-auto">
+      <div className="max-h-64 overflow-y-auto">
         <AnimatePresence>
-          {tasks.map((task) => {
+          {tasks.slice(0, 5).map((task) => {
             const Icon = getTaskIcon(task.type);
             
             return (
@@ -134,7 +134,7 @@ const TaskMonitor: React.FC<TaskMonitorProps> = ({ tasks, onClearCompleted }) =>
                     {task.status === 'completed' && task.result && (
                       <p className="text-xs text-zinc-400 mt-1 truncate">
                         {typeof task.result === 'string' 
-                          ? task.result.slice(0, 50) + (task.result.length > 50 ? '...' : '')
+                          ? task.result.slice(0, 40) + (task.result.length > 40 ? '...' : '')
                           : 'Completed successfully'
                         }
                       </p>
@@ -151,6 +151,12 @@ const TaskMonitor: React.FC<TaskMonitorProps> = ({ tasks, onClearCompleted }) =>
             );
           })}
         </AnimatePresence>
+        
+        {tasks.length > 5 && (
+          <div className="p-2 text-center text-xs text-zinc-500">
+            +{tasks.length - 5} more tasks
+          </div>
+        )}
       </div>
     </div>
   );
