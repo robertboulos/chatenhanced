@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { 
   Video, 
-  Mic, 
   Sparkles
 } from 'lucide-react';
 import toast from 'react-hot-toast';
@@ -58,21 +57,13 @@ const LiveViewControls: React.FC<LiveViewControlsProps> = ({
       message: 'Create a variation of this image',
       requestType: 'image' as const,
     },
-    {
-      id: 'audio',
-      icon: Mic,
-      label: 'Audio',
-      color: 'bg-blue-600 hover:bg-blue-700',
-      message: 'Generate audio description of this image',
-      requestType: 'text' as const,
-    },
   ];
 
-  const buttonBaseClasses = "p-2 rounded-lg transition-all duration-200 flex flex-col items-center justify-center space-y-1 min-h-[50px] shadow-md";
+  const buttonBaseClasses = "p-3 rounded-lg transition-all duration-200 flex flex-col items-center justify-center space-y-1 min-h-[60px] shadow-md";
 
   return (
     <div className="bg-zinc-800 rounded-lg border border-zinc-700 p-3 shadow-lg">
-      <div className="flex items-center justify-between mb-2">
+      <div className="flex items-center justify-between mb-3">
         <h3 className="text-xs font-medium text-zinc-300">AI Controls</h3>
         <div className="flex items-center space-x-1">
           <div className="w-1.5 h-1.5 bg-blue-500 rounded-full animate-pulse"></div>
@@ -80,7 +71,7 @@ const LiveViewControls: React.FC<LiveViewControlsProps> = ({
         </div>
       </div>
       
-      <div className="grid grid-cols-3 gap-2">
+      <div className="grid grid-cols-2 gap-3">
         {controlButtons.map((button) => {
           const Icon = button.icon;
           const isDisabled = disabled;
@@ -101,11 +92,11 @@ const LiveViewControls: React.FC<LiveViewControlsProps> = ({
               title={button.label}
             >
               {isProcessingThis ? (
-                <div className="w-3 h-3 border border-white border-t-transparent rounded-full animate-spin" />
+                <div className="w-4 h-4 border border-white border-t-transparent rounded-full animate-spin" />
               ) : (
-                <Icon size={14} />
+                <Icon size={16} />
               )}
-              <span className="text-xs font-medium">
+              <span className="text-sm font-medium">
                 {button.label}
               </span>
             </motion.button>
