@@ -27,4 +27,13 @@ export interface WebhookPayload {
   requestType?: 'text' | 'image' | 'video';
   imageData?: string;
   currentImageUrl?: string;
+  stream?: boolean;
+}
+
+export interface AITask {
+  id: string;
+  type: 'analyze' | 'enhance' | 'search' | 'execute' | 'translate';
+  status: 'pending' | 'processing' | 'completed' | 'failed';
+  progress?: number;
+  result?: any;
 }

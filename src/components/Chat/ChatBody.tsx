@@ -1,20 +1,29 @@
 import React, { useEffect, useRef } from 'react';
 import { Message as MessageType } from '../../types';
 import Message from './Message';
+import StreamingMessage from './StreamingMessage';
 import { motion, AnimatePresence } from 'framer-motion';
+
+interface StreamingState {
+  isStreaming: boolean;
+  streamingMessageId: string | null;
+  streamingContent: string;
+}
 
 interface ChatBodyProps {
   messages: MessageType[];
   loading: boolean;
   onRetryMessage: (id: string) => void;
   onRequestAudio?: (messageId: string, content: string) => void;
+  streamingState?: StreamingState;
 }
 
 const ChatBody: React.FC<ChatBodyProps> = ({ 
   messages, 
   loading, 
   onRetryMessage, 
-  onRequestAudio 
+  onRequestAudio,
+  streamingState 
 }) => {
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
@@ -24,7 +33,7 @@ const ChatBody: React.FC<ChatBodyProps> = ({
 
   useEffect(() => {
     scrollToBottom();
-  }, [messages, loading]);
+  }, [messages, loading, streamingState?.streamingContent]);
 
   const TypingIndicator = () => (
     <motion.div
@@ -81,7 +90,7 @@ const ChatBody: React.FC<ChatBodyProps> = ({
 
   return (
     <div className="flex-1 p-4 overflow-y-auto bg-zinc-900">
-      {messages.length === 0 && !loading ? (
+      {messages.length === 0 && !loading && !streamingState?.isStreaming ? (
         <div className="flex flex-col items-center justify-center h-full text-zinc-500">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -103,8 +112,19 @@ const ChatBody: React.FC<ChatBodyProps> = ({
               onRequestAudio={onRequestAudio}
             />
           ))}
+          
+          {/* Streaming Message */}
+          {streamingState?.isStreaming && streamingState.streamingContent && (
+            <StreamingMessage
+              content={streamingState.streamingContent}
+              timestamp={Date.now()}
+              isComplete={false}
+            />
+          )}
+          
+          {/* Typing Indicator */}
           <AnimatePresence>
-            {loading && (
+            {loading && !streamingState?.isStreaming && (
               <motion.div 
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}

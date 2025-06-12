@@ -1,10 +1,14 @@
 import React from 'react';
 import LiveViewContainer from './components/LiveView/LiveViewContainer';
 import ChatContainer from './components/Chat/ChatContainer';
+import AdvancedControls from './components/Chat/AdvancedControls';
+import TaskMonitor from './components/Chat/TaskMonitor';
 import { useWebhook } from './hooks/useWebhook';
 import { useMessages } from './hooks/useMessages';
 import { useProfileImages } from './hooks/useProfileImages';
 import { useAudio } from './hooks/useAudio';
+import { useStreaming } from './hooks/useStreaming';
+import { useAdvancedAI } from './hooks/useAdvancedAI';
 import { Toaster } from 'react-hot-toast';
 
 function App() {
@@ -29,13 +33,31 @@ function App() {
     messages, 
     loading: messagesLoading,
     waiting,
+    streamingMessageId,
     sendMessage,
     retryMessage,
     clearMessages,
     updateMessageWithAudio,
+    updateStreamingMessage,
   } = useMessages(webhookConfig, addImage);
 
   const { requestAudio } = useAudio(webhookConfig, updateMessageWithAudio);
+  
+  const { streamingState, startStreaming, stopStreaming } = useStreaming(
+    webhookConfig, 
+    updateStreamingMessage
+  );
+
+  const {
+    capabilities,
+    activeTasks,
+    analyzeImage,
+    enhanceImage,
+    performWebSearch,
+    executeCode,
+    translateText,
+    clearCompletedTasks,
+  } = useAdvancedAI(webhookConfig);
 
   const handleClearAll = () => {
     if (window.confirm('Are you sure you want to clear all chat history and images?')) {
@@ -47,6 +69,8 @@ function App() {
   const handleSendMessage = (message: string, requestType: 'text' | 'image' | 'video', imageData?: string, currentImageUrl?: string) => {
     sendMessage(message, requestType, imageData, currentImageUrl);
   };
+
+  const currentImageUrl = images[currentIndex];
 
   return (
     <div className="min-h-screen bg-zinc-900 flex">
@@ -62,7 +86,7 @@ function App() {
       />
       
       {/* Left Section - Live View / Webcam Display (Wider portrait width) */}
-      <div className="w-96 p-4 flex-shrink-0">
+      <div className="w-96 p-4 flex-shrink-0 space-y-4">
         <LiveViewContainer
           images={images}
           currentIndex={currentIndex}
@@ -70,6 +94,18 @@ function App() {
           pinnedIndex={pinnedIndex}
           onTogglePin={togglePin}
           onSendMessage={handleSendMessage}
+          disabled={waiting}
+        />
+        
+        {/* Advanced AI Controls */}
+        <AdvancedControls
+          onWebSearch={performWebSearch}
+          onCodeExecution={executeCode}
+          onTranslation={translateText}
+          onImageAnalysis={analyzeImage}
+          onImageEnhancement={enhanceImage}
+          activeTasks={activeTasks}
+          currentImageUrl={currentImageUrl}
           disabled={waiting}
         />
       </div>
@@ -87,8 +123,16 @@ function App() {
           onUpdateWebhook={updateWebhookUrl}
           onToggleWebhook={toggleWebhook}
           onRequestAudio={requestAudio}
+          streamingState={streamingState}
+          onStopStreaming={stopStreaming}
         />
       </div>
+
+      {/* Task Monitor - Fixed position overlay */}
+      <TaskMonitor 
+        tasks={activeTasks}
+        onClearCompleted={clearCompletedTasks}
+      />
     </div>
   );
 }

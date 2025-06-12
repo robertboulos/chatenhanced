@@ -10,6 +10,7 @@ export const useMessages = (webhookConfig: WebhookConfig, onImageReceived?: (ima
   const [messages, setMessages] = useState<Message[]>([]);
   const [loading, setLoading] = useState(true);
   const [waiting, setWaiting] = useState(false);
+  const [streamingMessageId, setStreamingMessageId] = useState<string | null>(null);
 
   useEffect(() => {
     const loadedMessages = loadMessages();
@@ -52,6 +53,38 @@ export const useMessages = (webhookConfig: WebhookConfig, onImageReceived?: (ima
     );
   }, []);
 
+  const updateStreamingMessage = useCallback((messageId: string, content: string, isComplete: boolean) => {
+    setMessages(prevMessages => {
+      const existingIndex = prevMessages.findIndex(m => m.id === messageId);
+      
+      if (existingIndex >= 0) {
+        // Update existing streaming message
+        const updatedMessages = [...prevMessages];
+        updatedMessages[existingIndex] = {
+          ...updatedMessages[existingIndex],
+          content,
+          status: isComplete ? 'sent' : 'sending',
+        };
+        return updatedMessages;
+      } else {
+        // Create new streaming message
+        const newMessage: Message = {
+          id: messageId,
+          content,
+          timestamp: Date.now(),
+          type: 'received',
+          status: isComplete ? 'sent' : 'sending',
+          isImage: false,
+        };
+        return [...prevMessages, newMessage];
+      }
+    });
+
+    if (isComplete) {
+      setStreamingMessageId(null);
+    }
+  }, []);
+
   const sendMessage = useCallback(
     async (content: string, requestType: 'text' | 'image' | 'video' = 'text', imageData?: string, currentImageUrl?: string) => {
       if (!content.trim() && !imageData) return;
@@ -76,6 +109,20 @@ export const useMessages = (webhookConfig: WebhookConfig, onImageReceived?: (ima
       if (webhookConfig.enabled && webhookConfig.url) {
         try {
           setWaiting(true);
+          
+          // Check if streaming is supported
+          const supportsStreaming = webhookConfig.url.includes('/stream') || 
+                                   webhookConfig.modelName?.includes('stream');
+          
+          if (supportsStreaming && requestType === 'text') {
+            // Use streaming for text responses
+            const streamingResponseId = uuidv4();
+            setStreamingMessageId(streamingResponseId);
+            
+            // This would be handled by the streaming hook
+            // For now, fall back to regular webhook
+          }
+          
           const result = await sendMessageToWebhook(
             {
               id: messageId,
@@ -185,9 +232,11 @@ export const useMessages = (webhookConfig: WebhookConfig, onImageReceived?: (ima
     messages,
     loading,
     waiting,
+    streamingMessageId,
     sendMessage,
     retryMessage,
     clearMessages,
     updateMessageWithAudio,
+    updateStreamingMessage,
   };
 };

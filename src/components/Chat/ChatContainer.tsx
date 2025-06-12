@@ -6,6 +6,12 @@ import SettingsModal from '../Settings/SettingsModal';
 import { Message, WebhookConfig } from '../../types';
 import { MessageSquare } from 'lucide-react';
 
+interface StreamingState {
+  isStreaming: boolean;
+  streamingMessageId: string | null;
+  streamingContent: string;
+}
+
 interface ChatContainerProps {
   messages: Message[];
   loading: boolean;
@@ -17,6 +23,8 @@ interface ChatContainerProps {
   onUpdateWebhook: (url: string, sessionId: string, modelName: string, modifier: string) => boolean;
   onToggleWebhook: (enabled: boolean) => boolean;
   onRequestAudio?: (messageId: string, content: string) => void;
+  streamingState?: StreamingState;
+  onStopStreaming?: () => void;
 }
 
 const ChatContainer: React.FC<ChatContainerProps> = ({
@@ -30,6 +38,8 @@ const ChatContainer: React.FC<ChatContainerProps> = ({
   onUpdateWebhook,
   onToggleWebhook,
   onRequestAudio,
+  streamingState,
+  onStopStreaming,
 }) => {
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
 
@@ -59,6 +69,8 @@ const ChatContainer: React.FC<ChatContainerProps> = ({
         onOpenSettings={handleOpenSettings}
         onClearChat={onClearChat}
         webhookConfigured={webhookConfig.enabled && !!webhookConfig.url}
+        streamingState={streamingState}
+        onStopStreaming={onStopStreaming}
       />
       
       <ChatBody 
@@ -66,10 +78,12 @@ const ChatContainer: React.FC<ChatContainerProps> = ({
         loading={loading}
         onRetryMessage={onRetryMessage}
         onRequestAudio={onRequestAudio}
+        streamingState={streamingState}
       />
       
       <ChatInput 
         onSendMessage={handleSendMessage}
+        disabled={loading || streamingState?.isStreaming}
       />
       
       <SettingsModal 
