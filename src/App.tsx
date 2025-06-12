@@ -73,7 +73,7 @@ function App() {
   const currentImageUrl = images[currentIndex];
 
   return (
-    <div className="min-h-screen bg-zinc-900 flex">
+    <div className="min-h-screen bg-zinc-900 flex flex-col md:flex-row">
       <Toaster 
         position="top-right"
         toastOptions={{
@@ -85,8 +85,8 @@ function App() {
         }}
       />
       
-      {/* Left Section - Live View / Webcam Display (Wider portrait width) */}
-      <div className="w-96 p-4 flex-shrink-0 space-y-4 overflow-x-hidden">
+      {/* Left Section - Live View / Webcam Display */}
+      <div className="w-full md:w-96 p-4 flex-shrink-0 space-y-4 overflow-x-hidden">
         <LiveViewContainer
           images={images}
           currentIndex={currentIndex}
@@ -110,8 +110,8 @@ function App() {
         />
       </div>
       
-      {/* Right Section - Chat Interface (Remaining space) */}
-      <div className="flex-1 border-l border-zinc-700">
+      {/* Right Section - Chat Interface */}
+      <div className="flex-1 border-t md:border-t-0 md:border-l border-zinc-700">
         <ChatContainer
           messages={messages}
           loading={waiting}
