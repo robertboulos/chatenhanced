@@ -91,7 +91,9 @@ const Message: React.FC<MessageProps> = ({ message, onRetry, onRequestAudio }) =
               i % 2 === 0 ? (
                 part
               ) : (
-                <code key={i} className="px-1 py-0.5 bg-blue-600 rounded font-mono text-sm">
+                <code key={i} className={`px-1 py-0.5 rounded font-mono text-sm ${
+                  isSent ? 'bg-blue-600' : 'bg-gray-600'
+                }`}>
                   {part}
                 </code>
               )
@@ -117,7 +119,7 @@ const Message: React.FC<MessageProps> = ({ message, onRetry, onRequestAudio }) =
           className={`px-4 py-3 rounded-3xl shadow-sm ${
             isSent
               ? 'bg-blue-500 text-white rounded-br-lg'
-              : 'bg-blue-500 text-white rounded-bl-lg'
+              : 'bg-gray-300 text-black rounded-bl-lg'
           }`}
         >
           <div className="text-sm whitespace-pre-wrap break-words">
@@ -126,7 +128,9 @@ const Message: React.FC<MessageProps> = ({ message, onRetry, onRequestAudio }) =
           
           {/* Audio Player - Show if audio URL exists */}
           {message.audioUrl && (
-            <div className="mt-2 pt-2 border-t border-blue-400">
+            <div className={`mt-2 pt-2 border-t ${
+              isSent ? 'border-blue-400' : 'border-gray-400'
+            }`}>
               <AudioPlayer audioUrl={message.audioUrl} />
             </div>
           )}

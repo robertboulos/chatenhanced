@@ -43,7 +43,7 @@ const ChatBody: React.FC<ChatBodyProps> = ({
       transition={{ duration: 0.3 }}
       className="flex justify-start mb-4 px-4"
     >
-      <div className="flex items-end space-x-2 px-4 py-3 bg-blue-500 rounded-3xl rounded-bl-lg w-fit shadow-sm">
+      <div className="flex items-end space-x-2 px-4 py-3 bg-gray-300 rounded-3xl rounded-bl-lg w-fit shadow-sm">
         <motion.div
           initial={{ scale: 0.8 }}
           animate={{ 
@@ -56,7 +56,7 @@ const ChatBody: React.FC<ChatBodyProps> = ({
             ease: "easeInOut",
             delay: 0 
           }}
-          className="w-2.5 h-2.5 bg-blue-200 rounded-full"
+          className="w-2.5 h-2.5 bg-gray-500 rounded-full"
         />
         <motion.div
           initial={{ scale: 0.8 }}
@@ -70,7 +70,7 @@ const ChatBody: React.FC<ChatBodyProps> = ({
             ease: "easeInOut",
             delay: 0.2 
           }}
-          className="w-2.5 h-2.5 bg-blue-200 rounded-full"
+          className="w-2.5 h-2.5 bg-gray-500 rounded-full"
         />
         <motion.div
           initial={{ scale: 0.8 }}
@@ -84,7 +84,7 @@ const ChatBody: React.FC<ChatBodyProps> = ({
             ease: "easeInOut",
             delay: 0.4 
           }}
-          className="w-2.5 h-2.5 bg-blue-200 rounded-full"
+          className="w-2.5 h-2.5 bg-gray-500 rounded-full"
         />
       </div>
     </motion.div>

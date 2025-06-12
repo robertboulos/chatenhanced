@@ -49,7 +49,7 @@ const StreamingMessage: React.FC<StreamingMessageProps> = ({
               i % 2 === 0 ? (
                 part
               ) : (
-                <code key={i} className="px-1 py-0.5 bg-blue-600 rounded font-mono text-sm">
+                <code key={i} className="px-1 py-0.5 bg-gray-600 rounded font-mono text-sm">
                   {part}
                 </code>
               )
@@ -71,12 +71,12 @@ const StreamingMessage: React.FC<StreamingMessageProps> = ({
       transition={{ duration: 0.3, ease: "easeOut" }}
     >
       <div className="max-w-[75%]">
-        <div className="px-4 py-3 rounded-3xl bg-blue-500 text-white rounded-bl-lg shadow-sm">
+        <div className="px-4 py-3 rounded-3xl bg-gray-300 text-black rounded-bl-lg shadow-sm">
           <div className="text-sm whitespace-pre-wrap break-words">
             {formatMessageContent(displayedContent)}
             {!isComplete && (
               <motion.span
-                className="inline-block w-2 h-4 bg-blue-200 ml-1"
+                className="inline-block w-2 h-4 bg-gray-600 ml-1"
                 animate={{ opacity: [1, 0] }}
                 transition={{ duration: 0.8, repeat: Infinity }}
               />
