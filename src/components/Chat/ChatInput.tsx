@@ -88,7 +88,7 @@ const ChatInput: React.FC<ChatInputProps> = ({ onSendMessage, disabled = false }
           className={`${buttonBaseClasses} ${
             disabled || isUploading
               ? 'bg-zinc-600 text-zinc-400 cursor-not-allowed'
-              : 'bg-green-600 text-white hover:bg-green-700 shadow-md hover:shadow-lg'
+              : 'bg-blue-500 text-white hover:bg-blue-600 shadow-md hover:shadow-lg'
           }`}
           disabled={disabled || isUploading}
           whileTap={!disabled && !isUploading ? { scale: 0.95 } : {}}
@@ -107,8 +107,8 @@ const ChatInput: React.FC<ChatInputProps> = ({ onSendMessage, disabled = false }
           type="text"
           value={message}
           onChange={(e) => setMessage(e.target.value)}
-          placeholder="Type a message..."
-          className="flex-1 p-3 border border-zinc-600 bg-zinc-700 text-zinc-100 placeholder-zinc-400 rounded-full focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200"
+          placeholder="iMessage"
+          className="flex-1 p-3 border border-zinc-600 bg-zinc-700 text-zinc-100 placeholder-zinc-400 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
           disabled={disabled}
           onKeyDown={(e) => {
             if (e.key === 'Enter' && !e.shiftKey) {
@@ -127,7 +127,7 @@ const ChatInput: React.FC<ChatInputProps> = ({ onSendMessage, disabled = false }
           className={`${buttonBaseClasses} ${
             disabled
               ? 'bg-zinc-600 text-zinc-400 cursor-not-allowed'
-              : 'bg-purple-600 text-white hover:bg-purple-700 shadow-md hover:shadow-lg'
+              : 'bg-blue-500 text-white hover:bg-blue-600 shadow-md hover:shadow-lg'
           }`}
           disabled={disabled}
           whileTap={!disabled ? { scale: 0.95 } : {}}
@@ -144,7 +144,7 @@ const ChatInput: React.FC<ChatInputProps> = ({ onSendMessage, disabled = false }
           className={`${buttonBaseClasses} ${
             isTextDisabled
               ? 'bg-zinc-600 text-zinc-400 cursor-not-allowed'
-              : 'bg-indigo-600 text-white hover:bg-indigo-700 shadow-md hover:shadow-lg'
+              : 'bg-blue-500 text-white hover:bg-blue-600 shadow-md hover:shadow-lg'
           }`}
           disabled={isTextDisabled}
           whileTap={!isTextDisabled ? { scale: 0.95 } : {}}

@@ -36,11 +36,11 @@ const Message: React.FC<MessageProps> = ({ message, onRetry, onRequestAudio }) =
   const getStatusIcon = () => {
     switch (message.status) {
       case 'sending':
-        return <Clock className="h-3 w-3 text-zinc-400" />;
+        return <Clock className="h-3 w-3 text-blue-300" />;
       case 'sent':
-        return <Check className="h-3 w-3 text-green-500" />;
+        return <Check className="h-3 w-3 text-blue-300" />;
       case 'failed':
-        return <X className="h-3 w-3 text-red-500" />;
+        return <X className="h-3 w-3 text-red-400" />;
       default:
         return null;
     }
@@ -91,7 +91,7 @@ const Message: React.FC<MessageProps> = ({ message, onRetry, onRequestAudio }) =
               i % 2 === 0 ? (
                 part
               ) : (
-                <code key={i} className="px-1 py-0.5 bg-zinc-700 rounded font-mono text-sm">
+                <code key={i} className="px-1 py-0.5 bg-blue-600 rounded font-mono text-sm">
                   {part}
                 </code>
               )
@@ -107,17 +107,17 @@ const Message: React.FC<MessageProps> = ({ message, onRetry, onRequestAudio }) =
 
   return (
     <motion.div
-      className={`flex ${isSent ? 'justify-end' : 'justify-start'} mb-4`}
+      className={`flex ${isSent ? 'justify-end' : 'justify-start'} mb-4 px-4`}
       initial="initial"
       animate="animate"
       variants={messageVariants}
     >
       <div className={`max-w-[75%] ${isSent ? 'order-2' : 'order-1'}`}>
         <div
-          className={`px-4 py-2 rounded-2xl ${
+          className={`px-4 py-3 rounded-3xl shadow-sm ${
             isSent
-              ? 'bg-indigo-600 text-white rounded-tr-none'
-              : 'bg-zinc-700 text-zinc-100 rounded-tl-none'
+              ? 'bg-blue-500 text-white rounded-br-lg'
+              : 'bg-blue-500 text-white rounded-bl-lg'
           }`}
         >
           <div className="text-sm whitespace-pre-wrap break-words">
@@ -126,7 +126,7 @@ const Message: React.FC<MessageProps> = ({ message, onRetry, onRequestAudio }) =
           
           {/* Audio Player - Show if audio URL exists */}
           {message.audioUrl && (
-            <div className="mt-2 pt-2 border-t border-zinc-600">
+            <div className="mt-2 pt-2 border-t border-blue-400">
               <AudioPlayer audioUrl={message.audioUrl} />
             </div>
           )}
@@ -161,7 +161,7 @@ const Message: React.FC<MessageProps> = ({ message, onRetry, onRequestAudio }) =
               {message.status === 'failed' && (
                 <button
                   onClick={() => onRetry(message.id)}
-                  className="ml-2 text-indigo-400 hover:text-indigo-300 flex items-center transition-colors"
+                  className="ml-2 text-blue-400 hover:text-blue-300 flex items-center transition-colors"
                 >
                   <RefreshCw className="h-3 w-3 mr-1" />
                   <span>Retry</span>
