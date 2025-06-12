@@ -105,14 +105,14 @@ const AdvancedControls: React.FC<AdvancedControlsProps> = ({
     {
       id: 'search',
       icon: Search,
-      label: 'Web Search',
+      label: 'Search',
       color: 'bg-blue-600 hover:bg-blue-700',
       status: getTaskStatus('search'),
     },
     {
       id: 'code',
       icon: Code,
-      label: 'Code Execute',
+      label: 'Code',
       color: 'bg-green-600 hover:bg-green-700',
       status: getTaskStatus('execute'),
     },
@@ -126,15 +126,15 @@ const AdvancedControls: React.FC<AdvancedControlsProps> = ({
     {
       id: 'analyze',
       icon: Eye,
-      label: 'Analyze Image',
+      label: 'Analyze',
       color: 'bg-orange-600 hover:bg-orange-700',
       status: getTaskStatus('analyze'),
       requiresImage: true,
     },
     {
-      id: 'enhance',
+      id: 'variation',
       icon: Sparkles,
-      label: 'Enhance Image',
+      label: 'Variation',
       color: 'bg-pink-600 hover:bg-pink-700',
       status: getTaskStatus('enhance'),
       requiresImage: true,
@@ -142,26 +142,26 @@ const AdvancedControls: React.FC<AdvancedControlsProps> = ({
   ];
 
   return (
-    <div className="bg-zinc-800 rounded-lg border border-zinc-700 shadow-lg">
+    <div className="w-full bg-zinc-800 rounded-lg border border-zinc-700 shadow-lg overflow-hidden">
       {/* Header */}
       <div 
-        className="flex items-center justify-between p-3 cursor-pointer hover:bg-zinc-700/50 transition-colors"
+        className="flex items-center justify-between p-3 cursor-pointer hover:bg-zinc-700/50 transition-colors w-full"
         onClick={() => setIsExpanded(!isExpanded)}
       >
-        <div className="flex items-center space-x-2">
-          <Sparkles className="w-4 h-4 text-indigo-400" />
-          <h3 className="text-sm font-medium text-zinc-200">Advanced AI Tools</h3>
+        <div className="flex items-center space-x-2 min-w-0 flex-1">
+          <Sparkles className="w-4 h-4 text-indigo-400 flex-shrink-0" />
+          <h3 className="text-sm font-medium text-zinc-200 truncate">Advanced AI Tools</h3>
         </div>
-        <div className="flex items-center space-x-2">
+        <div className="flex items-center space-x-2 flex-shrink-0">
           {activeTasks.filter(t => t.status === 'processing').length > 0 && (
             <div className="flex items-center space-x-1">
               <Loader2 className="w-3 h-3 animate-spin text-blue-500" />
               <span className="text-xs text-blue-400">
-                {activeTasks.filter(t => t.status === 'processing').length} active
+                {activeTasks.filter(t => t.status === 'processing').length}
               </span>
             </div>
           )}
-          {isExpanded ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+          {isExpanded ? <ChevronUp className="w-4 h-4 flex-shrink-0" /> : <ChevronDown className="w-4 h-4 flex-shrink-0" />}
         </div>
       </div>
 
@@ -172,11 +172,11 @@ const AdvancedControls: React.FC<AdvancedControlsProps> = ({
             animate={{ height: 'auto', opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
             transition={{ duration: 0.2 }}
-            className="overflow-hidden"
+            className="overflow-hidden w-full"
           >
-            <div className="p-3 pt-0 space-y-3">
+            <div className="p-3 pt-0 space-y-3 w-full">
               {/* Control Buttons */}
-              <div className="grid grid-cols-3 gap-2">
+              <div className="grid grid-cols-3 gap-2 w-full">
                 {controlButtons.map((button) => {
                   const Icon = button.icon;
                   const isDisabled = disabled || (button.requiresImage && !currentImageUrl);
@@ -186,7 +186,7 @@ const AdvancedControls: React.FC<AdvancedControlsProps> = ({
                     <motion.button
                       key={button.id}
                       onClick={() => setActivePanel(isActive ? null : button.id)}
-                      className={`p-2 rounded-lg transition-all duration-200 flex flex-col items-center justify-center space-y-1 min-h-[50px] text-xs ${
+                      className={`p-2 rounded-lg transition-all duration-200 flex flex-col items-center justify-center space-y-1 min-h-[50px] text-xs w-full ${
                         isDisabled
                           ? 'bg-zinc-700 text-zinc-500 cursor-not-allowed'
                           : isActive
@@ -216,10 +216,10 @@ const AdvancedControls: React.FC<AdvancedControlsProps> = ({
                     initial={{ opacity: 0, y: -10 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -10 }}
-                    className="bg-zinc-700/50 rounded-lg p-3 space-y-3"
+                    className="bg-zinc-700/50 rounded-lg p-3 space-y-3 w-full"
                   >
                     {activePanel === 'search' && (
-                      <div className="space-y-2">
+                      <div className="space-y-2 w-full">
                         <input
                           type="text"
                           value={searchQuery}
@@ -228,7 +228,7 @@ const AdvancedControls: React.FC<AdvancedControlsProps> = ({
                           className="w-full p-2 bg-zinc-600 border border-zinc-500 rounded text-sm text-zinc-100 placeholder-zinc-400"
                           onKeyDown={(e) => e.key === 'Enter' && handleWebSearch()}
                         />
-                        <div className="flex space-x-2">
+                        <div className="flex space-x-2 w-full">
                           <select
                             value={searchType}
                             onChange={(e) => setSearchType(e.target.value as any)}
@@ -251,7 +251,7 @@ const AdvancedControls: React.FC<AdvancedControlsProps> = ({
                     )}
 
                     {activePanel === 'code' && (
-                      <div className="space-y-2">
+                      <div className="space-y-2 w-full">
                         <select
                           value={codeLanguage}
                           onChange={(e) => setCodeLanguage(e.target.value as any)}
@@ -279,7 +279,7 @@ const AdvancedControls: React.FC<AdvancedControlsProps> = ({
                     )}
 
                     {activePanel === 'translate' && (
-                      <div className="space-y-2">
+                      <div className="space-y-2 w-full">
                         <textarea
                           value={translateText}
                           onChange={(e) => setTranslateText(e.target.value)}
@@ -287,7 +287,7 @@ const AdvancedControls: React.FC<AdvancedControlsProps> = ({
                           className="w-full p-2 bg-zinc-600 border border-zinc-500 rounded text-sm text-zinc-100 placeholder-zinc-400"
                           rows={3}
                         />
-                        <div className="flex space-x-2">
+                        <div className="flex space-x-2 w-full">
                           <select
                             value={sourceLanguage}
                             onChange={(e) => setSourceLanguage(e.target.value)}
@@ -333,11 +333,11 @@ const AdvancedControls: React.FC<AdvancedControlsProps> = ({
                     )}
 
                     {activePanel === 'analyze' && (
-                      <div className="space-y-2">
+                      <div className="space-y-2 w-full">
                         <p className="text-xs text-zinc-400 mb-2">
                           Analyze the current image:
                         </p>
-                        <div className="grid grid-cols-2 gap-2">
+                        <div className="grid grid-cols-2 gap-2 w-full">
                           <button
                             onClick={() => handleImageAnalysis('describe')}
                             className="p-2 bg-orange-600 hover:bg-orange-700 rounded text-xs font-medium transition-colors"
@@ -366,12 +366,12 @@ const AdvancedControls: React.FC<AdvancedControlsProps> = ({
                       </div>
                     )}
 
-                    {activePanel === 'enhance' && (
-                      <div className="space-y-2">
+                    {activePanel === 'variation' && (
+                      <div className="space-y-2 w-full">
                         <p className="text-xs text-zinc-400 mb-2">
-                          Enhance the current image:
+                          Create variations of the current image:
                         </p>
-                        <div className="grid grid-cols-2 gap-2">
+                        <div className="grid grid-cols-2 gap-2 w-full">
                           <button
                             onClick={() => handleImageEnhancement('upscale')}
                             className="p-2 bg-pink-600 hover:bg-pink-700 rounded text-xs font-medium transition-colors"
