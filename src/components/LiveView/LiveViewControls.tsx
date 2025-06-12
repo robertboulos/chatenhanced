@@ -31,11 +31,6 @@ const LiveViewControls: React.FC<LiveViewControlsProps> = ({
     setIsProcessing(action);
     
     try {
-      if (requestType === 'video' && !currentImageUrl) {
-        toast.error('Please select an image first to create a video');
-        return;
-      }
-      
       onSendMessage(
         message, 
         requestType, 
@@ -55,7 +50,7 @@ const LiveViewControls: React.FC<LiveViewControlsProps> = ({
     {
       id: 'image',
       icon: Image,
-      label: 'Generate Image',
+      label: 'Image',
       color: 'bg-purple-600 hover:bg-purple-700',
       message: 'Generate a creative image',
       requestType: 'image' as const,
@@ -63,16 +58,15 @@ const LiveViewControls: React.FC<LiveViewControlsProps> = ({
     {
       id: 'video',
       icon: Video,
-      label: 'Create Video',
+      label: 'Video',
       color: 'bg-red-600 hover:bg-red-700',
       message: 'Create a short video from this image',
       requestType: 'video' as const,
-      requiresImage: true,
     },
     {
       id: 'enhance',
       icon: Sparkles,
-      label: 'Enhance Image',
+      label: 'Enhance',
       color: 'bg-amber-600 hover:bg-amber-700',
       message: 'Enhance and improve this image',
       requestType: 'image' as const,
@@ -80,7 +74,7 @@ const LiveViewControls: React.FC<LiveViewControlsProps> = ({
     {
       id: 'style',
       icon: Palette,
-      label: 'Style Transfer',
+      label: 'Style',
       color: 'bg-pink-600 hover:bg-pink-700',
       message: 'Apply artistic style to this image',
       requestType: 'image' as const,
@@ -92,34 +86,33 @@ const LiveViewControls: React.FC<LiveViewControlsProps> = ({
       color: 'bg-blue-600 hover:bg-blue-700',
       message: 'Create an animated version',
       requestType: 'video' as const,
-      requiresImage: true,
     },
     {
       id: 'portrait',
       icon: Camera,
-      label: 'Portrait Mode',
+      label: 'Portrait',
       color: 'bg-green-600 hover:bg-green-700',
       message: 'Generate a professional portrait',
       requestType: 'image' as const,
     },
   ];
 
-  const buttonBaseClasses = "p-3 rounded-xl transition-all duration-200 flex flex-col items-center justify-center space-y-1 min-h-[80px] shadow-lg";
+  const buttonBaseClasses = "p-2 rounded-lg transition-all duration-200 flex flex-col items-center justify-center space-y-1 min-h-[50px] shadow-md";
 
   return (
-    <div className="bg-zinc-800 rounded-xl border border-zinc-700 p-4 shadow-2xl">
-      <div className="flex items-center justify-between mb-4">
-        <h3 className="text-sm font-semibold text-zinc-200">Creative Controls</h3>
+    <div className="bg-zinc-800 rounded-lg border border-zinc-700 p-3 shadow-lg">
+      <div className="flex items-center justify-between mb-2">
+        <h3 className="text-xs font-medium text-zinc-300">AI Controls</h3>
         <div className="flex items-center space-x-1">
-          <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></div>
-          <span className="text-xs text-zinc-400">AI Ready</span>
+          <div className="w-1.5 h-1.5 bg-blue-500 rounded-full animate-pulse"></div>
+          <span className="text-xs text-zinc-500">Ready</span>
         </div>
       </div>
       
-      <div className="grid grid-cols-2 gap-3">
+      <div className="grid grid-cols-3 gap-2">
         {controlButtons.map((button) => {
           const Icon = button.icon;
-          const isDisabled = disabled || (button.requiresImage && !currentImageUrl);
+          const isDisabled = disabled;
           const isProcessingThis = isProcessing === button.id;
           
           return (
@@ -128,41 +121,25 @@ const LiveViewControls: React.FC<LiveViewControlsProps> = ({
               onClick={() => handleAction(button.label, button.requestType, button.message)}
               className={`${buttonBaseClasses} ${
                 isDisabled
-                  ? 'bg-zinc-700 text-zinc-500 cursor-not-allowed border border-zinc-600'
-                  : `${button.color} text-white hover:shadow-xl border border-transparent`
+                  ? 'bg-zinc-700 text-zinc-500 cursor-not-allowed'
+                  : `${button.color} text-white hover:shadow-lg`
               }`}
               disabled={isDisabled || isProcessingThis}
-              whileHover={!isDisabled ? { scale: 1.02, y: -2 } : {}}
-              whileTap={!isDisabled ? { scale: 0.98 } : {}}
-              title={
-                button.requiresImage && !currentImageUrl 
-                  ? 'Select an image first' 
-                  : button.label
-              }
+              whileHover={!isDisabled ? { scale: 1.05 } : {}}
+              whileTap={!isDisabled ? { scale: 0.95 } : {}}
+              title={button.label}
             >
               {isProcessingThis ? (
-                <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                <div className="w-3 h-3 border border-white border-t-transparent rounded-full animate-spin" />
               ) : (
-                <Icon size={20} />
+                <Icon size={14} />
               )}
-              <span className="text-xs font-medium text-center leading-tight">
+              <span className="text-xs font-medium">
                 {button.label}
               </span>
             </motion.button>
           );
         })}
-      </div>
-      
-      {/* Status indicator */}
-      <div className="mt-4 pt-3 border-t border-zinc-700">
-        <div className="flex items-center justify-between text-xs">
-          <span className="text-zinc-400">
-            {currentImageUrl ? 'Image selected' : 'No image selected'}
-          </span>
-          <span className="text-zinc-400">
-            {controlButtons.filter(b => !b.requiresImage || currentImageUrl).length} actions available
-          </span>
-        </div>
       </div>
     </div>
   );

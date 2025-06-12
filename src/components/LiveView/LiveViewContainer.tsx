@@ -24,9 +24,9 @@ const LiveViewContainer: React.FC<LiveViewContainerProps> = ({
   const currentImageUrl = images[currentIndex];
 
   return (
-    <div className="h-full flex flex-col space-y-4">
+    <div className="h-full flex flex-col space-y-3">
       {/* Profile Image Display - Takes most of the space */}
-      <div className="flex-1">
+      <div className="flex-1 min-h-0">
         <ProfileImageDisplay
           images={images}
           currentIndex={currentIndex}
@@ -36,7 +36,7 @@ const LiveViewContainer: React.FC<LiveViewContainerProps> = ({
         />
       </div>
       
-      {/* Live View Controls - Fixed at bottom */}
+      {/* Live View Controls - Compact at bottom */}
       <div className="flex-shrink-0">
         <LiveViewControls
           onSendMessage={onSendMessage}
