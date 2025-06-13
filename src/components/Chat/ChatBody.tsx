@@ -16,6 +16,7 @@ interface ChatBodyProps {
   onRetryMessage: (id: string) => void;
   onRequestAudio?: (messageId: string, content: string) => void;
   streamingState?: StreamingState;
+  onNotificationSound?: () => void;
 }
 
 const ChatBody: React.FC<ChatBodyProps> = ({ 
@@ -23,9 +24,11 @@ const ChatBody: React.FC<ChatBodyProps> = ({
   loading, 
   onRetryMessage, 
   onRequestAudio,
-  streamingState 
+  streamingState,
+  onNotificationSound
 }) => {
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const previousMessageCountRef = useRef(messages.length);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -34,6 +37,25 @@ const ChatBody: React.FC<ChatBodyProps> = ({
   useEffect(() => {
     scrollToBottom();
   }, [messages, loading, streamingState?.streamingContent]);
+
+  // Play notification sound when a new received message is added
+  useEffect(() => {
+    const currentMessageCount = messages.length;
+    const previousMessageCount = previousMessageCountRef.current;
+    
+    if (currentMessageCount > previousMessageCount) {
+      // Check if the new message is a received message
+      const newMessage = messages[currentMessageCount - 1];
+      if (newMessage && newMessage.type === 'received' && onNotificationSound) {
+        // Small delay to ensure the message is rendered before playing sound
+        setTimeout(() => {
+          onNotificationSound();
+        }, 100);
+      }
+    }
+    
+    previousMessageCountRef.current = currentMessageCount;
+  }, [messages, onNotificationSound]);
 
   const TypingIndicator = () => (
     <motion.div

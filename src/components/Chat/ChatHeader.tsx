@@ -1,5 +1,5 @@
 import React from 'react';
-import { Settings, Trash2, Square } from 'lucide-react';
+import { Settings, Trash2, Square, Volume2, VolumeX } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 interface StreamingState {
@@ -14,6 +14,8 @@ interface ChatHeaderProps {
   webhookConfigured: boolean;
   streamingState?: StreamingState;
   onStopStreaming?: () => void;
+  soundEnabled: boolean;
+  onToggleSound: () => void;
 }
 
 const ChatHeader: React.FC<ChatHeaderProps> = ({ 
@@ -21,7 +23,9 @@ const ChatHeader: React.FC<ChatHeaderProps> = ({
   onClearChat,
   webhookConfigured,
   streamingState,
-  onStopStreaming
+  onStopStreaming,
+  soundEnabled,
+  onToggleSound
 }) => {
   return (
     <div className="bg-zinc-800 border-b border-zinc-700 p-4 flex items-center justify-between shadow-sm">
@@ -58,6 +62,20 @@ const ChatHeader: React.FC<ChatHeaderProps> = ({
             <Square size={18} />
           </motion.button>
         )}
+
+        <motion.button
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.9 }}
+          onClick={onToggleSound}
+          className={`p-2 rounded-full transition-colors ${
+            soundEnabled 
+              ? 'text-blue-400 hover:text-blue-300 hover:bg-zinc-700' 
+              : 'text-zinc-400 hover:text-zinc-300 hover:bg-zinc-700'
+          }`}
+          title={soundEnabled ? 'Disable notification sounds' : 'Enable notification sounds'}
+        >
+          {soundEnabled ? <Volume2 size={18} /> : <VolumeX size={18} />}
+        </motion.button>
         
         <motion.button
           whileHover={{ scale: 1.1 }}

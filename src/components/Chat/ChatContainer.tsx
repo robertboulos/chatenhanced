@@ -5,6 +5,7 @@ import ChatInput from './ChatInput';
 import SettingsModal from '../Settings/SettingsModal';
 import { Message, WebhookConfig } from '../../types';
 import { MessageSquare } from 'lucide-react';
+import { useNotificationSound } from '../../hooks/useNotificationSound';
 
 interface StreamingState {
   isStreaming: boolean;
@@ -42,6 +43,7 @@ const ChatContainer: React.FC<ChatContainerProps> = ({
   onStopStreaming,
 }) => {
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+  const { soundEnabled, toggleSound, playNotificationSound } = useNotificationSound();
 
   const handleOpenSettings = () => {
     setIsSettingsOpen(true);
@@ -71,6 +73,8 @@ const ChatContainer: React.FC<ChatContainerProps> = ({
         webhookConfigured={webhookConfig.enabled && !!webhookConfig.url}
         streamingState={streamingState}
         onStopStreaming={onStopStreaming}
+        soundEnabled={soundEnabled}
+        onToggleSound={toggleSound}
       />
       
       <ChatBody 
@@ -79,6 +83,7 @@ const ChatContainer: React.FC<ChatContainerProps> = ({
         onRetryMessage={onRetryMessage}
         onRequestAudio={onRequestAudio}
         streamingState={streamingState}
+        onNotificationSound={playNotificationSound}
       />
       
       <ChatInput 
