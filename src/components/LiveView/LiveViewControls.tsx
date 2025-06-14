@@ -22,17 +22,24 @@ const LiveViewControls: React.FC<LiveViewControlsProps> = ({
   const handleAction = async (action: string, requestType: 'text' | 'image' | 'video', message: string) => {
     if (disabled) return;
     
+    // Check if we have a current image URL for image/video operations
+    if ((requestType === 'video' || requestType === 'image') && !currentImageUrl) {
+      toast.error('No image available for this operation');
+      return;
+    }
+    
     setIsProcessing(action);
     
     try {
+      // Pass the current image URL for both video and variation requests
       onSendMessage(
         message, 
         requestType, 
-        undefined, 
-        requestType === 'video' ? currentImageUrl : undefined
+        undefined, // imageData (base64) - not needed for these operations
+        currentImageUrl // Pass the current image URL
       );
       
-      toast.success(`${action} request sent!`);
+      toast.success(`${action} request sent with image URL!`);
     } catch (error) {
       toast.error(`Failed to send ${action} request`);
     } finally {
@@ -67,14 +74,16 @@ const LiveViewControls: React.FC<LiveViewControlsProps> = ({
         <h3 className="text-xs font-medium text-zinc-300">AI Controls</h3>
         <div className="flex items-center space-x-1">
           <div className="w-1.5 h-1.5 bg-blue-500 rounded-full animate-pulse"></div>
-          <span className="text-xs text-zinc-500">Ready</span>
+          <span className="text-xs text-zinc-500">
+            {currentImageUrl ? 'Image Ready' : 'No Image'}
+          </span>
         </div>
       </div>
       
       <div className="grid grid-cols-2 gap-3">
         {controlButtons.map((button) => {
           const Icon = button.icon;
-          const isDisabled = disabled;
+          const isDisabled = disabled || !currentImageUrl;
           const isProcessingThis = isProcessing === button.id;
           
           return (
@@ -89,7 +98,7 @@ const LiveViewControls: React.FC<LiveViewControlsProps> = ({
               disabled={isDisabled || isProcessingThis}
               whileHover={!isDisabled ? { scale: 1.05 } : {}}
               whileTap={!isDisabled ? { scale: 0.95 } : {}}
-              title={button.label}
+              title={isDisabled && !currentImageUrl ? 'No image available' : button.label}
             >
               {isProcessingThis ? (
                 <div className="w-4 h-4 border border-white border-t-transparent rounded-full animate-spin" />
@@ -103,6 +112,14 @@ const LiveViewControls: React.FC<LiveViewControlsProps> = ({
           );
         })}
       </div>
+      
+      {/* Debug info - shows current image URL (can be removed in production) */}
+      {currentImageUrl && (
+        <div className="mt-2 p-2 bg-zinc-900/50 rounded text-xs text-zinc-400 truncate">
+          <span className="font-medium">Current: </span>
+          <span className="opacity-75">{currentImageUrl}</span>
+        </div>
+      )}
     </div>
   );
 };
