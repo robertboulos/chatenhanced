@@ -122,13 +122,20 @@ export const useAdvancedAI = (webhookConfig: WebhookConfig) => {
           setActiveTasks(prev => 
             prev.map(task => 
               task.id === taskId 
-                ? { ...task, status: 'completed', progress: 100, result: result.response }
+                ? { ...task, status: 'completed', progress: 100, result: result.imageUrls || [result.response] }
                 : task
             )
           );
           
-          toast.success('Image enhancement completed');
-          return result.response;
+          // Handle multiple enhanced images
+          const enhancedImages = result.imageUrls || (result.response ? [result.response] : []);
+          if (enhancedImages.length > 1) {
+            toast.success(`Image enhancement completed - ${enhancedImages.length} variations created`);
+          } else {
+            toast.success('Image enhancement completed');
+          }
+          
+          return enhancedImages;
         } else {
           throw new Error(result.error || 'Enhancement failed');
         }

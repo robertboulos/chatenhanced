@@ -139,8 +139,23 @@ export const useMessages = (webhookConfig: WebhookConfig, onImageReceived?: (ima
           if (result.success) {
             updateMessageStatus(messageId, 'sent');
             
-            // Handle image URL response if present
-            if (result.response && onImageReceived) {
+            // Handle multiple image URLs if present
+            if (result.imageUrls && result.imageUrls.length > 0 && onImageReceived) {
+              console.log('Processing multiple image URLs:', result.imageUrls);
+              // Add all image URLs to the gallery
+              result.imageUrls.forEach((imageUrl, index) => {
+                console.log(`Adding image ${index + 1}/${result.imageUrls!.length}:`, imageUrl);
+                onImageReceived(imageUrl);
+              });
+              
+              // Show success message with count
+              if (result.imageUrls.length > 1) {
+                toast.success(`${result.imageUrls.length} images received`);
+              }
+            } 
+            // Fallback to single image URL for backward compatibility
+            else if (result.response && onImageReceived) {
+              console.log('Processing single image URL:', result.response);
               onImageReceived(result.response);
             }
 
@@ -190,8 +205,21 @@ export const useMessages = (webhookConfig: WebhookConfig, onImageReceived?: (ima
           updateMessageStatus(messageId, 'sent');
           toast.success('Message resent successfully');
           
-          // Handle image URL response if present
-          if (result.response && onImageReceived) {
+          // Handle multiple image URLs if present
+          if (result.imageUrls && result.imageUrls.length > 0 && onImageReceived) {
+            console.log('Processing multiple image URLs from retry:', result.imageUrls);
+            result.imageUrls.forEach((imageUrl, index) => {
+              console.log(`Adding retry image ${index + 1}/${result.imageUrls!.length}:`, imageUrl);
+              onImageReceived(imageUrl);
+            });
+            
+            if (result.imageUrls.length > 1) {
+              toast.success(`${result.imageUrls.length} images received`);
+            }
+          }
+          // Fallback to single image URL for backward compatibility
+          else if (result.response && onImageReceived) {
+            console.log('Processing single image URL from retry:', result.response);
             onImageReceived(result.response);
           }
 

@@ -7,14 +7,17 @@ interface SendMessageResult {
   response?: string;
   additionalResponse?: string;
   audioUrl?: string;
+  imageUrls?: string[]; // Add support for multiple image URLs
 }
 
 interface WebhookResponse {
   output: {
-    URL?: string;
-    url?: string;
+    URL?: string | string[]; // Support both single and multiple URLs
+    url?: string | string[];
+    urls?: string[]; // Additional field for multiple URLs
+    imageUrl?: string | string[];
+    imageUrls?: string[]; // Additional field for multiple image URLs
     message?: string;
-    imageUrl?: string;
     audioUrl?: string;
   };
 }
@@ -27,7 +30,12 @@ const handleWebhookError = (error: unknown): string => {
   return error instanceof Error ? error.message : 'An unexpected error occurred';
 };
 
-const parseWebhookResponse = (response: any): { message?: string; imageUrl?: string; audioUrl?: string } => {
+const parseWebhookResponse = (response: any): { 
+  message?: string; 
+  imageUrl?: string; 
+  imageUrls?: string[];
+  audioUrl?: string; 
+} => {
   console.log('Parsing webhook response:', response);
   try {
     if (typeof response === 'string') {
@@ -38,16 +46,35 @@ const parseWebhookResponse = (response: any): { message?: string; imageUrl?: str
     const webhookResponse = response as WebhookResponse;
     console.log('Parsed webhook response object:', webhookResponse);
     
-    const imageUrl = webhookResponse.output?.URL || 
-                    webhookResponse.output?.url || 
-                    webhookResponse.output?.imageUrl;
+    // Collect all possible image URLs from various fields
+    const allImageUrls: string[] = [];
+    
+    // Helper function to add URLs to the collection
+    const addUrls = (value: string | string[] | undefined) => {
+      if (typeof value === 'string') {
+        allImageUrls.push(value);
+      } else if (Array.isArray(value)) {
+        allImageUrls.push(...value.filter(url => typeof url === 'string'));
+      }
+    };
 
-    console.log('Extracted image URL:', imageUrl);
+    // Check all possible URL fields
+    addUrls(webhookResponse.output?.URL);
+    addUrls(webhookResponse.output?.url);
+    addUrls(webhookResponse.output?.urls);
+    addUrls(webhookResponse.output?.imageUrl);
+    addUrls(webhookResponse.output?.imageUrls);
+
+    // Remove duplicates and filter out empty strings
+    const uniqueImageUrls = [...new Set(allImageUrls)].filter(url => url && url.trim());
+
+    console.log('Extracted image URLs:', uniqueImageUrls);
     console.log('Extracted message:', webhookResponse.output?.message);
     console.log('Extracted audio URL:', webhookResponse.output?.audioUrl);
 
     return {
-      imageUrl,
+      imageUrl: uniqueImageUrls.length > 0 ? uniqueImageUrls[0] : undefined, // Keep backward compatibility
+      imageUrls: uniqueImageUrls.length > 0 ? uniqueImageUrls : undefined,
       message: webhookResponse.output?.message,
       audioUrl: webhookResponse.output?.audioUrl
     };
@@ -140,7 +167,8 @@ export const sendMessageToWebhook = async (
 
     return { 
       success: true,
-      response: parsedResponse.imageUrl,
+      response: parsedResponse.imageUrl, // Keep backward compatibility
+      imageUrls: parsedResponse.imageUrls, // New field for multiple URLs
       additionalResponse: parsedResponse.message,
       audioUrl: parsedResponse.audioUrl
     };
