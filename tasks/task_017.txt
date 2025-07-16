@@ -1,0 +1,32 @@
+# Task ID: 17
+# Title: Implement Usage Analytics Endpoint
+# Status: pending
+# Dependencies: 1, 2
+# Priority: low
+# Description: Create an endpoint to retrieve usage analytics data.
+# Details:
+Create a new endpoint at `GET /api:v2/data/analytics` with the following implementation:
+
+1. Accept query parameters for filtering (date range, provider)
+2. Calculate usage metrics from generation history
+3. Return formatted response with analytics data
+
+The analytics should include:
+- Total generations by provider
+- Success/failure rates
+- Average generation time
+- Cost metrics
+- Popular LoRA combinations
+- Usage trends over time
+
+Implement proper authentication and authorization to ensure users can only access their own analytics unless they have admin privileges.
+
+# Test Strategy:
+Test the endpoint with various scenarios:
+- Retrieve analytics with different filters
+- Test with no data
+- Verify calculation accuracy
+- Verify authentication and authorization
+- Test with invalid parameters
+- Verify proper error handling
+- Test performance with large datasets

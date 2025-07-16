@@ -1,0 +1,30 @@
+# Task ID: 7
+# Title: Implement Replicate Generate Endpoint
+# Status: completed
+# Dependencies: 1, 2, 3
+# Priority: medium
+# Description: Create the Replicate endpoint that provides access to Replicate Flux Dev with proper parameters.
+# Details:
+Create a new endpoint at `POST /api:v2/replicate/generate` with the following implementation:
+
+1. Accept input parameters similar to the Flux endpoints, but with Replicate-specific parameters
+2. Validate input parameters, allowing up to 3 LoRAs (Replicate limit)
+3. Fetch LoRA URLs from database based on provided IDs
+4. Build enhanced prompt with seed and negative prompt
+5. Call Replicate API with properly mapped parameters
+6. Store generation record in generation_history_v2 table
+7. Return standardized response
+
+Ensure parameter mapping follows the table in Appendix B of the PRD. Replicate uses slightly different parameter names (e.g., 'guidance' instead of 'guidance_scale'). Implement proper async handling as Replicate may be slower than other providers.
+
+# Test Strategy:
+Test the endpoint with various input combinations:
+- Valid prompt with no LoRAs
+- Valid prompt with 1-3 LoRAs
+- Invalid input with 4+ LoRAs (should return error)
+- Test with various seed values
+- Test with and without negative prompts
+- Verify database record creation
+- Test async response handling
+- Verify proper error handling for invalid inputs and API failures
+- Test performance under load

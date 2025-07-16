@@ -1,0 +1,25 @@
+# Task ID: 13
+# Title: Implement LoRA Compatibility Checker
+# Status: pending
+# Dependencies: 1, 2, 3
+# Priority: low
+# Description: Create an endpoint to check compatibility between multiple LoRAs before generation.
+# Details:
+Create a new endpoint at `POST /api:v2/utils/compatibility` with the following implementation:
+
+1. Accept an array of LoRA IDs to check
+2. Retrieve LoRA records from the database
+3. Check for known compatibility issues between the LoRAs
+4. Return compatibility score and any warnings
+
+Implement a compatibility matrix or algorithm that identifies potential conflicts between LoRAs. This could be based on tags, categories, or historical data on successful/failed combinations. Store compatibility data in a new database table if necessary.
+
+# Test Strategy:
+Test the endpoint with various LoRA combinations:
+- Known compatible LoRAs
+- Known incompatible LoRAs
+- Mix of compatible and incompatible LoRAs
+- Invalid LoRA IDs
+- Verify that compatibility scores are consistent
+- Verify that warnings are appropriate
+- Test performance under load

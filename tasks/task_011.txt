@@ -1,0 +1,28 @@
+# Task ID: 11
+# Title: Implement Universal Status Checker
+# Status: completed
+# Dependencies: 1, 2, 3
+# Priority: high
+# Description: Create a single endpoint to check status across all async providers.
+# Details:
+Create a new endpoint at `GET /api:v2/status/check` with the following implementation:
+
+1. Accept request_id and/or generation_id as query parameters
+2. Retrieve the generation record from the database
+3. If already completed, return the completed response
+4. Otherwise, check status with the appropriate provider
+5. Update the generation record if completed
+6. Return standardized status response
+
+Implement the check_status function as specified in PRD section 4.2.C. Create helper functions for provider-specific status checking (checkProviderStatus) and response formatting (formatStatusResponse, formatCompletedResponse). Handle different provider response formats and ensure consistent output format regardless of provider.
+
+# Test Strategy:
+Test the endpoint with various scenarios:
+- Check status of pending generation
+- Check status of completed generation
+- Check status of failed generation
+- Test with invalid request_id/generation_id
+- Test with different providers (Fal.ai, Replicate)
+- Verify database record updates
+- Verify proper error handling
+- Test performance under load to ensure it meets the <200ms response time requirement

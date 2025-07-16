@@ -1,0 +1,50 @@
+# Task ID: 2
+# Title: Create Database Schema Updates
+# Status: done
+# Dependencies: 1
+# Priority: high
+# Description: Implement the new database tables required for the Image Generation v2 API group as specified in the PRD.
+# Details:
+Create the following database tables:
+
+1. generation_history_v2 with fields:
+- id (INT, PRIMARY KEY, AUTO_INCREMENT)
+- request_id (VARCHAR(255))
+- generation_id (VARCHAR(255), UNIQUE)
+- user_id (INT)
+- provider (VARCHAR(50))
+- status (ENUM: 'pending', 'processing', 'completed', 'failed')
+- settings (JSON)
+- images (JSON)
+- metadata (JSON)
+- credits_used (DECIMAL(10,4))
+- error (JSON)
+- created_at (TIMESTAMP, DEFAULT CURRENT_TIMESTAMP)
+- completed_at (TIMESTAMP)
+
+Add indexes:
+- idx_request_id (request_id)
+- idx_user_status (user_id, status)
+- idx_created (created_at)
+
+2. generation_presets with fields:
+- id (INT, PRIMARY KEY, AUTO_INCREMENT)
+- user_id (INT)
+- name (VARCHAR(255))
+- description (TEXT)
+- provider (VARCHAR(50))
+- settings (JSON)
+- thumbnail_url (VARCHAR(500))
+- usage_count (INT, DEFAULT 0)
+- is_public (BOOLEAN, DEFAULT FALSE)
+- tags (JSON)
+- created_at (TIMESTAMP, DEFAULT CURRENT_TIMESTAMP)
+- updated_at (TIMESTAMP, DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP)
+
+Add indexes:
+- idx_user (user_id)
+- idx_public (is_public)
+- FULLTEXT idx_search (name, description)
+
+# Test Strategy:
+Verify that both tables are created with all specified fields and correct data types. Test the indexes by running sample queries that should use them. Confirm that AUTO_INCREMENT, DEFAULT values, and timestamps work correctly by inserting test records.

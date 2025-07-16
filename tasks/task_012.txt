@@ -1,0 +1,26 @@
+# Task ID: 12
+# Title: Implement Cost Estimator Endpoint
+# Status: pending
+# Dependencies: 1, 3
+# Priority: medium
+# Description: Create an endpoint that estimates cost and time before generation.
+# Details:
+Create a new endpoint at `POST /api:v2/utils/estimate` with the following implementation:
+
+1. Accept the same input parameters as the generation endpoints
+2. Calculate estimated cost and time for each available provider
+3. Determine recommendations based on priority factors
+4. Return formatted response with recommendations
+
+The response should include an array of provider recommendations with estimated cost, time, quality score, and limitations for each. Also include summary fields for cheapest, fastest, and best quality options. Base calculations on the provider comparison matrix in Appendix A of the PRD.
+
+# Test Strategy:
+Test the endpoint with various input combinations:
+- Different prompt complexities
+- Different LoRA counts
+- Different size options
+- Verify that estimates are reasonable and consistent
+- Verify that recommendations match expected outcomes
+- Test with unavailable providers
+- Verify proper error handling
+- Test performance under load

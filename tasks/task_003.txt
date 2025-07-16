@@ -1,0 +1,66 @@
+# Task ID: 3
+# Title: Implement Common Utility Functions
+# Status: completed
+# Dependencies: 1
+# Priority: high
+# Description: Create reusable utility functions that will be used across multiple endpoints, including seed implementation and size mapping.
+# Details:
+Create a utilities module with the following functions:
+
+1. buildEnhancedPrompt(prompt, seed, negative):
+```javascript
+function buildEnhancedPrompt(prompt, seed, negative) {
+  var enhanced = prompt;
+  
+  // Add seed for reproducibility
+  if (seed && seed > 0) {
+    enhanced += ` [seed:${seed}]`;
+  } else if (seed === -1) {
+    // Generate random seed
+    var random_seed = Math.floor(Math.random() * 2147483647);
+    enhanced += ` [seed:${random_seed}]`;
+  }
+  
+  // Add negative prompt
+  if (negative) {
+    enhanced += ` [not: ${negative}]`;
+  }
+  
+  return enhanced;
+}
+```
+
+2. mapToFalSize(width, height):
+```javascript
+function mapToFalSize(width, height) {
+  var ratio = width / height;
+  
+  // Exact matches
+  if (width === 1024 && height === 1024) return "square_hd";
+  if (width === 1024 && height === 768) return "landscape_4_3";
+  if (width === 768 && height === 1024) return "portrait_4_3";
+  
+  // Ratio-based selection
+  if (Math.abs(ratio - 1) < 0.1) return "square_hd";
+  if (ratio > 1.4) return "landscape_16_9";
+  if (ratio > 1.2) return "landscape_4_3";
+  if (ratio < 0.7) return "portrait_16_9";
+  if (ratio < 0.9) return "portrait_4_3";
+  
+  return "square_hd";
+}
+```
+
+3. Additional utility functions:
+- validateInput(input, schema) - For input validation
+- formatStatusResponse(status, generation) - For consistent status responses
+- formatCompletedResponse(generation) - For completed generation responses
+- checkProviderStatus(provider, requestId) - For provider-specific status checking
+- updateGenerationRecord(id, status) - For updating generation records
+
+# Test Strategy:
+Create unit tests for each utility function with various input combinations:
+- Test buildEnhancedPrompt with different seed values (positive, -1, null) and with/without negative prompts
+- Test mapToFalSize with various width/height combinations to ensure correct size mapping
+- Test each additional utility function with valid and invalid inputs
+- Verify that random seed generation produces values within expected range

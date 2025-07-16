@@ -1,0 +1,26 @@
+# Task ID: 18
+# Title: Implement API Documentation
+# Status: pending
+# Dependencies: 1, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17
+# Priority: medium
+# Description: Create comprehensive API documentation for all endpoints.
+# Details:
+Create OpenAPI/Swagger documentation for all endpoints in the Image Generation v2 API group. The documentation should include:
+
+1. Endpoint descriptions
+2. Request parameters with types and constraints
+3. Response schemas with examples
+4. Error codes and messages
+5. Authentication requirements
+6. Rate limiting information
+
+Also create a migration guide from v1 to v2, highlighting the differences and benefits of the new API. Include code examples in at least 5 programming languages (JavaScript, Python, PHP, Ruby, Go).
+
+# Test Strategy:
+Review documentation for accuracy and completeness:
+- Verify that all endpoints are documented
+- Verify that parameter descriptions are accurate
+- Verify that response schemas match actual responses
+- Test code examples to ensure they work
+- Have developers review the documentation for clarity
+- Test the migration guide with v1 users

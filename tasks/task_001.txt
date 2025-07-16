@@ -1,0 +1,21 @@
+# Task ID: 1
+# Title: Create New API Group Structure
+# Status: done
+# Dependencies: None
+# Priority: high
+# Description: Set up the new '🎨 Image Generation v2' API group in Xano workspace 5 with all required folders according to the PRD structure.
+# Details:
+Create the following folder structure in Xano workspace 5:
+- 🎨 Image Generation v2/
+  - 📁 /flux/
+  - 📁 /replicate/
+  - 📁 /openai/
+  - 📁 /smart/
+  - 📁 /status/
+  - 📁 /utils/
+  - 📁 /data/
+
+Ensure all folders are properly named and organized according to the PRD. This is the foundation for all subsequent tasks.
+
+# Test Strategy:
+Verify that all folders are created with correct naming and structure. Check that the API group appears in the Xano workspace 5 interface. Confirm that the structure matches exactly what's specified in the PRD section 4.1.

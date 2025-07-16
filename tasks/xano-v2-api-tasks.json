@@ -1,0 +1,336 @@
+{
+  "tasks": [
+    {
+      "id": 1,
+      "title": "Create New API Group Structure",
+      "description": "Set up the new '🎨 Image Generation v2' API group in Xano workspace 5 with all required folders according to the PRD structure.",
+      "details": "Create the following folder structure in Xano workspace 5:\n- 🎨 Image Generation v2/\n  - 📁 /flux/\n  - 📁 /replicate/\n  - 📁 /openai/\n  - 📁 /smart/\n  - 📁 /status/\n  - 📁 /utils/\n  - 📁 /data/\n\nEnsure all folders are properly named and organized according to the PRD. This is the foundation for all subsequent tasks.",
+      "testStrategy": "Verify that all folders are created with correct naming and structure. Check that the API group appears in the Xano workspace 5 interface. Confirm that the structure matches exactly what's specified in the PRD section 4.1.",
+      "priority": "high",
+      "dependencies": [],
+      "status": "done",
+      "subtasks": []
+    },
+    {
+      "id": 2,
+      "title": "Create Database Schema Updates",
+      "description": "Implement the new database tables required for the Image Generation v2 API group as specified in the PRD.",
+      "details": "Create the following database tables:\n\n1. generation_history_v2 with fields:\n- id (INT, PRIMARY KEY, AUTO_INCREMENT)\n- request_id (VARCHAR(255))\n- generation_id (VARCHAR(255), UNIQUE)\n- user_id (INT)\n- provider (VARCHAR(50))\n- status (ENUM: 'pending', 'processing', 'completed', 'failed')\n- settings (JSON)\n- images (JSON)\n- metadata (JSON)\n- credits_used (DECIMAL(10,4))\n- error (JSON)\n- created_at (TIMESTAMP, DEFAULT CURRENT_TIMESTAMP)\n- completed_at (TIMESTAMP)\n\nAdd indexes:\n- idx_request_id (request_id)\n- idx_user_status (user_id, status)\n- idx_created (created_at)\n\n2. generation_presets with fields:\n- id (INT, PRIMARY KEY, AUTO_INCREMENT)\n- user_id (INT)\n- name (VARCHAR(255))\n- description (TEXT)\n- provider (VARCHAR(50))\n- settings (JSON)\n- thumbnail_url (VARCHAR(500))\n- usage_count (INT, DEFAULT 0)\n- is_public (BOOLEAN, DEFAULT FALSE)\n- tags (JSON)\n- created_at (TIMESTAMP, DEFAULT CURRENT_TIMESTAMP)\n- updated_at (TIMESTAMP, DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP)\n\nAdd indexes:\n- idx_user (user_id)\n- idx_public (is_public)\n- FULLTEXT idx_search (name, description)",
+      "testStrategy": "Verify that both tables are created with all specified fields and correct data types. Test the indexes by running sample queries that should use them. Confirm that AUTO_INCREMENT, DEFAULT values, and timestamps work correctly by inserting test records.",
+      "priority": "high",
+      "dependencies": [
+        1
+      ],
+      "status": "done",
+      "subtasks": []
+    },
+    {
+      "id": 3,
+      "title": "Implement Common Utility Functions",
+      "description": "Create reusable utility functions that will be used across multiple endpoints, including seed implementation and size mapping.",
+      "details": "Create a utilities module with the following functions:\n\n1. buildEnhancedPrompt(prompt, seed, negative):\n```javascript\nfunction buildEnhancedPrompt(prompt, seed, negative) {\n  var enhanced = prompt;\n  \n  // Add seed for reproducibility\n  if (seed && seed > 0) {\n    enhanced += ` [seed:${seed}]`;\n  } else if (seed === -1) {\n    // Generate random seed\n    var random_seed = Math.floor(Math.random() * 2147483647);\n    enhanced += ` [seed:${random_seed}]`;\n  }\n  \n  // Add negative prompt\n  if (negative) {\n    enhanced += ` [not: ${negative}]`;\n  }\n  \n  return enhanced;\n}\n```\n\n2. mapToFalSize(width, height):\n```javascript\nfunction mapToFalSize(width, height) {\n  var ratio = width / height;\n  \n  // Exact matches\n  if (width === 1024 && height === 1024) return \"square_hd\";\n  if (width === 1024 && height === 768) return \"landscape_4_3\";\n  if (width === 768 && height === 1024) return \"portrait_4_3\";\n  \n  // Ratio-based selection\n  if (Math.abs(ratio - 1) < 0.1) return \"square_hd\";\n  if (ratio > 1.4) return \"landscape_16_9\";\n  if (ratio > 1.2) return \"landscape_4_3\";\n  if (ratio < 0.7) return \"portrait_16_9\";\n  if (ratio < 0.9) return \"portrait_4_3\";\n  \n  return \"square_hd\";\n}\n```\n\n3. Additional utility functions:\n- validateInput(input, schema) - For input validation\n- formatStatusResponse(status, generation) - For consistent status responses\n- formatCompletedResponse(generation) - For completed generation responses\n- checkProviderStatus(provider, requestId) - For provider-specific status checking\n- updateGenerationRecord(id, status) - For updating generation records",
+      "testStrategy": "Create unit tests for each utility function with various input combinations:\n- Test buildEnhancedPrompt with different seed values (positive, -1, null) and with/without negative prompts\n- Test mapToFalSize with various width/height combinations to ensure correct size mapping\n- Test each additional utility function with valid and invalid inputs\n- Verify that random seed generation produces values within expected range",
+      "priority": "high",
+      "dependencies": [
+        1
+      ],
+      "status": "completed",
+      "subtasks": []
+    },
+    {
+      "id": 4,
+      "title": "Implement Flux Standard Endpoint",
+      "description": "Create the standard Flux endpoint that consolidates fal-ai/flux-lora, rundiffusion-photo-flux, and generate-image-rundiffusion-lora functionality.",
+      "details": "Create a new endpoint at `POST /api:v2/flux/standard` with the following implementation:\n\n1. Accept input parameters as specified in PRD section 4.2.A\n2. Validate input parameters, especially LoRA count (max 2)\n3. Fetch LoRA URLs from database based on provided IDs\n4. Build enhanced prompt with seed and negative prompt using utility function\n5. Call Fal.ai API with properly mapped parameters\n6. Store generation record in generation_history_v2 table\n7. Return standardized response with request_id, generation_id, and status\n\nImplementation should follow the XanoScript provided in the PRD, with additional error handling and input validation. Ensure the endpoint respects the non-functional requirements for performance and reliability.",
+      "testStrategy": "Test the endpoint with various input combinations:\n- Valid prompt with no LoRAs\n- Valid prompt with 1 LoRA\n- Valid prompt with 2 LoRAs\n- Invalid input with 3+ LoRAs (should return error)\n- Test with various seed values (positive, -1, null)\n- Test with and without negative prompts\n- Verify database record creation\n- Verify proper error handling for invalid inputs and API failures\n- Test performance under load to ensure it meets the <500ms response time requirement",
+      "priority": "high",
+      "dependencies": [
+        1,
+        2,
+        3
+      ],
+      "status": "completed",
+      "subtasks": []
+    },
+    {
+      "id": 5,
+      "title": "Implement Flux Advanced Endpoint",
+      "description": "Create the advanced Flux endpoint that supports 3-5 LoRAs for power users.",
+      "details": "Create a new endpoint at `POST /api:v2/flux/advanced` with the following implementation:\n\n1. Accept the same input parameters as the standard endpoint\n2. Validate input parameters, allowing 3-5 LoRAs\n3. Fetch LoRA URLs from database based on provided IDs\n4. Build enhanced prompt with seed and negative prompt\n5. Call Fal.ai API with properly mapped parameters, using the appropriate model for multiple LoRAs\n6. Store generation record in generation_history_v2 table\n7. Return standardized response\n\nThe implementation should be similar to the standard endpoint but with adjusted validation and potentially different API parameters for the advanced model. Include proper error handling for LoRA compatibility issues.",
+      "testStrategy": "Test the endpoint with various input combinations:\n- Valid prompt with 3 LoRAs\n- Valid prompt with 5 LoRAs\n- Invalid input with 6+ LoRAs (should return error)\n- Test with various seed values\n- Test with and without negative prompts\n- Verify database record creation\n- Test LoRA compatibility handling\n- Verify proper error handling for invalid inputs and API failures\n- Test performance under load",
+      "priority": "medium",
+      "dependencies": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "status": "completed",
+      "subtasks": []
+    },
+    {
+      "id": 6,
+      "title": "Implement Flux Juggernaut Endpoint",
+      "description": "Create the Juggernaut Flux endpoint that provides the highest quality output with support for 2 LoRAs.",
+      "details": "Create a new endpoint at `POST /api:v2/flux/juggernaut` with the following implementation:\n\n1. Accept the same input parameters as the standard endpoint\n2. Validate input parameters, allowing up to 2 LoRAs\n3. Fetch LoRA URLs from database based on provided IDs\n4. Build enhanced prompt with seed and negative prompt\n5. Call Fal.ai API with properly mapped parameters, using the Juggernaut model\n6. Store generation record in generation_history_v2 table\n7. Return standardized response\n\nThe implementation should be similar to the standard endpoint but configured to use the Juggernaut model which provides higher quality output. May require different default parameters (higher step count, different guidance scale) for optimal results.",
+      "testStrategy": "Test the endpoint with various input combinations:\n- Valid prompt with no LoRAs\n- Valid prompt with 1 LoRA\n- Valid prompt with 2 LoRAs\n- Invalid input with 3+ LoRAs (should return error)\n- Test with various seed values\n- Test with and without negative prompts\n- Verify database record creation\n- Compare output quality with standard endpoint\n- Verify proper error handling for invalid inputs and API failures\n- Test performance under load",
+      "priority": "medium",
+      "dependencies": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "status": "completed",
+      "subtasks": []
+    },
+    {
+      "id": 7,
+      "title": "Implement Replicate Generate Endpoint",
+      "description": "Create the Replicate endpoint that provides access to Replicate Flux Dev with proper parameters.",
+      "details": "Create a new endpoint at `POST /api:v2/replicate/generate` with the following implementation:\n\n1. Accept input parameters similar to the Flux endpoints, but with Replicate-specific parameters\n2. Validate input parameters, allowing up to 3 LoRAs (Replicate limit)\n3. Fetch LoRA URLs from database based on provided IDs\n4. Build enhanced prompt with seed and negative prompt\n5. Call Replicate API with properly mapped parameters\n6. Store generation record in generation_history_v2 table\n7. Return standardized response\n\nEnsure parameter mapping follows the table in Appendix B of the PRD. Replicate uses slightly different parameter names (e.g., 'guidance' instead of 'guidance_scale'). Implement proper async handling as Replicate may be slower than other providers.",
+      "testStrategy": "Test the endpoint with various input combinations:\n- Valid prompt with no LoRAs\n- Valid prompt with 1-3 LoRAs\n- Invalid input with 4+ LoRAs (should return error)\n- Test with various seed values\n- Test with and without negative prompts\n- Verify database record creation\n- Test async response handling\n- Verify proper error handling for invalid inputs and API failures\n- Test performance under load",
+      "priority": "medium",
+      "dependencies": [
+        1,
+        2,
+        3
+      ],
+      "status": "completed",
+      "subtasks": []
+    },
+    {
+      "id": 8,
+      "title": "Implement OpenAI Generate Endpoint",
+      "description": "Create the OpenAI endpoint that provides access to DALL-E 3 text-to-image generation.",
+      "details": "Create a new endpoint at `POST /api:v2/openai/generate` with the following implementation:\n\n1. Accept input parameters appropriate for DALL-E 3 (prompt, size, quality, style)\n2. Validate input parameters\n3. Call OpenAI API with properly mapped parameters\n4. Store generation record in generation_history_v2 table\n5. Return standardized response\n\nNote that OpenAI doesn't support LoRAs, seeds, or negative prompts directly, so these parameters should be ignored or return an appropriate error message. OpenAI responses are typically synchronous, so the implementation should handle this difference from the async providers.",
+      "testStrategy": "Test the endpoint with various input combinations:\n- Valid prompt with different size options\n- Valid prompt with different quality options\n- Test with LoRAs (should return appropriate error)\n- Test with seed values (should be ignored or return appropriate message)\n- Test with negative prompts (should be ignored or return appropriate message)\n- Verify database record creation\n- Verify proper error handling for invalid inputs and API failures\n- Test performance under load",
+      "priority": "medium",
+      "dependencies": [
+        1,
+        2,
+        3
+      ],
+      "status": "completed",
+      "subtasks": []
+    },
+    {
+      "id": 9,
+      "title": "Implement OpenAI Edit Endpoint",
+      "description": "Create the OpenAI edit endpoint that provides access to DALL-E 3 with reference image support.",
+      "details": "Create a new endpoint at `POST /api:v2/openai/edit` with the following implementation:\n\n1. Accept input parameters appropriate for DALL-E 3 edit (prompt, reference_image, size, quality, style)\n2. Validate input parameters, especially the reference_image format\n3. Call OpenAI API with properly mapped parameters\n4. Store generation record in generation_history_v2 table\n5. Return standardized response\n\nThis endpoint extends the OpenAI generate endpoint with support for a reference image. The reference_image should be accepted as a URL or base64-encoded image data. Implement proper validation for the image format and size according to OpenAI's requirements.",
+      "testStrategy": "Test the endpoint with various input combinations:\n- Valid prompt with valid reference image URL\n- Valid prompt with valid base64-encoded image\n- Invalid reference image format (should return error)\n- Test with different size options\n- Test with different quality options\n- Verify database record creation\n- Verify proper error handling for invalid inputs and API failures\n- Test performance under load",
+      "priority": "medium",
+      "dependencies": [
+        1,
+        2,
+        3,
+        8
+      ],
+      "status": "pending",
+      "subtasks": []
+    },
+    {
+      "id": 10,
+      "title": "Implement Smart Generate Endpoint",
+      "description": "Create the smart generate endpoint that automatically selects the best provider based on requirements.",
+      "details": "Create a new endpoint at `POST /api:v2/smart/generate` with the following implementation:\n\n1. Accept all standard input parameters plus priority and provider_preference\n2. Implement provider selection logic as specified in PRD section 4.2.B\n3. Route the request to the appropriate provider endpoint based on selection\n4. Store generation record in generation_history_v2 table with the selected provider\n5. Return standardized response\n\nThe provider selection logic should consider:\n- LoRA count\n- Priority (speed, quality, cost)\n- Provider preference\n- Provider availability\n\nImplement the selectProvider function as specified in the PRD, with additional error handling and fallback options if the selected provider is unavailable.",
+      "testStrategy": "Test the endpoint with various input combinations:\n- Different priority values (speed, quality, cost)\n- Different provider_preference values\n- Different LoRA counts\n- Verify that the correct provider is selected based on the rules\n- Test fallback behavior when preferred provider is unavailable\n- Verify database record creation\n- Verify proper error handling for invalid inputs and API failures\n- Test performance under load",
+      "priority": "high",
+      "dependencies": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "status": "completed",
+      "subtasks": []
+    },
+    {
+      "id": 11,
+      "title": "Implement Universal Status Checker",
+      "description": "Create a single endpoint to check status across all async providers.",
+      "details": "Create a new endpoint at `GET /api:v2/status/check` with the following implementation:\n\n1. Accept request_id and/or generation_id as query parameters\n2. Retrieve the generation record from the database\n3. If already completed, return the completed response\n4. Otherwise, check status with the appropriate provider\n5. Update the generation record if completed\n6. Return standardized status response\n\nImplement the check_status function as specified in PRD section 4.2.C. Create helper functions for provider-specific status checking (checkProviderStatus) and response formatting (formatStatusResponse, formatCompletedResponse). Handle different provider response formats and ensure consistent output format regardless of provider.",
+      "testStrategy": "Test the endpoint with various scenarios:\n- Check status of pending generation\n- Check status of completed generation\n- Check status of failed generation\n- Test with invalid request_id/generation_id\n- Test with different providers (Fal.ai, Replicate)\n- Verify database record updates\n- Verify proper error handling\n- Test performance under load to ensure it meets the <200ms response time requirement",
+      "priority": "high",
+      "dependencies": [
+        1,
+        2,
+        3
+      ],
+      "status": "completed",
+      "subtasks": []
+    },
+    {
+      "id": 12,
+      "title": "Implement Cost Estimator Endpoint",
+      "description": "Create an endpoint that estimates cost and time before generation.",
+      "details": "Create a new endpoint at `POST /api:v2/utils/estimate` with the following implementation:\n\n1. Accept the same input parameters as the generation endpoints\n2. Calculate estimated cost and time for each available provider\n3. Determine recommendations based on priority factors\n4. Return formatted response with recommendations\n\nThe response should include an array of provider recommendations with estimated cost, time, quality score, and limitations for each. Also include summary fields for cheapest, fastest, and best quality options. Base calculations on the provider comparison matrix in Appendix A of the PRD.",
+      "testStrategy": "Test the endpoint with various input combinations:\n- Different prompt complexities\n- Different LoRA counts\n- Different size options\n- Verify that estimates are reasonable and consistent\n- Verify that recommendations match expected outcomes\n- Test with unavailable providers\n- Verify proper error handling\n- Test performance under load",
+      "priority": "medium",
+      "dependencies": [
+        1,
+        3
+      ],
+      "status": "pending",
+      "subtasks": []
+    },
+    {
+      "id": 13,
+      "title": "Implement LoRA Compatibility Checker",
+      "description": "Create an endpoint to check compatibility between multiple LoRAs before generation.",
+      "details": "Create a new endpoint at `POST /api:v2/utils/compatibility` with the following implementation:\n\n1. Accept an array of LoRA IDs to check\n2. Retrieve LoRA records from the database\n3. Check for known compatibility issues between the LoRAs\n4. Return compatibility score and any warnings\n\nImplement a compatibility matrix or algorithm that identifies potential conflicts between LoRAs. This could be based on tags, categories, or historical data on successful/failed combinations. Store compatibility data in a new database table if necessary.",
+      "testStrategy": "Test the endpoint with various LoRA combinations:\n- Known compatible LoRAs\n- Known incompatible LoRAs\n- Mix of compatible and incompatible LoRAs\n- Invalid LoRA IDs\n- Verify that compatibility scores are consistent\n- Verify that warnings are appropriate\n- Test performance under load",
+      "priority": "low",
+      "dependencies": [
+        1,
+        2,
+        3
+      ],
+      "status": "pending",
+      "subtasks": []
+    },
+    {
+      "id": 14,
+      "title": "Implement Parameter Validation Endpoint",
+      "description": "Create an endpoint to validate generation parameters before submission.",
+      "details": "Create a new endpoint at `POST /api:v2/utils/validate` with the following implementation:\n\n1. Accept the same input parameters as the generation endpoints\n2. Validate all parameters according to provider-specific rules\n3. Return validation results with any errors or warnings\n\nImplement comprehensive validation for all parameters, including:\n- Prompt length and content\n- LoRA count and weights\n- Size constraints\n- Step count and guidance scale ranges\n- Provider-specific limitations\n\nThe endpoint should not perform any actual generation, only validation.",
+      "testStrategy": "Test the endpoint with various input combinations:\n- Valid inputs for different providers\n- Invalid inputs (exceeding limits, wrong formats)\n- Edge cases (minimum/maximum values)\n- Verify that validation results are accurate\n- Verify that error messages are clear and helpful\n- Test performance under load",
+      "priority": "low",
+      "dependencies": [
+        1,
+        3
+      ],
+      "status": "pending",
+      "subtasks": []
+    },
+    {
+      "id": 15,
+      "title": "Implement Generation History Endpoint",
+      "description": "Create an endpoint to retrieve and manage generation history.",
+      "details": "Create a new endpoint at `GET /api:v2/data/history` with the following implementation:\n\n1. Accept query parameters for filtering (date range, status, provider)\n2. Accept pagination parameters (page, limit)\n3. Retrieve generation records from the database\n4. Return formatted response with generation history\n\nAlso implement a `DELETE /api:v2/data/history/:id` endpoint to allow users to delete specific generation records. Include proper authentication and authorization to ensure users can only access their own generation history.",
+      "testStrategy": "Test the endpoint with various scenarios:\n- Retrieve history with different filters\n- Test pagination\n- Test with no results\n- Test deletion of records\n- Verify authentication and authorization\n- Test with invalid parameters\n- Verify proper error handling\n- Test performance with large history datasets",
+      "priority": "medium",
+      "dependencies": [
+        1,
+        2
+      ],
+      "status": "pending",
+      "subtasks": []
+    },
+    {
+      "id": 16,
+      "title": "Implement Preset Management Endpoints",
+      "description": "Create endpoints to create, retrieve, update, and delete generation presets.",
+      "details": "Create the following endpoints:\n\n1. `POST /api:v2/data/presets` - Create a new preset\n2. `GET /api:v2/data/presets` - List presets with filtering and pagination\n3. `GET /api:v2/data/presets/:id` - Get a specific preset\n4. `PUT /api:v2/data/presets/:id` - Update a preset\n5. `DELETE /api:v2/data/presets/:id` - Delete a preset\n\nImplement proper validation for preset data, including name, description, settings, and thumbnail. Include support for public/private presets and tagging. Ensure users can only modify their own presets unless they have admin privileges.",
+      "testStrategy": "Test each endpoint with various scenarios:\n- Create preset with valid data\n- Create preset with invalid data\n- Retrieve presets with different filters\n- Test pagination\n- Update preset with valid data\n- Update preset with invalid data\n- Delete preset\n- Verify authentication and authorization\n- Test with invalid parameters\n- Verify proper error handling\n- Test performance with large preset datasets",
+      "priority": "medium",
+      "dependencies": [
+        1,
+        2
+      ],
+      "status": "pending",
+      "subtasks": []
+    },
+    {
+      "id": 17,
+      "title": "Implement Usage Analytics Endpoint",
+      "description": "Create an endpoint to retrieve usage analytics data.",
+      "details": "Create a new endpoint at `GET /api:v2/data/analytics` with the following implementation:\n\n1. Accept query parameters for filtering (date range, provider)\n2. Calculate usage metrics from generation history\n3. Return formatted response with analytics data\n\nThe analytics should include:\n- Total generations by provider\n- Success/failure rates\n- Average generation time\n- Cost metrics\n- Popular LoRA combinations\n- Usage trends over time\n\nImplement proper authentication and authorization to ensure users can only access their own analytics unless they have admin privileges.",
+      "testStrategy": "Test the endpoint with various scenarios:\n- Retrieve analytics with different filters\n- Test with no data\n- Verify calculation accuracy\n- Verify authentication and authorization\n- Test with invalid parameters\n- Verify proper error handling\n- Test performance with large datasets",
+      "priority": "low",
+      "dependencies": [
+        1,
+        2
+      ],
+      "status": "pending",
+      "subtasks": []
+    },
+    {
+      "id": 18,
+      "title": "Implement API Documentation",
+      "description": "Create comprehensive API documentation for all endpoints.",
+      "details": "Create OpenAPI/Swagger documentation for all endpoints in the Image Generation v2 API group. The documentation should include:\n\n1. Endpoint descriptions\n2. Request parameters with types and constraints\n3. Response schemas with examples\n4. Error codes and messages\n5. Authentication requirements\n6. Rate limiting information\n\nAlso create a migration guide from v1 to v2, highlighting the differences and benefits of the new API. Include code examples in at least 5 programming languages (JavaScript, Python, PHP, Ruby, Go).",
+      "testStrategy": "Review documentation for accuracy and completeness:\n- Verify that all endpoints are documented\n- Verify that parameter descriptions are accurate\n- Verify that response schemas match actual responses\n- Test code examples to ensure they work\n- Have developers review the documentation for clarity\n- Test the migration guide with v1 users",
+      "priority": "medium",
+      "dependencies": [
+        1,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17
+      ],
+      "status": "pending",
+      "subtasks": []
+    },
+    {
+      "id": 19,
+      "title": "Implement Comprehensive Testing Suite",
+      "description": "Create a comprehensive testing suite for all endpoints and functionality.",
+      "details": "Implement a comprehensive testing suite that includes:\n\n1. Unit tests for all utility functions\n2. Integration tests for all endpoints\n3. Load tests for performance validation\n4. Error handling tests\n5. Provider failover tests\n6. Database operation tests\n\nThe testing suite should be automated and runnable in CI/CD pipelines. Include test coverage reporting and performance benchmarking. Tests should validate both functional requirements (correct behavior) and non-functional requirements (performance, reliability).",
+      "testStrategy": "Meta-testing of the test suite itself:\n- Verify that all endpoints have tests\n- Verify that all error conditions are tested\n- Verify that performance tests accurately measure response times\n- Verify that test coverage is adequate (>80%)\n- Run the full test suite and fix any failures\n- Verify that the test suite can be run in CI/CD",
+      "priority": "high",
+      "dependencies": [
+        1,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17
+      ],
+      "status": "pending",
+      "subtasks": []
+    },
+    {
+      "id": 20,
+      "title": "Implement Migration Tools and Monitoring",
+      "description": "Create tools to facilitate migration from v1 to v2 and monitor adoption.",
+      "details": "Implement the following migration tools and monitoring:\n\n1. Request translator that converts v1 API calls to v2 format\n2. Response translator that converts v2 responses to v1 format for backward compatibility\n3. Usage dashboard showing v1 vs v2 adoption rates\n4. Error monitoring specifically for migration-related issues\n5. Automated notifications for users still using v1 endpoints\n\nThe migration tools should make it as easy as possible for users to switch from v1 to v2. The monitoring should provide visibility into the migration progress and identify any issues that need to be addressed.",
+      "testStrategy": "Test the migration tools with various scenarios:\n- Convert v1 requests to v2 format\n- Convert v2 responses to v1 format\n- Test with edge cases and invalid inputs\n- Verify that the usage dashboard accurately reflects adoption\n- Verify that error monitoring catches migration-related issues\n- Test automated notifications\n- Get feedback from users on the migration experience",
+      "priority": "medium",
+      "dependencies": [
+        1,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18
+      ],
+      "status": "pending",
+      "subtasks": []
+    }
+  ]
+}
