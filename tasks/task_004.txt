@@ -1,30 +1,11 @@
 # Task ID: 4
-# Title: Implement Flux Standard Endpoint
-# Status: completed
-# Dependencies: 1, 2, 3
-# Priority: high
-# Description: Create the standard Flux endpoint that consolidates fal-ai/flux-lora, rundiffusion-photo-flux, and generate-image-rundiffusion-lora functionality.
+# Title: Implement GPT-4 Vision API Integration
+# Status: pending
+# Dependencies: None
+# Priority: medium
+# Description: Add GPT-4 Vision API to analyze_image_v2 endpoint for real image analysis capabilities
 # Details:
-Create a new endpoint at `POST /api:v2/flux/standard` with the following implementation:
-
-1. Accept input parameters as specified in PRD section 4.2.A
-2. Validate input parameters, especially LoRA count (max 2)
-3. Fetch LoRA URLs from database based on provided IDs
-4. Build enhanced prompt with seed and negative prompt using utility function
-5. Call Fal.ai API with properly mapped parameters
-6. Store generation record in generation_history_v2 table
-7. Return standardized response with request_id, generation_id, and status
-
-Implementation should follow the XanoScript provided in the PRD, with additional error handling and input validation. Ensure the endpoint respects the non-functional requirements for performance and reliability.
+Update /api:f0PVlTz_/analyze_image_v2 endpoint to use GPT-4 Vision API. Support multiple analysis types (describe, objects, colors, style), technical detail extraction, and return structured responses.
 
 # Test Strategy:
-Test the endpoint with various input combinations:
-- Valid prompt with no LoRAs
-- Valid prompt with 1 LoRA
-- Valid prompt with 2 LoRAs
-- Invalid input with 3+ LoRAs (should return error)
-- Test with various seed values (positive, -1, null)
-- Test with and without negative prompts
-- Verify database record creation
-- Verify proper error handling for invalid inputs and API failures
-- Test performance under load to ensure it meets the <500ms response time requirement
+Test with various images and analysis types to verify accurate results

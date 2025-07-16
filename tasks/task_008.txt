@@ -1,27 +1,11 @@
 # Task ID: 8
-# Title: Implement OpenAI Generate Endpoint
-# Status: completed
-# Dependencies: 1, 2, 3
+# Title: Populate LoRA Models Database
+# Status: pending
+# Dependencies: None
 # Priority: medium
-# Description: Create the OpenAI endpoint that provides access to DALL-E 3 text-to-image generation.
+# Description: Fill lora_models table with real LoRA model data for image generation
 # Details:
-Create a new endpoint at `POST /api:v2/openai/generate` with the following implementation:
-
-1. Accept input parameters appropriate for DALL-E 3 (prompt, size, quality, style)
-2. Validate input parameters
-3. Call OpenAI API with properly mapped parameters
-4. Store generation record in generation_history_v2 table
-5. Return standardized response
-
-Note that OpenAI doesn't support LoRAs, seeds, or negative prompts directly, so these parameters should be ignored or return an appropriate error message. OpenAI responses are typically synchronous, so the implementation should handle this difference from the async providers.
+Populate the existing lora_models table with real LoRA models including name, category, URL, and compatibility information. Ensure models are categorized properly (anime, portrait, style, etc.).
 
 # Test Strategy:
-Test the endpoint with various input combinations:
-- Valid prompt with different size options
-- Valid prompt with different quality options
-- Test with LoRAs (should return appropriate error)
-- Test with seed values (should be ignored or return appropriate message)
-- Test with negative prompts (should be ignored or return appropriate message)
-- Verify database record creation
-- Verify proper error handling for invalid inputs and API failures
-- Test performance under load
+Verify LoRA listing endpoint returns populated data

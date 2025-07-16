@@ -1,31 +1,11 @@
 # Task ID: 6
-# Title: Implement Flux Juggernaut Endpoint
-# Status: completed
-# Dependencies: 1, 2, 3, 4
-# Priority: medium
-# Description: Create the Juggernaut Flux endpoint that provides the highest quality output with support for 2 LoRAs.
+# Title: Implement Session Management Endpoints
+# Status: pending
+# Dependencies: 5
+# Priority: high
+# Description: Create working CRUD endpoints for chat session management
 # Details:
-Create a new endpoint at `POST /api:v2/flux/juggernaut` with the following implementation:
-
-1. Accept the same input parameters as the standard endpoint
-2. Validate input parameters, allowing up to 2 LoRAs
-3. Fetch LoRA URLs from database based on provided IDs
-4. Build enhanced prompt with seed and negative prompt
-5. Call Fal.ai API with properly mapped parameters, using the Juggernaut model
-6. Store generation record in generation_history_v2 table
-7. Return standardized response
-
-The implementation should be similar to the standard endpoint but configured to use the Juggernaut model which provides higher quality output. May require different default parameters (higher step count, different guidance scale) for optimal results.
+Implement POST /sessions (create), GET /sessions (list), GET /sessions/:id (retrieve), PUT /sessions/:id (update), DELETE /sessions/:id (delete). Link sessions to companions and users properly.
 
 # Test Strategy:
-Test the endpoint with various input combinations:
-- Valid prompt with no LoRAs
-- Valid prompt with 1 LoRA
-- Valid prompt with 2 LoRAs
-- Invalid input with 3+ LoRAs (should return error)
-- Test with various seed values
-- Test with and without negative prompts
-- Verify database record creation
-- Compare output quality with standard endpoint
-- Verify proper error handling for invalid inputs and API failures
-- Test performance under load
+Test full CRUD cycle for sessions with proper data persistence

@@ -1,21 +1,11 @@
 # Task ID: 1
-# Title: Create New API Group Structure
-# Status: done
+# Title: Integrate OpenAI Chat Completion API
+# Status: pending
 # Dependencies: None
 # Priority: high
-# Description: Set up the new '🎨 Image Generation v2' API group in Xano workspace 5 with all required folders according to the PRD structure.
+# Description: Replace mock messages endpoint with real OpenAI GPT-4/GPT-3.5 integration for actual AI conversations
 # Details:
-Create the following folder structure in Xano workspace 5:
-- 🎨 Image Generation v2/
-  - 📁 /flux/
-  - 📁 /replicate/
-  - 📁 /openai/
-  - 📁 /smart/
-  - 📁 /status/
-  - 📁 /utils/
-  - 📁 /data/
-
-Ensure all folders are properly named and organized according to the PRD. This is the foundation for all subsequent tasks.
+Update /api:GIojy04c/messages endpoint in Xano to call OpenAI Chat Completion API. Include streaming support, context management, conversation history, and proper error handling. This is the most critical feature.
 
 # Test Strategy:
-Verify that all folders are created with correct naming and structure. Check that the API group appears in the Xano workspace 5 interface. Confirm that the structure matches exactly what's specified in the PRD section 4.1.
+Test with real API calls to verify AI responses are generated and streamed properly

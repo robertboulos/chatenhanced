@@ -1,27 +1,11 @@
 # Task ID: 9
-# Title: Implement OpenAI Edit Endpoint
+# Title: Configure Xano Environment Variables
 # Status: pending
-# Dependencies: 1, 2, 3, 8
-# Priority: medium
-# Description: Create the OpenAI edit endpoint that provides access to DALL-E 3 with reference image support.
+# Dependencies: None
+# Priority: high
+# Description: Set up all required API keys and environment variables in Xano
 # Details:
-Create a new endpoint at `POST /api:v2/openai/edit` with the following implementation:
-
-1. Accept input parameters appropriate for DALL-E 3 edit (prompt, reference_image, size, quality, style)
-2. Validate input parameters, especially the reference_image format
-3. Call OpenAI API with properly mapped parameters
-4. Store generation record in generation_history_v2 table
-5. Return standardized response
-
-This endpoint extends the OpenAI generate endpoint with support for a reference image. The reference_image should be accepted as a URL or base64-encoded image data. Implement proper validation for the image format and size according to OpenAI's requirements.
+Add OPENAI_API_KEY to Xano environment variables. Configure any other required API keys (Fal.ai, Replicate, etc.). Set up proper error handling for missing keys.
 
 # Test Strategy:
-Test the endpoint with various input combinations:
-- Valid prompt with valid reference image URL
-- Valid prompt with valid base64-encoded image
-- Invalid reference image format (should return error)
-- Test with different size options
-- Test with different quality options
-- Verify database record creation
-- Verify proper error handling for invalid inputs and API failures
-- Test performance under load
+Verify API calls authenticate successfully

@@ -1,30 +1,11 @@
 # Task ID: 5
-# Title: Implement Flux Advanced Endpoint
-# Status: completed
-# Dependencies: 1, 2, 3, 4
-# Priority: medium
-# Description: Create the advanced Flux endpoint that supports 3-5 LoRAs for power users.
+# Title: Create Database Schema for Sessions
+# Status: pending
+# Dependencies: None
+# Priority: high
+# Description: Design and implement chat_sessions and chat_messages tables with proper relationships
 # Details:
-Create a new endpoint at `POST /api:v2/flux/advanced` with the following implementation:
-
-1. Accept the same input parameters as the standard endpoint
-2. Validate input parameters, allowing 3-5 LoRAs
-3. Fetch LoRA URLs from database based on provided IDs
-4. Build enhanced prompt with seed and negative prompt
-5. Call Fal.ai API with properly mapped parameters, using the appropriate model for multiple LoRAs
-6. Store generation record in generation_history_v2 table
-7. Return standardized response
-
-The implementation should be similar to the standard endpoint but with adjusted validation and potentially different API parameters for the advanced model. Include proper error handling for LoRA compatibility issues.
+Create chat_sessions table with fields: id, session_id, companion_id, user_id, created_at, last_message_at, context. Create chat_messages table with: id, session_id, role, content, metadata, created_at. Add proper indexes and foreign keys.
 
 # Test Strategy:
-Test the endpoint with various input combinations:
-- Valid prompt with 3 LoRAs
-- Valid prompt with 5 LoRAs
-- Invalid input with 6+ LoRAs (should return error)
-- Test with various seed values
-- Test with and without negative prompts
-- Verify database record creation
-- Test LoRA compatibility handling
-- Verify proper error handling for invalid inputs and API failures
-- Test performance under load
+Verify tables are created with correct schema and relationships work

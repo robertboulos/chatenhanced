@@ -1,0 +1,87 @@
+CHATENHANCED - XANO BACKEND INTEGRATION PROJECT
+
+PROJECT OVERVIEW:
+ChatEnhanced is a sophisticated AI-powered chat application with a complete React frontend but mostly mocked Xano backend. The system needs real OpenAI API integrations to replace mock endpoints and enable true AI functionality.
+
+CURRENT STATE:
+- Frontend: 100% complete with React/TypeScript components for chat, image generation, voice, and companions
+- Backend: Xano endpoints exist but return mock/static data instead of real AI responses
+- Database: Tables exist but lack proper data and relationships
+- Integrations: No real OpenAI API connections implemented
+
+CORE REQUIREMENTS:
+
+1. CHAT FUNCTIONALITY (Critical Priority)
+   - Integrate OpenAI Chat Completion API (GPT-4/GPT-3.5) in messages endpoint
+   - Implement real-time streaming support for chat responses
+   - Create message persistence in chat_messages table
+   - Add conversation context management per session
+   - Link messages to companions and sessions properly
+
+2. TEXT-TO-SPEECH INTEGRATION (High Priority)
+   - Complete OpenAI TTS API integration in text_to_speech_real endpoint
+   - Support all 6 OpenAI voices (alloy, echo, fable, onyx, nova, shimmer)
+   - Generate actual audio files and return playable URLs
+   - Implement audio format selection (mp3, opus, aac, flac)
+   - Add speed control (0.25 to 4.0)
+
+3. IMAGE GENERATION (High Priority)
+   - Integrate DALL-E 3 API for text-to-image generation
+   - Complete smart_generate endpoint with real provider routing
+   - Implement image-to-image transformations
+   - Fix enhance_image_v2 endpoint for upscaling/enhancement
+   - Populate LoRA models database with real data
+
+4. VISION API INTEGRATION (Medium Priority)
+   - Implement GPT-4 Vision API in analyze_image_v2 endpoint
+   - Support multiple analysis types (describe, objects, colors, style)
+   - Add technical detail extraction
+   - Return structured analysis responses
+
+5. SESSION & COMPANION MANAGEMENT (High Priority)
+   - Create proper database schema for sessions and messages
+   - Implement session creation and retrieval endpoints
+   - Link companions to sessions with personality injection
+   - Add per-companion model preferences
+   - Store conversation history properly
+
+6. DATABASE REQUIREMENTS:
+   - Create/update chat_sessions table with proper fields
+   - Create/update chat_messages table with foreign keys
+   - Populate lora_models table with real LoRA data
+   - Add proper indexes for performance
+   - Implement cascade deletes for data integrity
+
+7. API ENDPOINT FIXES NEEDED:
+   - /api:GIojy04c/messages - Replace mock with real OpenAI chat
+   - /api:nw4Il-wU/text_to_speech_real - Add real OpenAI TTS
+   - /api:f0PVlTz_/smart_generate - Complete provider routing logic
+   - /api:f0PVlTz_/analyze_image_v2 - Add GPT-4 Vision integration
+   - /api:GIojy04c/sessions - Implement full CRUD operations
+   - /api:GIojy04c/companions - Complete companion management
+
+8. EXTERNAL API REQUIREMENTS:
+   - OpenAI API key configuration in Xano environment
+   - Proper error handling for API failures
+   - Rate limiting implementation
+   - Cost tracking per request
+   - Fallback mechanisms for provider failures
+
+9. PERFORMANCE REQUIREMENTS:
+   - Chat responses must begin streaming < 1 second
+   - Image generation must initiate < 500ms
+   - TTS audio generation < 2 seconds
+   - All endpoints must handle errors gracefully
+
+10. TESTING & VALIDATION:
+    - All endpoints must return real data, not mocks
+    - Integration tests must pass with real API calls
+    - Error states must be properly handled
+    - Response formats must match frontend expectations
+
+SUCCESS CRITERIA:
+- Users can have real conversations with AI companions
+- Images are generated using actual AI providers
+- Voice responses use real OpenAI TTS
+- All mock data is replaced with functional integrations
+- System handles errors gracefully with proper fallbacks

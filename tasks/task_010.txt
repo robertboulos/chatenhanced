@@ -1,33 +1,11 @@
 # Task ID: 10
-# Title: Implement Smart Generate Endpoint
-# Status: completed
-# Dependencies: 1, 2, 3, 4, 5, 6, 7, 8
+# Title: Implement Message Persistence
+# Status: pending
+# Dependencies: 5
 # Priority: high
-# Description: Create the smart generate endpoint that automatically selects the best provider based on requirements.
+# Description: Store all chat messages in database with proper relationships
 # Details:
-Create a new endpoint at `POST /api:v2/smart/generate` with the following implementation:
-
-1. Accept all standard input parameters plus priority and provider_preference
-2. Implement provider selection logic as specified in PRD section 4.2.B
-3. Route the request to the appropriate provider endpoint based on selection
-4. Store generation record in generation_history_v2 table with the selected provider
-5. Return standardized response
-
-The provider selection logic should consider:
-- LoRA count
-- Priority (speed, quality, cost)
-- Provider preference
-- Provider availability
-
-Implement the selectProvider function as specified in the PRD, with additional error handling and fallback options if the selected provider is unavailable.
+Update messages endpoint to save each message to chat_messages table. Include role (user/assistant), content, session_id, timestamps, and metadata. Implement message history retrieval.
 
 # Test Strategy:
-Test the endpoint with various input combinations:
-- Different priority values (speed, quality, cost)
-- Different provider_preference values
-- Different LoRA counts
-- Verify that the correct provider is selected based on the rules
-- Test fallback behavior when preferred provider is unavailable
-- Verify database record creation
-- Verify proper error handling for invalid inputs and API failures
-- Test performance under load
+Verify messages are saved and retrievable with correct associations
