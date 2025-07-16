@@ -1,6 +1,8 @@
-import React from 'react';
-import { Settings, Trash2, Square, Volume2, VolumeX } from 'lucide-react';
+import React, { useState } from 'react';
+import { Settings, Trash2, Square, Volume2, VolumeX, Plus } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { CompanionPreset } from '../../types/companions';
+import CompanionSelector from '../Companions/CompanionSelector';
 
 interface StreamingState {
   isStreaming: boolean;
@@ -16,6 +18,14 @@ interface ChatHeaderProps {
   onStopStreaming?: () => void;
   soundEnabled: boolean;
   onToggleSound: () => void;
+  // Companion props
+  companions: CompanionPreset[];
+  activeCompanion: CompanionPreset;
+  onSwitchCompanion: (companionId: string) => void;
+  onCreateCompanion: () => void;
+  onEditCompanion: (companion: CompanionPreset) => void;
+  onDuplicateCompanion: (companionId: string) => void;
+  onDeleteCompanion: (companionId: string) => void;
 }
 
 const ChatHeader: React.FC<ChatHeaderProps> = ({ 
@@ -25,21 +35,41 @@ const ChatHeader: React.FC<ChatHeaderProps> = ({
   streamingState,
   onStopStreaming,
   soundEnabled,
-  onToggleSound
+  onToggleSound,
+  companions,
+  activeCompanion,
+  onSwitchCompanion,
+  onCreateCompanion,
+  onEditCompanion,
+  onDuplicateCompanion,
+  onDeleteCompanion,
 }) => {
   return (
     <div className="bg-zinc-800 border-b border-zinc-700 p-4 flex items-center justify-between shadow-sm">
-      <div className="flex items-center">
-        <h1 className="text-xl font-semibold text-zinc-100">Live Chat</h1>
+      <div className="flex items-center space-x-4">
+        {/* Companion Selector */}
+        <CompanionSelector
+          companions={companions}
+          activeCompanion={activeCompanion}
+          onSwitchCompanion={onSwitchCompanion}
+          onCreateCompanion={onCreateCompanion}
+          onEditCompanion={onEditCompanion}
+          onDuplicateCompanion={onDuplicateCompanion}
+          onDeleteCompanion={onDeleteCompanion}
+          disabled={streamingState?.isStreaming}
+        />
+
+        {/* Connection Status */}
         {webhookConfigured && (
-          <div className="ml-3 flex items-center">
+          <div className="flex items-center">
             <span className="inline-block w-2 h-2 bg-green-500 rounded-full mr-2 animate-pulse"></span>
             <span className="text-xs text-green-400 font-medium">Connected</span>
           </div>
         )}
         
+        {/* Streaming Status */}
         {streamingState?.isStreaming && (
-          <div className="ml-3 flex items-center">
+          <div className="flex items-center">
             <div className="flex space-x-1 mr-2">
               <div className="w-1 h-1 bg-blue-500 rounded-full animate-bounce"></div>
               <div className="w-1 h-1 bg-blue-500 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
@@ -51,6 +81,7 @@ const ChatHeader: React.FC<ChatHeaderProps> = ({
       </div>
       
       <div className="flex space-x-2">
+        {/* Stop Streaming */}
         {streamingState?.isStreaming && onStopStreaming && (
           <motion.button
             whileHover={{ scale: 1.1 }}
@@ -63,6 +94,7 @@ const ChatHeader: React.FC<ChatHeaderProps> = ({
           </motion.button>
         )}
 
+        {/* Sound Toggle */}
         <motion.button
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.9 }}
@@ -77,6 +109,7 @@ const ChatHeader: React.FC<ChatHeaderProps> = ({
           {soundEnabled ? <Volume2 size={18} /> : <VolumeX size={18} />}
         </motion.button>
         
+        {/* Clear Chat */}
         <motion.button
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.9 }}
@@ -87,6 +120,7 @@ const ChatHeader: React.FC<ChatHeaderProps> = ({
           <Trash2 size={18} />
         </motion.button>
         
+        {/* Settings */}
         <motion.button
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.9 }}

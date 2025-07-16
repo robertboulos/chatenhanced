@@ -9,7 +9,9 @@ import { useProfileImages } from './hooks/useProfileImages';
 import { useAudio } from './hooks/useAudio';
 import { useStreaming } from './hooks/useStreaming';
 import { useAdvancedAI } from './hooks/useAdvancedAI';
+import { useCompanions } from './hooks/useCompanions';
 import { Toaster } from 'react-hot-toast';
+import { StylePreset } from './types/companions';
 
 function App() {
   const { 
@@ -29,6 +31,23 @@ function App() {
     clearImages,
   } = useProfileImages();
   
+  const {
+    companions,
+    activeCompanion,
+    loading: companionsLoading,
+    switchCompanion,
+    addCompanion,
+    updateCompanion,
+    deleteCompanion,
+    duplicateCompanion,
+  } = useCompanions();
+
+  // Use active companion's webhook config
+  const activeWebhookConfig = {
+    ...webhookConfig,
+    sessionId: activeCompanion?.sessionId || webhookConfig.sessionId,
+  };
+  
   const { 
     messages, 
     loading: messagesLoading,
@@ -39,25 +58,30 @@ function App() {
     clearMessages,
     updateMessageWithAudio,
     updateStreamingMessage,
-  } = useMessages(webhookConfig, addImage);
+  } = useMessages(activeWebhookConfig, addImage);
 
-  const { requestAudio } = useAudio(webhookConfig, updateMessageWithAudio);
+  const { requestAudio } = useAudio(activeWebhookConfig, updateMessageWithAudio);
   
   const { streamingState, startStreaming, stopStreaming } = useStreaming(
-    webhookConfig, 
+    activeWebhookConfig, 
     updateStreamingMessage
   );
 
   const {
     capabilities,
     activeTasks,
+    generationQueue,
+    generateImage,
     analyzeImage,
     enhanceImage,
     performWebSearch,
     executeCode,
     translateText,
     clearCompletedTasks,
-  } = useAdvancedAI(webhookConfig);
+    clearCompletedGenerations,
+    cancelGeneration,
+    retryGeneration,
+  } = useAdvancedAI(activeWebhookConfig);
 
   const handleClearAll = () => {
     if (window.confirm('Are you sure you want to clear all chat history and images?')) {
@@ -70,7 +94,32 @@ function App() {
     sendMessage(message, requestType, imageData, currentImageUrl);
   };
 
+  const handleGenerate = async (
+    prompt: string, 
+    type: 'text-to-image' | 'image-to-image', 
+    sourceImage?: string, 
+    styleOverride?: StylePreset
+  ) => {
+    if (!activeCompanion) return;
+    
+    const images = await generateImage(prompt, type, activeCompanion, sourceImage, styleOverride);
+    
+    // Add generated images to the gallery
+    if (images && images.length > 0) {
+      images.forEach(imageUrl => addImage(imageUrl));
+    }
+  };
+
   const currentImageUrl = images[currentIndex];
+
+  // Show loading state while companions are loading
+  if (companionsLoading) {
+    return (
+      <div className="h-screen bg-zinc-900 flex items-center justify-center">
+        <div className="text-zinc-400">Loading AI Companions...</div>
+      </div>
+    );
+  }
 
   return (
     <div className="h-screen bg-zinc-900 flex flex-col md:flex-row overflow-hidden">
@@ -99,15 +148,15 @@ function App() {
           />
         </div>
         
-        {/* Advanced AI Controls - Fixed at bottom */}
+        {/* AI Generation Controls - Fixed at bottom */}
         <div className="flex-shrink-0 p-4 pt-0">
           <AdvancedControls
-            onWebSearch={performWebSearch}
-            onCodeExecution={executeCode}
-            onTranslation={translateText}
-            onImageAnalysis={analyzeImage}
-            onImageEnhancement={enhanceImage}
-            activeTasks={activeTasks}
+            companion={activeCompanion}
+            onGenerate={handleGenerate}
+            generationQueue={generationQueue}
+            onCancelGeneration={cancelGeneration}
+            onRetryGeneration={retryGeneration}
+            onClearCompleted={clearCompletedGenerations}
             currentImageUrl={currentImageUrl}
             disabled={waiting}
           />
@@ -129,6 +178,13 @@ function App() {
           onRequestAudio={requestAudio}
           streamingState={streamingState}
           onStopStreaming={stopStreaming}
+          companions={companions}
+          activeCompanion={activeCompanion}
+          onSwitchCompanion={switchCompanion}
+          onCreateCompanion={addCompanion}
+          onUpdateCompanion={updateCompanion}
+          onDuplicateCompanion={duplicateCompanion}
+          onDeleteCompanion={deleteCompanion}
         />
       </div>
 

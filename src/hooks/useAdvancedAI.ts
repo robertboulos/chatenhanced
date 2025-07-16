@@ -1,7 +1,9 @@
 import { useState, useCallback } from 'react';
 import { WebhookConfig } from '../types';
+import { CompanionPreset, GenerationQueueItem, StylePreset } from '../types/companions';
 import { sendMessageToWebhook } from '../services/webhookService';
 import toast from 'react-hot-toast';
+import { v4 as uuidv4 } from 'uuid';
 
 interface AICapabilities {
   textToSpeech: boolean;
@@ -33,6 +35,110 @@ export const useAdvancedAI = (webhookConfig: WebhookConfig) => {
   });
 
   const [activeTasks, setActiveTasks] = useState<AITask[]>([]);
+  const [generationQueue, setGenerationQueue] = useState<GenerationQueueItem[]>([]);
+
+  const generateImage = useCallback(
+    async (
+      prompt: string, 
+      type: 'text-to-image' | 'image-to-image', 
+      companion: CompanionPreset,
+      sourceImage?: string,
+      styleOverride?: StylePreset
+    ) => {
+      const queueId = uuidv4();
+      
+      // Add to generation queue
+      const queueItem: GenerationQueueItem = {
+        id: queueId,
+        type,
+        prompt,
+        status: 'pending',
+        createdAt: Date.now(),
+        companionId: companion.id,
+      };
+      
+      setGenerationQueue(prev => [...prev, queueItem]);
+
+      try {
+        // Update status to processing
+        setGenerationQueue(prev => 
+          prev.map(item => 
+            item.id === queueId 
+              ? { ...item, status: 'processing' }
+              : item
+          )
+        );
+
+        // Build the message for the webhook
+        let message = prompt;
+        if (type === 'image-to-image') {
+          message = `Transform this image: ${prompt}`;
+        }
+
+        // Create webhook config with companion's session ID
+        const companionWebhookConfig: WebhookConfig = {
+          ...webhookConfig,
+          sessionId: companion.sessionId,
+        };
+
+        const result = await sendMessageToWebhook(
+          {
+            id: queueId,
+            content: message,
+            timestamp: Date.now(),
+            isImage: type === 'text-to-image',
+          },
+          companionWebhookConfig,
+          type === 'text-to-image' ? 'image' : 'text',
+          undefined,
+          sourceImage
+        );
+
+        if (result.success) {
+          // Update queue with completed status
+          setGenerationQueue(prev => 
+            prev.map(item => 
+              item.id === queueId 
+                ? { 
+                    ...item, 
+                    status: 'completed',
+                    result: result.imageUrls || (result.response ? [result.response] : [])
+                  }
+                : item
+            )
+          );
+          
+          const imageCount = result.imageUrls?.length || (result.response ? 1 : 0);
+          if (imageCount > 1) {
+            toast.success(`Generated ${imageCount} images successfully!`);
+          } else {
+            toast.success('Image generated successfully!');
+          }
+          
+          return result.imageUrls || (result.response ? [result.response] : []);
+        } else {
+          throw new Error(result.error || 'Generation failed');
+        }
+      } catch (error: any) {
+        // Update queue with failed status
+        setGenerationQueue(prev => 
+          prev.map(item => 
+            item.id === queueId 
+              ? { 
+                  ...item, 
+                  status: 'failed',
+                  error: error.message
+                }
+              : item
+          )
+        );
+        
+        toast.error(`Image generation failed: ${error.message}`);
+        return [];
+      }
+    },
+    [webhookConfig]
+  );
 
   const analyzeImage = useCallback(
     async (imageUrl: string, analysisType: 'describe' | 'ocr' | 'objects' | 'faces' = 'describe') => {
@@ -324,6 +430,31 @@ export const useAdvancedAI = (webhookConfig: WebhookConfig) => {
     setActiveTasks(prev => prev.filter(task => task.status === 'processing'));
   }, []);
 
+  const clearCompletedGenerations = useCallback(() => {
+    setGenerationQueue(prev => prev.filter(item => 
+      item.status === 'pending' || item.status === 'processing'
+    ));
+  }, []);
+
+  const cancelGeneration = useCallback((id: string) => {
+    setGenerationQueue(prev => 
+      prev.map(item => 
+        item.id === id 
+          ? { ...item, status: 'failed', error: 'Cancelled by user' }
+          : item
+      )
+    );
+    toast.info('Generation cancelled');
+  }, []);
+
+  const retryGeneration = useCallback((id: string) => {
+    const item = generationQueue.find(g => g.id === id);
+    if (item && item.prompt) {
+      // This would need to be implemented with the actual companion and generation logic
+      toast.info('Retry functionality would be implemented here');
+    }
+  }, [generationQueue]);
+
   const updateCapabilities = useCallback((newCapabilities: Partial<AICapabilities>) => {
     setCapabilities(prev => ({ ...prev, ...newCapabilities }));
   }, []);
@@ -331,12 +462,17 @@ export const useAdvancedAI = (webhookConfig: WebhookConfig) => {
   return {
     capabilities,
     activeTasks,
+    generationQueue,
+    generateImage,
     analyzeImage,
     enhanceImage,
     performWebSearch,
     executeCode,
     translateText,
     clearCompletedTasks,
+    clearCompletedGenerations,
+    cancelGeneration,
+    retryGeneration,
     updateCapabilities,
   };
 };

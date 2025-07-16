@@ -3,7 +3,9 @@ import ChatHeader from './ChatHeader';
 import ChatBody from './ChatBody';
 import ChatInput from './ChatInput';
 import SettingsModal from '../Settings/SettingsModal';
+import CompanionEditor from '../Companions/CompanionEditor';
 import { Message, WebhookConfig } from '../../types';
+import { CompanionPreset } from '../../types/companions';
 import { MessageSquare } from 'lucide-react';
 import { useNotificationSound } from '../../hooks/useNotificationSound';
 
@@ -26,6 +28,14 @@ interface ChatContainerProps {
   onRequestAudio?: (messageId: string, content: string) => void;
   streamingState?: StreamingState;
   onStopStreaming?: () => void;
+  // Companion props
+  companions: CompanionPreset[];
+  activeCompanion: CompanionPreset;
+  onSwitchCompanion: (companionId: string) => void;
+  onCreateCompanion: (name: string, personality: string, sessionId: string, avatar?: string) => CompanionPreset | null;
+  onUpdateCompanion: (companionId: string, updates: Partial<CompanionPreset>) => void;
+  onDuplicateCompanion: (companionId: string) => CompanionPreset | null;
+  onDeleteCompanion: (companionId: string) => boolean;
 }
 
 const ChatContainer: React.FC<ChatContainerProps> = ({
@@ -41,8 +51,19 @@ const ChatContainer: React.FC<ChatContainerProps> = ({
   onRequestAudio,
   streamingState,
   onStopStreaming,
+  companions,
+  activeCompanion,
+  onSwitchCompanion,
+  onCreateCompanion,
+  onUpdateCompanion,
+  onDuplicateCompanion,
+  onDeleteCompanion,
 }) => {
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+  const [isCompanionEditorOpen, setIsCompanionEditorOpen] = useState(false);
+  const [editingCompanion, setEditingCompanion] = useState<CompanionPreset | null>(null);
+  const [companionEditorMode, setCompanionEditorMode] = useState<'create' | 'edit'>('create');
+  
   const { soundEnabled, toggleSound, playNotificationSound } = useNotificationSound();
 
   const handleOpenSettings = () => {
@@ -61,6 +82,28 @@ const ChatContainer: React.FC<ChatContainerProps> = ({
     return success;
   };
 
+  const handleCreateCompanion = () => {
+    setEditingCompanion(null);
+    setCompanionEditorMode('create');
+    setIsCompanionEditorOpen(true);
+  };
+
+  const handleEditCompanion = (companion: CompanionPreset) => {
+    setEditingCompanion(companion);
+    setCompanionEditorMode('edit');
+    setIsCompanionEditorOpen(true);
+  };
+
+  const handleSaveCompanion = (companionData: Partial<CompanionPreset>) => {
+    if (editingCompanion) {
+      onUpdateCompanion(editingCompanion.id, companionData);
+    }
+  };
+
+  const handleCreateCompanionSubmit = (name: string, personality: string, sessionId: string, avatar?: string) => {
+    onCreateCompanion(name, personality, sessionId, avatar);
+  };
+
   const handleSendMessage = (message: string, requestType: 'text' | 'image', imageData?: string) => {
     onSendMessage(message, requestType, imageData);
   };
@@ -75,6 +118,13 @@ const ChatContainer: React.FC<ChatContainerProps> = ({
         onStopStreaming={onStopStreaming}
         soundEnabled={soundEnabled}
         onToggleSound={toggleSound}
+        companions={companions}
+        activeCompanion={activeCompanion}
+        onSwitchCompanion={onSwitchCompanion}
+        onCreateCompanion={handleCreateCompanion}
+        onEditCompanion={handleEditCompanion}
+        onDuplicateCompanion={onDuplicateCompanion}
+        onDeleteCompanion={onDeleteCompanion}
       />
       
       <ChatBody 
@@ -91,6 +141,7 @@ const ChatContainer: React.FC<ChatContainerProps> = ({
         disabled={loading || streamingState?.isStreaming}
       />
       
+      {/* Settings Modal */}
       <SettingsModal 
         isOpen={isSettingsOpen}
         onClose={handleCloseSettings}
@@ -100,6 +151,17 @@ const ChatContainer: React.FC<ChatContainerProps> = ({
         error={webhookError}
       />
 
+      {/* Companion Editor Modal */}
+      <CompanionEditor
+        isOpen={isCompanionEditorOpen}
+        onClose={() => setIsCompanionEditorOpen(false)}
+        companion={editingCompanion}
+        onSave={handleSaveCompanion}
+        onCreate={handleCreateCompanionSubmit}
+        mode={companionEditorMode}
+      />
+
+      {/* Setup Prompt for New Users */}
       {!webhookConfig.url && !isSettingsOpen && (
         <div 
           className="fixed bottom-24 right-4 animate-bounce cursor-pointer z-40"
