@@ -5,16 +5,16 @@ import { sendMessageToWebhook } from '../services/webhookService';
 import toast from 'react-hot-toast';
 
 export const useAudio = (
-  activeCompanion: CompanionPreset, 
+  activeCompanion: CompanionPreset | undefined, 
   updateMessageWithAudio: (messageId: string, audioUrl: string) => void
 ) => {
   // Create webhook config from active companion
   const webhookConfig: WebhookConfig = {
     url: '', // This will be managed through settings
     enabled: true,
-    sessionId: activeCompanion.sessionId,
-    modelName: activeCompanion.modelName,
-    modifier: activeCompanion.modifier
+    sessionId: activeCompanion?.sessionId || '',
+    modelName: activeCompanion?.modelName || '',
+    modifier: activeCompanion?.modifier || ''
   };
 
   const requestAudio = useCallback(
@@ -27,7 +27,7 @@ export const useAudio = (
       try {
         // Include voice settings from companion
         const generationParams = {
-          voice_settings: activeCompanion.voiceSettings
+          voice_settings: activeCompanion?.voiceSettings
         };
 
         const result = await sendMessageToWebhook(

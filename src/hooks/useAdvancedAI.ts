@@ -24,7 +24,7 @@ interface AITask {
   result?: any;
 }
 
-export const useAdvancedAI = (activeCompanion: CompanionPreset) => {
+export const useAdvancedAI = (activeCompanion: CompanionPreset | undefined) => {
   const [capabilities, setCapabilities] = useState<AICapabilities>({
     textToSpeech: true,
     speechToText: true,
@@ -42,9 +42,9 @@ export const useAdvancedAI = (activeCompanion: CompanionPreset) => {
   const webhookConfig: WebhookConfig = {
     url: '', // This will be managed through settings
     enabled: true,
-    sessionId: activeCompanion.sessionId,
-    modelName: activeCompanion.modelName,
-    modifier: activeCompanion.modifier
+    sessionId: activeCompanion?.sessionId || '',
+    modelName: activeCompanion?.modelName || '',
+    modifier: activeCompanion?.modifier || ''
   };
 
   const generateImage = useCallback(

@@ -10,7 +10,7 @@ interface StreamingState {
 }
 
 export const useStreaming = (
-  activeCompanion: CompanionPreset,
+  activeCompanion: CompanionPreset | undefined,
   onStreamingMessage: (messageId: string, content: string, isComplete: boolean) => void
 ) => {
   const [streamingState, setStreamingState] = useState<StreamingState>({
@@ -25,9 +25,9 @@ export const useStreaming = (
   const webhookConfig: WebhookConfig = {
     url: '', // This will be managed through settings
     enabled: true,
-    sessionId: activeCompanion.sessionId,
-    modelName: activeCompanion.modelName,
-    modifier: activeCompanion.modifier
+    sessionId: activeCompanion?.sessionId || '',
+    modelName: activeCompanion?.modelName || '',
+    modifier: activeCompanion?.modifier || ''
   };
 
   const startStreaming = useCallback(
