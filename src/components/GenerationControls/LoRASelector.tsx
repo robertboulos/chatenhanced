@@ -168,10 +168,11 @@ export const LoRASelector: React.FC<LoRASelectorProps> = ({
                 <button
                   onClick={() => updateWeight(model.id, Math.max(0, weight - 0.1))}
                   disabled={disabled || weight <= 0}
+          <div className="absolute z-50 w-full mt-2 bg-white dark:bg-zinc-800 border border-gray-300 dark:border-zinc-700 rounded-lg shadow-xl max-h-80 overflow-hidden">
                   className="p-1 hover:bg-zinc-700 dark:hover:bg-gray-200 rounded transition-colors disabled:opacity-50"
-                >
+            <div className="p-3 border-b border-gray-300 dark:border-zinc-700">
                   <Minus size={14} className="text-zinc-400 dark:text-gray-600" />
-                </button>
+                <Search size={16} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 dark:text-zinc-500" />
                 <input
                   type="range"
                   min="0"
@@ -179,7 +180,7 @@ export const LoRASelector: React.FC<LoRASelectorProps> = ({
                   step="0.1"
                   value={weight}
                   onChange={(e) => updateWeight(model.id, parseFloat(e.target.value))}
-                  disabled={disabled}
+                  className="w-full pl-9 pr-3 py-2 bg-gray-50 dark:bg-zinc-700 text-gray-700 dark:text-zinc-300 rounded focus:outline-none focus:ring-1 focus:ring-indigo-500 text-sm"
                   className="flex-1 h-1.5 bg-zinc-700 dark:bg-gray-300 rounded-lg appearance-none cursor-pointer slider"
                 />
                 <span className="text-xs text-zinc-300 dark:text-gray-700 w-8 text-center">
@@ -230,12 +231,12 @@ export const LoRASelector: React.FC<LoRASelectorProps> = ({
               {/* LoRA list */}
               <div className="max-h-60 overflow-y-auto">
                 {loading ? (
-                  <div className="p-4 text-center text-zinc-500 dark:text-gray-400 text-sm">
-                    <div className="inline-block w-4 h-4 border-2 border-zinc-400 border-t-transparent rounded-full animate-spin mr-2"></div>
+                  <div className="p-4 text-center text-gray-500 dark:text-zinc-500 text-sm">
+                    <div className="inline-block w-4 h-4 border-2 border-gray-400 border-t-transparent rounded-full animate-spin mr-2"></div>
                     Loading models...
                   </div>
                 ) : filteredLoRAs.length === 0 ? (
-                  <div className="p-4 text-center text-zinc-500 dark:text-gray-400 text-sm">
+                  <div className="p-4 text-center text-gray-500 dark:text-zinc-500 text-sm">
                     {searchTerm ? 'No models found' : 'No models available'}
                   </div>
                 ) : (
@@ -244,26 +245,26 @@ export const LoRASelector: React.FC<LoRASelectorProps> = ({
                       key={lora.id}
                       onClick={() => addLoRA(lora)}
                       disabled={selectedLoRAs.find(s => s.model.id === lora.id) !== undefined}
-                      className="w-full p-3 hover:bg-zinc-700 dark:hover:bg-gray-50 transition-colors text-left disabled:opacity-50 disabled:cursor-not-allowed"
+                      className="w-full p-3 hover:bg-gray-50 dark:hover:bg-zinc-700 transition-colors text-left disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                       <div className="flex items-start justify-between">
                         <div className="flex-1">
                           <div className="flex items-center gap-2">
-                            <span className="text-sm font-medium text-zinc-300">
+                            <span className="text-sm font-medium text-gray-700 dark:text-zinc-300">
                               {lora.name}
                             </span>
-                            <span className="text-xs text-zinc-500 dark:text-gray-500">
+                            <span className="text-xs text-gray-500 dark:text-zinc-500">
                               {lora.file_size_mb}MB
                             </span>
                           </div>
-                          <p className="text-xs text-zinc-500 dark:text-gray-600 mt-1">
+                          <p className="text-xs text-gray-600 dark:text-zinc-500 mt-1">
                             {lora.description}
                           </p>
                           <div className="flex gap-1 mt-1">
                             {lora.tags.slice(0, 3).map((tag) => (
                               <span
                                 key={tag}
-                                className="text-xs bg-zinc-700 dark:bg-gray-200 text-zinc-400 dark:text-gray-600 px-2 py-0.5 rounded"
+                                className="text-xs bg-gray-200 dark:bg-zinc-700 text-gray-600 dark:text-zinc-400 px-2 py-0.5 rounded"
                               >
                                 {tag}
                               </span>

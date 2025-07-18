@@ -199,7 +199,6 @@ const CompanionEditor: React.FC<CompanionEditorProps> = ({
             animate={{ y: 0, opacity: 1, scale: 1 }}
             exit={{ y: 20, opacity: 0, scale: 0.95 }}
             transition={{ type: 'spring', damping: 25 }}
-            className="bg-zinc-800 dark:bg-white border border-zinc-700 dark:border-gray-300 rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] overflow-hidden"
             className="bg-white dark:bg-zinc-800 border border-gray-300 dark:border-zinc-700 rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] overflow-hidden"
             onClick={(e) => e.stopPropagation()}
           >
@@ -229,7 +228,7 @@ const CompanionEditor: React.FC<CompanionEditorProps> = ({
 
                   {/* Name */}
                   <div>
-                    <label className="block text-sm font-medium text-zinc-300 dark:text-gray-700 mb-2">
+                    <label className="block text-sm font-medium text-gray-700 dark:text-zinc-300 mb-2">
                       Name *
                     </label>
                     <input
@@ -248,7 +247,7 @@ const CompanionEditor: React.FC<CompanionEditorProps> = ({
 
                   {/* Avatar */}
                   <div>
-                    <label className="block text-sm font-medium text-zinc-300 mb-2">
+                    <label className="block text-sm font-medium text-gray-700 dark:text-zinc-300 mb-2">
                       Avatar
                     </label>
                     <div className="flex flex-wrap gap-2">
@@ -271,7 +270,7 @@ const CompanionEditor: React.FC<CompanionEditorProps> = ({
 
                   {/* Personality */}
                   <div>
-                    <label className="block text-sm font-medium text-zinc-300 mb-2">
+                    <label className="block text-sm font-medium text-gray-700 dark:text-zinc-300 mb-2">
                       Personality *
                     </label>
                     <textarea
@@ -290,7 +289,7 @@ const CompanionEditor: React.FC<CompanionEditorProps> = ({
 
                   {/* Session ID */}
                   <div>
-                    <label className="block text-sm font-medium text-zinc-300 dark:text-gray-700 mb-2">
+                    <label className="block text-sm font-medium text-gray-700 dark:text-zinc-300 mb-2">
                       Session ID *
                     </label>
                     <input
@@ -312,7 +311,7 @@ const CompanionEditor: React.FC<CompanionEditorProps> = ({
 
                   {/* Model Name */}
                   <div>
-                    <label className="block text-sm font-medium text-zinc-300 dark:text-gray-700 mb-2">
+                    <label className="block text-sm font-medium text-gray-700 dark:text-zinc-300 mb-2">
                       AI Model *
                     </label>
                     <select
@@ -339,7 +338,7 @@ const CompanionEditor: React.FC<CompanionEditorProps> = ({
 
                   {/* Modifier */}
                   <div>
-                    <label className="block text-sm font-medium text-zinc-300 dark:text-gray-700 mb-2">
+                    <label className="block text-sm font-medium text-gray-700 dark:text-zinc-300 mb-2">
                       Personality Modifier
                     </label>
                     <select
@@ -363,14 +362,14 @@ const CompanionEditor: React.FC<CompanionEditorProps> = ({
 
                 {/* Generation Settings */}
                 <div className="space-y-4">
-                  <h3 className="text-lg font-medium text-zinc-200 dark:text-gray-800 flex items-center space-x-2">
+                  <h3 className="text-lg font-medium text-gray-800 dark:text-zinc-200 flex items-center space-x-2">
                     <Settings className="w-4 h-4" />
                     <span>Generation Defaults</span>
                   </h3>
 
                   {/* Style Preset */}
                   <div>
-                    <label className="block text-sm font-medium text-zinc-300 dark:text-gray-700 mb-2">
+                    <label className="block text-sm font-medium text-gray-700 dark:text-zinc-300 mb-2">
                       Default Style
                     </label>
                     <select
@@ -388,7 +387,7 @@ const CompanionEditor: React.FC<CompanionEditorProps> = ({
 
                   {/* LoRA Models */}
                   <div>
-                    <label className="block text-sm font-medium text-zinc-300 dark:text-gray-700 mb-2">
+                    <label className="block text-sm font-medium text-gray-700 dark:text-zinc-300 mb-2">
                       LoRA Models
                     </label>
                     <LoRASelector
@@ -404,9 +403,9 @@ const CompanionEditor: React.FC<CompanionEditorProps> = ({
 
                   {/* CFG Scale */}
                   <div>
-                    <label className="flex items-center justify-between text-sm font-medium text-zinc-300 dark:text-gray-700 mb-2">
+                    <label className="flex items-center justify-between text-sm font-medium text-gray-700 dark:text-zinc-300 mb-2">
                       <span>CFG Scale</span>
-                      <span className="text-zinc-400 dark:text-gray-600">{formData.generationDefaults.cfg_scale}</span>
+                      <span className="text-gray-600 dark:text-zinc-400">{formData.generationDefaults.cfg_scale}</span>
                     </label>
                     <input
                       type="range"
@@ -421,9 +420,9 @@ const CompanionEditor: React.FC<CompanionEditorProps> = ({
 
                   {/* Steps */}
                   <div>
-                    <label className="flex items-center justify-between text-sm font-medium text-zinc-300 dark:text-gray-700 mb-2">
+                    <label className="flex items-center justify-between text-sm font-medium text-gray-700 dark:text-zinc-300 mb-2">
                       <span>Steps</span>
-                      <span className="text-zinc-400 dark:text-gray-600">{formData.generationDefaults.steps}</span>
+                      <span className="text-gray-600 dark:text-zinc-400">{formData.generationDefaults.steps}</span>
                     </label>
                     <input
                       type="range"
@@ -438,7 +437,7 @@ const CompanionEditor: React.FC<CompanionEditorProps> = ({
 
                   {/* Dimensions */}
                   <div>
-                    <label className="block text-sm font-medium text-zinc-300 dark:text-gray-700 mb-2">
+                    <label className="block text-sm font-medium text-gray-700 dark:text-zinc-300 mb-2">
                       Default Dimensions
                     </label>
                     <select
@@ -456,7 +455,7 @@ const CompanionEditor: React.FC<CompanionEditorProps> = ({
 
                   {/* Negative Prompt */}
                   <div>
-                    <label className="block text-sm font-medium text-zinc-300 dark:text-gray-700 mb-2">
+                    <label className="block text-sm font-medium text-gray-700 dark:text-zinc-300 mb-2">
                       Negative Prompt
                     </label>
                     <textarea
@@ -474,14 +473,14 @@ const CompanionEditor: React.FC<CompanionEditorProps> = ({
 
                 {/* Voice Settings */}
                 <div className="space-y-4">
-                  <h3 className="text-lg font-medium text-zinc-200 dark:text-gray-800 flex items-center space-x-2">
+                  <h3 className="text-lg font-medium text-gray-800 dark:text-zinc-200 flex items-center space-x-2">
                     <Volume2 className="w-4 h-4" />
                     <span>Voice Settings (Optional)</span>
                   </h3>
 
                   {/* Voice ID */}
                   <div>
-                    <label className="block text-sm font-medium text-zinc-300 dark:text-gray-700 mb-2">
+                    <label className="block text-sm font-medium text-gray-700 dark:text-zinc-300 mb-2">
                       Voice ID
                     </label>
                     <select
@@ -501,9 +500,9 @@ const CompanionEditor: React.FC<CompanionEditorProps> = ({
 
                   {/* Speed */}
                   <div>
-                    <label className="flex items-center justify-between text-sm font-medium text-zinc-300 dark:text-gray-700 mb-2">
+                    <label className="flex items-center justify-between text-sm font-medium text-gray-700 dark:text-zinc-300 mb-2">
                       <span>Speech Speed</span>
-                      <span className="text-zinc-400 dark:text-gray-600">{formData.voiceSettings.speed}x</span>
+                      <span className="text-gray-600 dark:text-zinc-400">{formData.voiceSettings.speed}x</span>
                     </label>
                     <input
                       type="range"
