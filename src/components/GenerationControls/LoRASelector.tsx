@@ -89,10 +89,16 @@ export const LoRASelector: React.FC<LoRASelectorProps> = ({
 
     return () => clearTimeout(timeoutId);
   }, [searchTerm, handleSearch]);
-  const filteredLoRAs = availableLoRAs.filter(lora =>
-    lora.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    lora.tags.some(tag => tag.toLowerCase().includes(searchTerm.toLowerCase()))
-  );
+  const filteredLoRAs = availableLoRAs.filter(lora => {
+    const searchLower = searchTerm.toLowerCase();
+    const nameMatch = lora.name && typeof lora.name === 'string' 
+      ? lora.name.toLowerCase().includes(searchLower) 
+      : false;
+    const tagMatch = Array.isArray(lora.tags) 
+      ? lora.tags.some(tag => tag && typeof tag === 'string' && tag.toLowerCase().includes(searchLower))
+      : false;
+    return nameMatch || tagMatch;
+  });
 
   const addLoRA = (lora: LoRAModel) => {
     if (selectedLoRAs.length >= maxSelections) return;
