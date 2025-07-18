@@ -236,8 +236,8 @@ const CompanionEditor: React.FC<CompanionEditorProps> = ({
                       type="text"
                       value={formData.name}
                       onChange={(e) => updateFormData('name', e.target.value)}
-                      className={`w-full px-3 py-2 bg-zinc-700 text-zinc-100 rounded border transition-colors ${
-                        errors.name ? 'border-red-500' : 'border-zinc-600 focus:border-indigo-500'
+                      className={`w-full px-3 py-2 bg-gray-50 dark:bg-zinc-700 text-gray-900 dark:text-zinc-100 rounded border transition-colors ${
+                        errors.name ? 'border-red-500' : 'border-gray-300 dark:border-zinc-600 focus:border-indigo-500'
                       } focus:outline-none`}
                       placeholder="Enter companion name"
                     />
@@ -259,8 +259,8 @@ const CompanionEditor: React.FC<CompanionEditorProps> = ({
                           onClick={() => updateFormData('avatar', avatar)}
                           className={`p-2 text-lg rounded border transition-colors ${
                             formData.avatar === avatar
-                              ? 'border-indigo-500 bg-indigo-600/20'
-                              : 'border-zinc-600 hover:border-zinc-500'
+                              ? 'border-indigo-500 bg-indigo-100 dark:bg-indigo-600/20'
+                              : 'border-gray-300 dark:border-zinc-600 hover:border-gray-400 dark:hover:border-zinc-500'
                           }`}
                         >
                           {avatar}
@@ -278,8 +278,8 @@ const CompanionEditor: React.FC<CompanionEditorProps> = ({
                       value={formData.personality}
                       onChange={(e) => updateFormData('personality', e.target.value)}
                       rows={3}
-                      className={`w-full px-3 py-2 bg-zinc-700 text-zinc-100 rounded border transition-colors resize-none ${
-                        errors.personality ? 'border-red-500' : 'border-zinc-600 focus:border-indigo-500'
+                      className={`w-full px-3 py-2 bg-gray-50 dark:bg-zinc-700 text-gray-900 dark:text-zinc-100 rounded border transition-colors resize-none ${
+                        errors.personality ? 'border-red-500' : 'border-gray-300 dark:border-zinc-600 focus:border-indigo-500'
                       } focus:outline-none`}
                       placeholder="Describe the companion's personality and behavior"
                     />
@@ -297,8 +297,8 @@ const CompanionEditor: React.FC<CompanionEditorProps> = ({
                       type="text"
                       value={formData.sessionId}
                       onChange={(e) => updateFormData('sessionId', e.target.value)}
-                      className={`w-full px-3 py-2 bg-zinc-700 text-zinc-100 rounded border transition-colors ${
-                        errors.sessionId ? 'border-red-500' : 'border-zinc-600 focus:border-indigo-500'
+                      className={`w-full px-3 py-2 bg-gray-50 dark:bg-zinc-700 text-gray-900 dark:text-zinc-100 rounded border transition-colors ${
+                        errors.sessionId ? 'border-red-500' : 'border-gray-300 dark:border-zinc-600 focus:border-indigo-500'
                       } focus:outline-none`}
                       placeholder="unique-session-id"
                     />
@@ -318,8 +318,8 @@ const CompanionEditor: React.FC<CompanionEditorProps> = ({
                     <select
                       value={formData.modelName}
                       onChange={(e) => updateFormData('modelName', e.target.value)}
-                      className={`w-full px-3 py-2 bg-zinc-700 dark:bg-gray-50 text-zinc-100 dark:text-gray-900 rounded border transition-colors ${
-                        errors.modelName ? 'border-red-500' : 'border-zinc-600 dark:border-gray-300 focus:border-indigo-500'
+                      className={`w-full px-3 py-2 bg-gray-50 dark:bg-zinc-700 text-gray-900 dark:text-zinc-100 rounded border transition-colors ${
+                        errors.modelName ? 'border-red-500' : 'border-gray-300 dark:border-zinc-600 focus:border-indigo-500'
                       } focus:outline-none`}
                     >
                       <option value="">Select AI Model</option>
@@ -345,7 +345,7 @@ const CompanionEditor: React.FC<CompanionEditorProps> = ({
                     <select
                       value={formData.modifier}
                       onChange={(e) => updateFormData('modifier', e.target.value)}
-                      className="w-full px-3 py-2 bg-zinc-700 dark:bg-gray-50 text-zinc-100 dark:text-gray-900 rounded border border-zinc-600 dark:border-gray-300 focus:border-indigo-500 focus:outline-none"
+                      className="w-full px-3 py-2 bg-gray-50 dark:bg-zinc-700 text-gray-900 dark:text-zinc-100 rounded border border-gray-300 dark:border-zinc-600 focus:border-indigo-500 focus:outline-none"
                     >
                       <option value="balanced">Balanced</option>
                       <option value="creative">Creative</option>
@@ -376,7 +376,7 @@ const CompanionEditor: React.FC<CompanionEditorProps> = ({
                     <select
                       value={formData.generationDefaults.style_preset}
                       onChange={(e) => updateGenerationDefaults('style_preset', e.target.value)}
-                      className="w-full px-3 py-2 bg-zinc-700 dark:bg-gray-50 text-zinc-100 dark:text-gray-900 rounded border border-zinc-600 dark:border-gray-300 focus:border-indigo-500 focus:outline-none"
+                      className="w-full px-3 py-2 bg-gray-50 dark:bg-zinc-700 text-gray-900 dark:text-zinc-100 rounded border border-gray-300 dark:border-zinc-600 focus:border-indigo-500 focus:outline-none"
                     >
                       {STYLE_PRESETS.map((preset) => (
                         <option key={preset.id} value={preset.id}>
@@ -415,7 +415,7 @@ const CompanionEditor: React.FC<CompanionEditorProps> = ({
                       step="0.5"
                       value={formData.generationDefaults.cfg_scale}
                       onChange={(e) => updateGenerationDefaults('cfg_scale', parseFloat(e.target.value))}
-                      className="w-full h-2 bg-zinc-700 dark:bg-gray-300 rounded-lg appearance-none cursor-pointer slider"
+                      className="w-full h-2 bg-gray-300 dark:bg-zinc-700 rounded-lg appearance-none cursor-pointer slider"
                     />
                   </div>
 
@@ -432,7 +432,7 @@ const CompanionEditor: React.FC<CompanionEditorProps> = ({
                       step="5"
                       value={formData.generationDefaults.steps}
                       onChange={(e) => updateGenerationDefaults('steps', parseInt(e.target.value))}
-                      className="w-full h-2 bg-zinc-700 dark:bg-gray-300 rounded-lg appearance-none cursor-pointer slider"
+                      className="w-full h-2 bg-gray-300 dark:bg-zinc-700 rounded-lg appearance-none cursor-pointer slider"
                     />
                   </div>
 
@@ -444,7 +444,7 @@ const CompanionEditor: React.FC<CompanionEditorProps> = ({
                     <select
                       value={formData.generationDefaults.dimensions}
                       onChange={(e) => updateGenerationDefaults('dimensions', e.target.value)}
-                      className="w-full px-3 py-2 bg-zinc-700 dark:bg-gray-50 text-zinc-100 dark:text-gray-900 rounded border border-zinc-600 dark:border-gray-300 focus:border-indigo-500 focus:outline-none"
+                      className="w-full px-3 py-2 bg-gray-50 dark:bg-zinc-700 text-gray-900 dark:text-zinc-100 rounded border border-gray-300 dark:border-zinc-600 focus:border-indigo-500 focus:outline-none"
                     >
                       <option value="1024x1024">Square (1024x1024)</option>
                       <option value="1024x768">Landscape (1024x768)</option>
@@ -463,7 +463,7 @@ const CompanionEditor: React.FC<CompanionEditorProps> = ({
                       value={formData.generationDefaults.negative_prompt}
                       onChange={(e) => updateGenerationDefaults('negative_prompt', e.target.value)}
                       rows={3}
-                      className="w-full px-3 py-2 bg-zinc-700 dark:bg-gray-50 text-zinc-100 dark:text-gray-900 rounded border border-zinc-600 dark:border-gray-300 focus:border-indigo-500 focus:outline-none resize-none"
+                      className="w-full px-3 py-2 bg-gray-50 dark:bg-zinc-700 text-gray-900 dark:text-zinc-100 rounded border border-gray-300 dark:border-zinc-600 focus:border-indigo-500 focus:outline-none resize-none"
                       placeholder="Things to avoid in generated images..."
                     />
                     <p className="text-zinc-400 dark:text-gray-600 text-xs mt-1">
@@ -487,7 +487,7 @@ const CompanionEditor: React.FC<CompanionEditorProps> = ({
                     <select
                       value={formData.voiceSettings.voice_id}
                       onChange={(e) => updateVoiceSettings('voice_id', e.target.value)}
-                      className="w-full px-3 py-2 bg-zinc-700 dark:bg-gray-50 text-zinc-100 dark:text-gray-900 rounded border border-zinc-600 dark:border-gray-300 focus:border-indigo-500 focus:outline-none"
+                      className="w-full px-3 py-2 bg-gray-50 dark:bg-zinc-700 text-gray-900 dark:text-zinc-100 rounded border border-gray-300 dark:border-zinc-600 focus:border-indigo-500 focus:outline-none"
                     >
                       <option value="">Select Voice</option>
                       <option value="alloy">Alloy (Neutral)</option>
@@ -512,7 +512,7 @@ const CompanionEditor: React.FC<CompanionEditorProps> = ({
                       step="0.1"
                       value={formData.voiceSettings.speed}
                       onChange={(e) => updateVoiceSettings('speed', parseFloat(e.target.value))}
-                      className="w-full h-2 bg-zinc-700 dark:bg-gray-300 rounded-lg appearance-none cursor-pointer slider"
+                      className="w-full h-2 bg-gray-300 dark:bg-zinc-700 rounded-lg appearance-none cursor-pointer slider"
                     />
                   </div>
                 </div>
