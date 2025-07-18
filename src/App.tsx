@@ -37,6 +37,10 @@ function App() {
     duplicateCompanion,
   } = useCompanions();
 
+  const handleImageReceived = (imageUrl: string) => {
+    addImage(imageUrl);
+  };
+
   const { 
     messages, 
     loading: messagesLoading,
