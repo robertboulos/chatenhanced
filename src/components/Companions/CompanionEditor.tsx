@@ -200,6 +200,7 @@ const CompanionEditor: React.FC<CompanionEditorProps> = ({
             exit={{ y: 20, opacity: 0, scale: 0.95 }}
             transition={{ type: 'spring', damping: 25 }}
             className="bg-zinc-800 dark:bg-white border border-zinc-700 dark:border-gray-300 rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] overflow-hidden"
+            className="bg-white dark:bg-zinc-800 border border-gray-300 dark:border-zinc-700 rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] overflow-hidden"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Header */}
