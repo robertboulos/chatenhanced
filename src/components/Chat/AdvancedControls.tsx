@@ -60,10 +60,10 @@ const AdvancedControls: React.FC<AdvancedControlsProps> = ({
   };
 
   return (
-    <div className="w-full bg-zinc-800 rounded-lg border border-zinc-700 shadow-lg overflow-hidden">
+    <div className="w-full bg-white dark:bg-zinc-800 rounded-lg border border-gray-300 dark:border-zinc-700 shadow-lg overflow-hidden">
       {/* Header */}
       <div 
-        className="flex items-center justify-between p-3 cursor-pointer hover:bg-zinc-700/50 transition-colors w-full"
+        className="flex items-center justify-between p-3 cursor-pointer hover:bg-gray-100 dark:hover:bg-zinc-700/50 transition-colors w-full"
         onClick={() => setIsExpanded(!isExpanded)}
       >
         <div className="flex items-center space-x-2 min-w-0 flex-1">
@@ -71,12 +71,12 @@ const AdvancedControls: React.FC<AdvancedControlsProps> = ({
             {companion.avatar ? (
               <span className="text-lg">{companion.avatar}</span>
             ) : (
-              <div className="w-5 h-5 bg-zinc-700 rounded-full flex items-center justify-center">
-                <Sliders size={12} className="text-zinc-400" />
+              <div className="w-5 h-5 bg-gray-300 dark:bg-zinc-700 rounded-full flex items-center justify-center">
+                <Sliders size={12} className="text-gray-600 dark:text-zinc-400" />
               </div>
             )}
           </div>
-          <h3 className="text-sm font-medium text-zinc-200 truncate">
+          <h3 className="text-sm font-medium text-gray-800 dark:text-zinc-200 truncate">
             AI Generation Studio
           </h3>
         </div>

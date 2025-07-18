@@ -79,7 +79,7 @@ const ChatInput: React.FC<ChatInputProps> = ({ onSendMessage, disabled = false }
   const isTextDisabled = disabled || (!message.trim());
 
   return (
-    <div className="border-t border-zinc-700 p-4 bg-zinc-800 shadow-lg">
+    <div className="border-t border-gray-300 dark:border-zinc-700 p-4 bg-white dark:bg-zinc-800 shadow-lg">
       <form className="flex items-center space-x-3">
         {/* Upload Image Button - Moved to left side */}
         <motion.button
@@ -87,7 +87,7 @@ const ChatInput: React.FC<ChatInputProps> = ({ onSendMessage, disabled = false }
           onClick={() => fileInputRef.current?.click()}
           className={`${buttonBaseClasses} ${
             disabled || isUploading
-              ? 'bg-zinc-600 text-zinc-400 cursor-not-allowed'
+              ? 'bg-gray-400 dark:bg-zinc-600 text-gray-500 dark:text-zinc-400 cursor-not-allowed'
               : 'bg-blue-500 text-white hover:bg-blue-600 shadow-md hover:shadow-lg'
           }`}
           disabled={disabled || isUploading}
@@ -108,7 +108,7 @@ const ChatInput: React.FC<ChatInputProps> = ({ onSendMessage, disabled = false }
           value={message}
           onChange={(e) => setMessage(e.target.value)}
           placeholder="iMessage"
-          className="flex-1 p-3 border border-zinc-600 bg-zinc-700 text-zinc-100 placeholder-zinc-400 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+          className="flex-1 p-3 border border-gray-300 dark:border-zinc-600 bg-gray-100 dark:bg-zinc-700 text-gray-900 dark:text-zinc-100 placeholder-gray-500 dark:placeholder-zinc-400 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
           disabled={disabled}
           onKeyDown={(e) => {
             if (e.key === 'Enter' && !e.shiftKey) {
@@ -126,7 +126,7 @@ const ChatInput: React.FC<ChatInputProps> = ({ onSendMessage, disabled = false }
           onClick={(e) => handleSubmit(e, 'image')}
           className={`${buttonBaseClasses} ${
             disabled
-              ? 'bg-zinc-600 text-zinc-400 cursor-not-allowed'
+              ? 'bg-gray-400 dark:bg-zinc-600 text-gray-500 dark:text-zinc-400 cursor-not-allowed'
               : 'bg-blue-500 text-white hover:bg-blue-600 shadow-md hover:shadow-lg'
           }`}
           disabled={disabled}
@@ -143,7 +143,7 @@ const ChatInput: React.FC<ChatInputProps> = ({ onSendMessage, disabled = false }
           onClick={(e) => handleSubmit(e, 'text')}
           className={`${buttonBaseClasses} ${
             isTextDisabled
-              ? 'bg-zinc-600 text-zinc-400 cursor-not-allowed'
+              ? 'bg-gray-400 dark:bg-zinc-600 text-gray-500 dark:text-zinc-400 cursor-not-allowed'
               : 'bg-blue-500 text-white hover:bg-blue-600 shadow-md hover:shadow-lg'
           }`}
           disabled={isTextDisabled}

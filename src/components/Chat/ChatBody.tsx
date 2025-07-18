@@ -113,7 +113,7 @@ const ChatBody: React.FC<ChatBodyProps> = ({
   );
 
   return (
-    <div className="flex-1 overflow-y-auto bg-zinc-900" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
+    <div className="flex-1 overflow-y-auto bg-gray-50 dark:bg-zinc-900" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
       <style jsx>{`
         div::-webkit-scrollbar {
           display: none;
@@ -121,7 +121,7 @@ const ChatBody: React.FC<ChatBodyProps> = ({
       `}</style>
       
       {messages.length === 0 && !loading && !streamingState?.isStreaming ? (
-        <div className="flex flex-col items-center justify-center h-full text-zinc-500 px-4">
+        <div className="flex flex-col items-center justify-center h-full text-gray-500 dark:text-zinc-500 px-4">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}

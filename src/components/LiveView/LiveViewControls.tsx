@@ -69,12 +69,12 @@ const LiveViewControls: React.FC<LiveViewControlsProps> = ({
   const buttonBaseClasses = "p-3 rounded-lg transition-all duration-200 flex flex-col items-center justify-center space-y-1 min-h-[60px] shadow-md";
 
   return (
-    <div className="bg-zinc-800 rounded-lg border border-zinc-700 p-3 shadow-lg">
+    <div className="bg-white dark:bg-zinc-800 rounded-lg border border-gray-300 dark:border-zinc-700 p-3 shadow-lg">
       <div className="flex items-center justify-between mb-3">
-        <h3 className="text-xs font-medium text-zinc-300">AI Controls</h3>
+        <h3 className="text-xs font-medium text-gray-700 dark:text-zinc-300">AI Controls</h3>
         <div className="flex items-center space-x-1">
           <div className="w-1.5 h-1.5 bg-blue-500 rounded-full animate-pulse"></div>
-          <span className="text-xs text-zinc-500">
+          <span className="text-xs text-gray-600 dark:text-zinc-500">
             {currentImageUrl ? 'Image Ready' : 'No Image'}
           </span>
         </div>
@@ -92,7 +92,7 @@ const LiveViewControls: React.FC<LiveViewControlsProps> = ({
               onClick={() => handleAction(button.label, button.requestType, button.message)}
               className={`${buttonBaseClasses} ${
                 isDisabled
-                  ? 'bg-zinc-700 text-zinc-500 cursor-not-allowed'
+                  ? 'bg-gray-300 dark:bg-zinc-700 text-gray-500 dark:text-zinc-500 cursor-not-allowed'
                   : `${button.color} text-white hover:shadow-lg`
               }`}
               disabled={isDisabled || isProcessingThis}
@@ -115,7 +115,7 @@ const LiveViewControls: React.FC<LiveViewControlsProps> = ({
       
       {/* Debug info - shows current image URL (can be removed in production) */}
       {currentImageUrl && (
-        <div className="mt-2 p-2 bg-zinc-900/50 rounded text-xs text-zinc-400 truncate">
+        <div className="mt-2 p-2 bg-gray-100 dark:bg-zinc-900/50 rounded text-xs text-gray-600 dark:text-zinc-400 truncate">
           <span className="font-medium">Current: </span>
           <span className="opacity-75">{currentImageUrl}</span>
         </div>

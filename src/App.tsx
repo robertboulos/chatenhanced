@@ -115,20 +115,20 @@ function App() {
   }
 
   return (
-    <div className="h-screen bg-zinc-900 dark:bg-gray-100 flex flex-col md:flex-row overflow-hidden">
+    <div className="h-screen bg-gray-100 dark:bg-zinc-900 flex flex-col md:flex-row overflow-hidden">
       <Toaster 
         position="top-right"
         toastOptions={{
           style: {
-            background: theme === 'dark' ? '#27272a' : '#ffffff',
-            color: theme === 'dark' ? '#f4f4f5' : '#1f2937',
-            border: theme === 'dark' ? '1px solid #3f3f46' : '1px solid #d1d5db',
+            background: theme === 'light' ? '#ffffff' : '#27272a',
+            color: theme === 'light' ? '#1f2937' : '#f4f4f5',
+            border: theme === 'light' ? '1px solid #d1d5db' : '1px solid #3f3f46',
           },
         }}
       />
       
       {/* Left Section - Live View / Webcam Display */}
-      <div className="w-full md:w-96 flex flex-col flex-shrink-0 border-b md:border-b-0 md:border-r border-zinc-700 dark:border-gray-300 overflow-hidden">
+      <div className="w-full md:w-96 flex flex-col flex-shrink-0 border-b md:border-b-0 md:border-r border-gray-300 dark:border-zinc-700 overflow-hidden">
         <div className="flex-1 p-4 overflow-hidden">
           <LiveViewContainer
             images={images}

@@ -118,7 +118,7 @@ const ChatContainer: React.FC<ChatContainerProps> = ({
   };
 
   return (
-    <div className="flex flex-col h-full bg-zinc-800 dark:bg-gray-50 overflow-hidden">
+    <div className="flex flex-col h-full bg-white dark:bg-zinc-800 overflow-hidden">
       <ChatHeader 
         onOpenSettings={handleOpenSettings}
         onClearChat={onClearChat}

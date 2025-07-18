@@ -56,17 +56,17 @@ const ProfileImageDisplay: React.FC<ProfileImageDisplayProps> = ({
 
   return (
     <>
-      <div className="h-full flex flex-col bg-zinc-800 rounded-xl border border-zinc-700 overflow-hidden shadow-2xl group">
+      <div className="h-full flex flex-col bg-white dark:bg-zinc-800 rounded-xl border border-gray-300 dark:border-zinc-700 overflow-hidden shadow-2xl group">
         {/* Header */}
-        <div className="flex items-center justify-between p-3 bg-zinc-900/50 border-b border-zinc-700 flex-shrink-0">
+        <div className="flex items-center justify-between p-3 bg-gray-100 dark:bg-zinc-900/50 border-b border-gray-300 dark:border-zinc-700 flex-shrink-0">
           <div className="flex items-center space-x-2">
             <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-            <span className="text-zinc-300 text-xs font-medium">Live View</span>
+            <span className="text-gray-700 dark:text-zinc-300 text-xs font-medium">Live View</span>
           </div>
           
           {hasImages && (
             <div className="flex items-center space-x-1">
-              <span className="text-zinc-400 text-xs">
+              <span className="text-gray-600 dark:text-zinc-400 text-xs">
                 {currentIndex + 1}/{images.length}
               </span>
               
@@ -75,7 +75,7 @@ const ProfileImageDisplay: React.FC<ProfileImageDisplayProps> = ({
                 className={`p-1 rounded transition-colors ${
                   isPinned 
                     ? 'bg-amber-500/20 text-amber-400 hover:bg-amber-500/30' 
-                    : 'text-zinc-400 hover:text-zinc-300 hover:bg-zinc-700'
+                    : 'text-gray-600 dark:text-zinc-400 hover:text-gray-800 dark:hover:text-zinc-300 hover:bg-gray-200 dark:hover:bg-zinc-700'
                 }`}
                 title={isPinned ? 'Unpin image' : 'Pin image'}
               >
@@ -86,9 +86,9 @@ const ProfileImageDisplay: React.FC<ProfileImageDisplayProps> = ({
         </div>
 
         {/* Image Display - Takes remaining space with 9:16 aspect ratio */}
-        <div className="relative flex-1 bg-zinc-900 flex items-center justify-center min-h-0">
+        <div className="relative flex-1 bg-gray-200 dark:bg-zinc-900 flex items-center justify-center min-h-0">
           {!hasImages ? (
-            <div className="flex flex-col items-center justify-center text-zinc-500 p-4">
+            <div className="flex flex-col items-center justify-center text-gray-500 dark:text-zinc-500 p-4">
               <User size={32} className="mb-2 opacity-50" />
               <p className="text-xs text-center">No images yet</p>
               <p className="text-xs opacity-75 mt-1 text-center">Images will appear here</p>
@@ -96,13 +96,13 @@ const ProfileImageDisplay: React.FC<ProfileImageDisplayProps> = ({
           ) : (
             <>
               {!loaded && !error && (
-                <div className="absolute inset-0 bg-zinc-800 animate-pulse flex items-center justify-center">
-                  <div className="w-8 h-8 border-2 border-zinc-600 border-t-zinc-400 rounded-full animate-spin"></div>
+                <div className="absolute inset-0 bg-gray-300 dark:bg-zinc-800 animate-pulse flex items-center justify-center">
+                  <div className="w-8 h-8 border-2 border-gray-400 dark:border-zinc-600 border-t-gray-600 dark:border-t-zinc-400 rounded-full animate-spin"></div>
                 </div>
               )}
               
               {error ? (
-                <div className="absolute inset-0 flex flex-col items-center justify-center text-zinc-500 p-4">
+                <div className="absolute inset-0 flex flex-col items-center justify-center text-gray-500 dark:text-zinc-500 p-4">
                   <X size={24} className="mb-2 opacity-50" />
                   <p className="text-xs text-center">Failed to load image</p>
                 </div>
@@ -154,7 +154,7 @@ const ProfileImageDisplay: React.FC<ProfileImageDisplayProps> = ({
 
         {/* Image Thumbnails - Compact for narrow width */}
         {images.length > 1 && (
-          <div className="p-2 bg-zinc-900/30 border-t border-zinc-700 flex-shrink-0">
+          <div className="p-2 bg-gray-100 dark:bg-zinc-900/30 border-t border-gray-300 dark:border-zinc-700 flex-shrink-0">
             <div className="flex space-x-1 overflow-x-auto scrollbar-hide">
               {images.map((image, index) => (
                 <button
@@ -163,7 +163,7 @@ const ProfileImageDisplay: React.FC<ProfileImageDisplayProps> = ({
                   className={`relative flex-shrink-0 w-8 h-8 rounded overflow-hidden border transition-all ${
                     index === currentIndex
                       ? 'border-indigo-500 ring-1 ring-indigo-500/30'
-                      : 'border-zinc-600 hover:border-zinc-500'
+                      : 'border-gray-400 dark:border-zinc-600 hover:border-gray-500 dark:hover:border-zinc-500'
                   }`}
                 >
                   <img

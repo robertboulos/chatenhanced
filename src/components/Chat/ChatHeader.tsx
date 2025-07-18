@@ -50,7 +50,7 @@ const ChatHeader: React.FC<ChatHeaderProps> = ({
   onDeleteCompanion,
 }) => {
   return (
-    <div className="bg-zinc-800 dark:bg-white border-b border-zinc-700 dark:border-gray-300 p-4 flex items-center justify-between shadow-sm">
+    <div className="bg-white dark:bg-zinc-800 border-b border-gray-300 dark:border-zinc-700 p-4 flex items-center justify-between shadow-sm">
       <div className="flex items-center space-x-4">
         {/* Companion Selector */}
         <CompanionSelector
