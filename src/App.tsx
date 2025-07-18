@@ -37,15 +37,6 @@ function App() {
     duplicateCompanion,
   } = useCompanions();
 
-  // Create webhook config from active companion
-  const activeWebhookConfig = {
-    url: '', // This will be managed through settings
-    enabled: true,
-    sessionId: activeCompanion?.sessionId || webhookConfig.sessionId,
-    modelName: activeCompanion?.modelName || '',
-    modifier: activeCompanion?.modifier || ''
-  };
-  
   const { 
     messages, 
     loading: messagesLoading,
