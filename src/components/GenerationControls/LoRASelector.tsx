@@ -89,6 +89,7 @@ export const LoRASelector: React.FC<LoRASelectorProps> = ({
 
     return () => clearTimeout(timeoutId);
   }, [searchTerm, handleSearch]);
+  
   const filteredLoRAs = availableLoRAs.filter(lora => {
     const searchLower = searchTerm.toLowerCase();
     const nameMatch = lora.name && typeof lora.name === 'string' 
@@ -168,11 +169,10 @@ export const LoRASelector: React.FC<LoRASelectorProps> = ({
                 <button
                   onClick={() => updateWeight(model.id, Math.max(0, weight - 0.1))}
                   disabled={disabled || weight <= 0}
-          <div className="absolute z-50 w-full mt-2 bg-white dark:bg-zinc-800 border border-gray-300 dark:border-zinc-700 rounded-lg shadow-xl max-h-80 overflow-hidden">
                   className="p-1 hover:bg-zinc-700 dark:hover:bg-gray-200 rounded transition-colors disabled:opacity-50"
-            <div className="p-3 border-b border-gray-300 dark:border-zinc-700">
+                >
                   <Minus size={14} className="text-zinc-400 dark:text-gray-600" />
-                <Search size={16} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 dark:text-zinc-500" />
+                </button>
                 <input
                   type="range"
                   min="0"
@@ -180,7 +180,7 @@ export const LoRASelector: React.FC<LoRASelectorProps> = ({
                   step="0.1"
                   value={weight}
                   onChange={(e) => updateWeight(model.id, parseFloat(e.target.value))}
-                  className="w-full pl-9 pr-3 py-2 bg-gray-50 dark:bg-zinc-700 text-gray-700 dark:text-zinc-300 rounded focus:outline-none focus:ring-1 focus:ring-indigo-500 text-sm"
+                  disabled={disabled}
                   className="flex-1 h-1.5 bg-zinc-700 dark:bg-gray-300 rounded-lg appearance-none cursor-pointer slider"
                 />
                 <span className="text-xs text-zinc-300 dark:text-gray-700 w-8 text-center">
