@@ -1,12 +1,22 @@
 import { useCallback } from 'react';
 import { WebhookConfig } from '../types';
+import { CompanionPreset } from '../types/companions';
 import { sendMessageToWebhook } from '../services/webhookService';
 import toast from 'react-hot-toast';
 
 export const useAudio = (
-  webhookConfig: WebhookConfig, 
+  activeCompanion: CompanionPreset, 
   updateMessageWithAudio: (messageId: string, audioUrl: string) => void
 ) => {
+  // Create webhook config from active companion
+  const webhookConfig: WebhookConfig = {
+    url: '', // This will be managed through settings
+    enabled: true,
+    sessionId: activeCompanion.sessionId,
+    modelName: activeCompanion.modelName,
+    modifier: activeCompanion.modifier
+  };
+
   const requestAudio = useCallback(
     async (messageId: string, content: string) => {
       if (!webhookConfig.enabled || !webhookConfig.url) {
@@ -15,6 +25,11 @@ export const useAudio = (
       }
 
       try {
+        // Include voice settings from companion
+        const generationParams = {
+          voice_settings: activeCompanion.voiceSettings
+        };
+
         const result = await sendMessageToWebhook(
           {
             id: messageId,
@@ -23,7 +38,10 @@ export const useAudio = (
             isImage: false,
           },
           webhookConfig,
-          'text' // Audio requests are sent as text with special prefix
+          'text', // Audio requests are sent as text with special prefix
+          undefined,
+          undefined,
+          generationParams
         );
 
         if (result.success && result.audioUrl) {
@@ -37,7 +55,7 @@ export const useAudio = (
         toast.error('Failed to request audio');
       }
     },
-    [webhookConfig, updateMessageWithAudio]
+    [activeCompanion, webhookConfig, updateMessageWithAudio]
   );
 
   return { requestAudio };

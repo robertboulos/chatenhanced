@@ -1,16 +1,26 @@
 import { useState, useEffect, useCallback } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { Message, WebhookConfig } from '../types';
+import { CompanionPreset } from '../types/companions';
 import { saveMessages, loadMessages } from '../services/storageService';
 import { sendMessageToWebhook, retryFailedMessage } from '../services/webhookService';
 import { isImageUrl } from '../utils/validation';
 import toast from 'react-hot-toast';
 
-export const useMessages = (webhookConfig: WebhookConfig, onImageReceived?: (imageUrl: string) => void) => {
+export const useMessages = (activeCompanion: CompanionPreset, onImageReceived?: (imageUrl: string) => void) => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [loading, setLoading] = useState(true);
   const [waiting, setWaiting] = useState(false);
   const [streamingMessageId, setStreamingMessageId] = useState<string | null>(null);
+
+  // Create webhook config from active companion
+  const webhookConfig: WebhookConfig = {
+    url: '', // This will be managed through settings
+    enabled: true,
+    sessionId: activeCompanion.sessionId,
+    modelName: activeCompanion.modelName,
+    modifier: activeCompanion.modifier
+  };
 
   useEffect(() => {
     const loadedMessages = loadMessages();
@@ -123,6 +133,15 @@ export const useMessages = (webhookConfig: WebhookConfig, onImageReceived?: (ima
             // For now, fall back to regular webhook
           }
           
+          // Include generation parameters from active companion
+          const generationParams = {
+            ...activeCompanion.generationDefaults,
+            lora_models: activeCompanion.generationDefaults.loras.map(lora => ({
+              id: lora.id,
+              weight: lora.weight
+            }))
+          };
+
           const result = await sendMessageToWebhook(
             {
               id: messageId,
@@ -133,7 +152,8 @@ export const useMessages = (webhookConfig: WebhookConfig, onImageReceived?: (ima
             webhookConfig,
             requestType,
             imageData,
-            currentImageUrl
+            currentImageUrl,
+            generationParams
           );
 
           if (result.success) {
@@ -187,7 +207,7 @@ export const useMessages = (webhookConfig: WebhookConfig, onImageReceived?: (ima
         updateMessageStatus(messageId, 'sent');
       }
     },
-    [webhookConfig, addMessage, updateMessageStatus, onImageReceived]
+    [activeCompanion, webhookConfig, addMessage, updateMessageStatus, onImageReceived]
   );
 
   const retryMessage = useCallback(

@@ -3,23 +3,18 @@ import LiveViewContainer from './components/LiveView/LiveViewContainer';
 import ChatContainer from './components/Chat/ChatContainer';
 import AdvancedControls from './components/Chat/AdvancedControls';
 import TaskMonitor from './components/Chat/TaskMonitor';
-import { useWebhook } from './hooks/useWebhook';
 import { useMessages } from './hooks/useMessages';
 import { useProfileImages } from './hooks/useProfileImages';
 import { useAudio } from './hooks/useAudio';
 import { useStreaming } from './hooks/useStreaming';
 import { useAdvancedAI } from './hooks/useAdvancedAI';
 import { useCompanions } from './hooks/useCompanions';
+import { useTheme } from './hooks/useTheme';
 import { Toaster } from 'react-hot-toast';
 import { StylePreset } from './types/companions';
 
 function App() {
-  const { 
-    config: webhookConfig, 
-    error: webhookError,
-    updateWebhookUrl,
-    toggleWebhook,
-  } = useWebhook();
+  const { theme, toggleTheme } = useTheme();
   
   const {
     images,
@@ -42,10 +37,13 @@ function App() {
     duplicateCompanion,
   } = useCompanions();
 
-  // Use active companion's webhook config
+  // Create webhook config from active companion
   const activeWebhookConfig = {
-    ...webhookConfig,
+    url: '', // This will be managed through settings
+    enabled: true,
     sessionId: activeCompanion?.sessionId || webhookConfig.sessionId,
+    modelName: activeCompanion?.modelName || '',
+    modifier: activeCompanion?.modifier || ''
   };
   
   const { 
@@ -58,12 +56,12 @@ function App() {
     clearMessages,
     updateMessageWithAudio,
     updateStreamingMessage,
-  } = useMessages(activeWebhookConfig, addImage);
+  } = useMessages(activeCompanion, addImage);
 
-  const { requestAudio } = useAudio(activeWebhookConfig, updateMessageWithAudio);
+  const { requestAudio } = useAudio(activeCompanion, updateMessageWithAudio);
   
   const { streamingState, startStreaming, stopStreaming } = useStreaming(
-    activeWebhookConfig, 
+    activeCompanion, 
     updateStreamingMessage
   );
 
@@ -81,7 +79,7 @@ function App() {
     clearCompletedGenerations,
     cancelGeneration,
     retryGeneration,
-  } = useAdvancedAI(activeWebhookConfig);
+  } = useAdvancedAI(activeCompanion);
 
   const handleClearAll = () => {
     if (window.confirm('Are you sure you want to clear all chat history and images?')) {
@@ -115,27 +113,27 @@ function App() {
   // Show loading state while companions are loading
   if (companionsLoading) {
     return (
-      <div className="h-screen bg-zinc-900 flex items-center justify-center">
-        <div className="text-zinc-400">Loading AI Companions...</div>
+      <div className="h-screen bg-zinc-900 dark:bg-gray-100 flex items-center justify-center">
+        <div className="text-zinc-400 dark:text-gray-600">Loading AI Companions...</div>
       </div>
     );
   }
 
   return (
-    <div className="h-screen bg-zinc-900 flex flex-col md:flex-row overflow-hidden">
+    <div className="h-screen bg-zinc-900 dark:bg-gray-100 flex flex-col md:flex-row overflow-hidden">
       <Toaster 
         position="top-right"
         toastOptions={{
           style: {
-            background: '#27272a',
-            color: '#f4f4f5',
-            border: '1px solid #3f3f46',
+            background: theme === 'dark' ? '#27272a' : '#ffffff',
+            color: theme === 'dark' ? '#f4f4f5' : '#1f2937',
+            border: theme === 'dark' ? '1px solid #3f3f46' : '1px solid #d1d5db',
           },
         }}
       />
       
       {/* Left Section - Live View / Webcam Display */}
-      <div className="w-full md:w-96 flex flex-col flex-shrink-0 border-b md:border-b-0 md:border-r border-zinc-700 overflow-hidden">
+      <div className="w-full md:w-96 flex flex-col flex-shrink-0 border-b md:border-b-0 md:border-r border-zinc-700 dark:border-gray-300 overflow-hidden">
         <div className="flex-1 p-4 overflow-hidden">
           <LiveViewContainer
             images={images}
@@ -171,13 +169,11 @@ function App() {
           onSendMessage={handleSendMessage}
           onRetryMessage={retryMessage}
           onClearChat={handleClearAll}
-          webhookConfig={webhookConfig}
-          webhookError={webhookError}
-          onUpdateWebhook={updateWebhookUrl}
-          onToggleWebhook={toggleWebhook}
           onRequestAudio={requestAudio}
           streamingState={streamingState}
           onStopStreaming={stopStreaming}
+          theme={theme}
+          onToggleTheme={toggleTheme}
           companions={companions}
           activeCompanion={activeCompanion}
           onSwitchCompanion={switchCompanion}

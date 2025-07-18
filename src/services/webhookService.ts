@@ -90,7 +90,8 @@ export const sendMessageToWebhook = async (
   config: WebhookConfig,
   requestType: 'text' | 'image' | 'video' = 'text',
   imageData?: string,
-  currentImageUrl?: string
+  currentImageUrl?: string,
+  generationParams?: any
 ): Promise<SendMessageResult> => {
   console.log('sendMessageToWebhook called with:', { message, config, requestType, imageData: !!imageData, currentImageUrl });
 
@@ -110,6 +111,7 @@ export const sendMessageToWebhook = async (
       requestType,
       imageData,
       currentImageUrl,
+      generationParams,
     };
 
     console.log('Preparing webhook request:', {

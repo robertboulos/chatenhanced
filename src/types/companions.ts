@@ -4,12 +4,15 @@ export interface CompanionPreset {
   avatar?: string;
   personality: string;
   sessionId: string;
+  modelName: string;
+  modifier: string;
   defaultImageStyle: string;
   generationDefaults: {
     cfg_scale: number;
     steps: number;
     dimensions: string;
-    loras?: string[];
+    loras: Array<{ id: number; weight: number; }>;
+    negative_prompt: string;
     style_preset?: string;
   };
   voiceSettings?: {

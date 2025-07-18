@@ -1,5 +1,6 @@
 import { useState, useCallback } from 'react';
 import { WebhookConfig } from '../types';
+import { CompanionPreset } from '../types/companions';
 import { CompanionPreset, GenerationQueueItem, StylePreset } from '../types/companions';
 import { sendMessageToWebhook } from '../services/webhookService';
 import toast from 'react-hot-toast';
@@ -23,7 +24,7 @@ interface AITask {
   result?: any;
 }
 
-export const useAdvancedAI = (webhookConfig: WebhookConfig) => {
+export const useAdvancedAI = (activeCompanion: CompanionPreset) => {
   const [capabilities, setCapabilities] = useState<AICapabilities>({
     textToSpeech: true,
     speechToText: true,
@@ -36,6 +37,15 @@ export const useAdvancedAI = (webhookConfig: WebhookConfig) => {
 
   const [activeTasks, setActiveTasks] = useState<AITask[]>([]);
   const [generationQueue, setGenerationQueue] = useState<GenerationQueueItem[]>([]);
+
+  // Create webhook config from active companion
+  const webhookConfig: WebhookConfig = {
+    url: '', // This will be managed through settings
+    enabled: true,
+    sessionId: activeCompanion.sessionId,
+    modelName: activeCompanion.modelName,
+    modifier: activeCompanion.modifier
+  };
 
   const generateImage = useCallback(
     async (
@@ -77,8 +87,22 @@ export const useAdvancedAI = (webhookConfig: WebhookConfig) => {
 
         // Create webhook config with companion's session ID
         const companionWebhookConfig: WebhookConfig = {
-          ...webhookConfig,
+          url: '', // This will be managed through settings
+          enabled: true,
           sessionId: companion.sessionId,
+          modelName: companion.modelName,
+          modifier: companion.modifier
+        };
+
+        // Include generation parameters from companion
+        const generationParams = {
+          ...companion.generationDefaults,
+          lora_models: companion.generationDefaults.loras.map(lora => ({
+            id: lora.id,
+            weight: lora.weight
+          })),
+          // Apply style override if provided
+          ...(styleOverride?.settings || {})
         };
 
         const result = await sendMessageToWebhook(
@@ -91,7 +115,8 @@ export const useAdvancedAI = (webhookConfig: WebhookConfig) => {
           companionWebhookConfig,
           type === 'text-to-image' ? 'image' : 'text',
           undefined,
-          sourceImage
+          sourceImage,
+          generationParams
         );
 
         if (result.success) {
@@ -137,7 +162,7 @@ export const useAdvancedAI = (webhookConfig: WebhookConfig) => {
         return [];
       }
     },
-    [webhookConfig]
+    [activeCompanion]
   );
 
   const analyzeImage = useCallback(

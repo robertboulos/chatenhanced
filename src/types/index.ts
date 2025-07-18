@@ -28,6 +28,7 @@ export interface WebhookPayload {
   imageData?: string;
   currentImageUrl?: string;
   stream?: boolean;
+  generationParams?: any;
 }
 
 export interface AITask {

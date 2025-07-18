@@ -62,7 +62,9 @@ export const useCompanions = () => {
     name: string,
     personality: string,
     sessionId: string,
-    avatar?: string
+    avatar?: string,
+    modelName?: string,
+    modifier?: string
   ) => {
     // Check if sessionId already exists
     const existingCompanion = companions.find(c => c.sessionId === sessionId);
@@ -71,7 +73,7 @@ export const useCompanions = () => {
       return null;
     }
 
-    const newCompanion = createCompanion(name, personality, sessionId, avatar);
+    const newCompanion = createCompanion(name, personality, sessionId, avatar, modelName, modifier);
     const updatedCompanions = [...companions, newCompanion];
     
     setCompanions(updatedCompanions);

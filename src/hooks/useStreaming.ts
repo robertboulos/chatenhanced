@@ -1,5 +1,6 @@
 import { useState, useCallback, useRef } from 'react';
 import { WebhookConfig } from '../types';
+import { CompanionPreset } from '../types/companions';
 import toast from 'react-hot-toast';
 
 interface StreamingState {
@@ -9,7 +10,7 @@ interface StreamingState {
 }
 
 export const useStreaming = (
-  webhookConfig: WebhookConfig,
+  activeCompanion: CompanionPreset,
   onStreamingMessage: (messageId: string, content: string, isComplete: boolean) => void
 ) => {
   const [streamingState, setStreamingState] = useState<StreamingState>({
@@ -19,6 +20,15 @@ export const useStreaming = (
   });
   
   const abortControllerRef = useRef<AbortController | null>(null);
+
+  // Create webhook config from active companion
+  const webhookConfig: WebhookConfig = {
+    url: '', // This will be managed through settings
+    enabled: true,
+    sessionId: activeCompanion.sessionId,
+    modelName: activeCompanion.modelName,
+    modifier: activeCompanion.modifier
+  };
 
   const startStreaming = useCallback(
     async (messageId: string, prompt: string, requestType: 'text' | 'image' | 'video' = 'text') => {
@@ -130,7 +140,7 @@ export const useStreaming = (
         return false;
       }
     },
-    [webhookConfig, onStreamingMessage]
+    [activeCompanion, webhookConfig, onStreamingMessage]
   );
 
   const stopStreaming = useCallback(() => {

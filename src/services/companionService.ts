@@ -9,12 +9,16 @@ export const defaultCompanions: CompanionPreset[] = [
     name: 'AI Assistant',
     personality: 'Helpful and professional AI assistant',
     sessionId: 'default-session',
+    modelName: 'gpt-4o-mini',
+    modifier: 'helpful',
     defaultImageStyle: 'Professional and clean',
     generationDefaults: {
       cfg_scale: 7.5,
       steps: 30,
       dimensions: '1024x1024',
-      style_preset: 'photographic'
+      style_preset: 'photographic',
+      loras: [],
+      negative_prompt: 'blurry, low quality, distorted'
     },
     createdAt: Date.now(),
     lastUsed: Date.now()
@@ -25,12 +29,16 @@ export const defaultCompanions: CompanionPreset[] = [
     avatar: '🎨',
     personality: 'Imaginative and artistic, loves creating beautiful visuals',
     sessionId: 'artist-session',
+    modelName: 'gpt-4o',
+    modifier: 'creative',
     defaultImageStyle: 'Artistic and expressive',
     generationDefaults: {
       cfg_scale: 8.5,
       steps: 50,
       dimensions: '1024x1024',
-      style_preset: 'artistic'
+      style_preset: 'artistic',
+      loras: [],
+      negative_prompt: 'ugly, deformed, low quality'
     },
     createdAt: Date.now(),
     lastUsed: Date.now()
@@ -41,12 +49,16 @@ export const defaultCompanions: CompanionPreset[] = [
     avatar: '📸',
     personality: 'Photography enthusiast with an eye for realistic imagery',
     sessionId: 'photo-session',
+    modelName: 'gpt-4o',
+    modifier: 'precise',
     defaultImageStyle: 'Photorealistic and detailed',
     generationDefaults: {
       cfg_scale: 7.0,
       steps: 40,
       dimensions: '1024x1024',
-      style_preset: 'photographic'
+      style_preset: 'photographic',
+      loras: [],
+      negative_prompt: 'cartoon, anime, painting, sketch'
     },
     createdAt: Date.now(),
     lastUsed: Date.now()
@@ -104,7 +116,9 @@ export const createCompanion = (
   name: string,
   personality: string,
   sessionId: string,
-  avatar?: string
+  avatar?: string,
+  modelName?: string,
+  modifier?: string
 ): CompanionPreset => {
   return {
     id: `companion-${Date.now()}`,
@@ -112,12 +126,16 @@ export const createCompanion = (
     avatar,
     personality,
     sessionId,
+    modelName: modelName || 'gpt-4o-mini',
+    modifier: modifier || 'balanced',
     defaultImageStyle: 'Balanced and versatile',
     generationDefaults: {
       cfg_scale: 7.5,
       steps: 30,
       dimensions: '1024x1024',
-      style_preset: 'balanced'
+      style_preset: 'balanced',
+      loras: [],
+      negative_prompt: 'low quality, blurry'
     },
     createdAt: Date.now(),
     lastUsed: Date.now()

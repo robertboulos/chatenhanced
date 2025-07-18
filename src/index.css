@@ -2,6 +2,15 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Light theme overrides */
+.light {
+  color-scheme: light;
+}
+
+.dark {
+  color-scheme: dark;
+}
+
 /* Custom slider styles for audio player */
 .slider::-webkit-slider-thumb {
   appearance: none;
@@ -14,6 +23,10 @@
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
+.dark .slider::-webkit-slider-thumb {
+  border: 2px solid #f9fafb;
+}
+
 .slider::-moz-range-thumb {
   height: 12px;
   width: 12px;
@@ -24,6 +37,10 @@
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
+.dark .slider::-moz-range-thumb {
+  border: 2px solid #f9fafb;
+}
+
 .slider::-webkit-slider-track {
   height: 4px;
   cursor: pointer;
@@ -31,11 +48,19 @@
   border-radius: 2px;
 }
 
+.dark .slider::-webkit-slider-track {
+  background: #d1d5db;
+}
+
 .slider::-moz-range-track {
   height: 4px;
   cursor: pointer;
   background: #52525b;
   border-radius: 2px;
+}
+
+.dark .slider::-moz-range-track {
+  background: #d1d5db;
 }
 
 /* Hide scrollbar for thumbnails */

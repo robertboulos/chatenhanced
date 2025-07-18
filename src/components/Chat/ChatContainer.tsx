@@ -21,18 +21,17 @@ interface ChatContainerProps {
   onSendMessage: (message: string, requestType: 'text' | 'image', imageData?: string, currentImageUrl?: string) => void;
   onRetryMessage: (messageId: string) => void;
   onClearChat: () => void;
-  webhookConfig: WebhookConfig;
-  webhookError: string | null;
-  onUpdateWebhook: (url: string, sessionId: string, modelName: string, modifier: string) => boolean;
-  onToggleWebhook: (enabled: boolean) => boolean;
   onRequestAudio?: (messageId: string, content: string) => void;
   streamingState?: StreamingState;
   onStopStreaming?: () => void;
+  // Theme props
+  theme: 'light' | 'dark';
+  onToggleTheme: () => void;
   // Companion props
   companions: CompanionPreset[];
   activeCompanion: CompanionPreset;
   onSwitchCompanion: (companionId: string) => void;
-  onCreateCompanion: (name: string, personality: string, sessionId: string, avatar?: string) => CompanionPreset | null;
+  onCreateCompanion: (name: string, personality: string, sessionId: string, avatar?: string, modelName?: string, modifier?: string) => CompanionPreset | null;
   onUpdateCompanion: (companionId: string, updates: Partial<CompanionPreset>) => void;
   onDuplicateCompanion: (companionId: string) => CompanionPreset | null;
   onDeleteCompanion: (companionId: string) => boolean;
@@ -44,13 +43,11 @@ const ChatContainer: React.FC<ChatContainerProps> = ({
   onSendMessage,
   onRetryMessage,
   onClearChat,
-  webhookConfig,
-  webhookError,
-  onUpdateWebhook,
-  onToggleWebhook,
   onRequestAudio,
   streamingState,
   onStopStreaming,
+  theme,
+  onToggleTheme,
   companions,
   activeCompanion,
   onSwitchCompanion,
@@ -66,6 +63,15 @@ const ChatContainer: React.FC<ChatContainerProps> = ({
   
   const { soundEnabled, toggleSound, playNotificationSound } = useNotificationSound();
 
+  // Create webhook config from active companion
+  const webhookConfig: WebhookConfig = {
+    url: '', // This will be set from settings
+    enabled: true,
+    sessionId: activeCompanion.sessionId,
+    modelName: activeCompanion.modelName,
+    modifier: activeCompanion.modifier
+  };
+
   const handleOpenSettings = () => {
     setIsSettingsOpen(true);
   };
@@ -75,11 +81,14 @@ const ChatContainer: React.FC<ChatContainerProps> = ({
   };
 
   const handleSaveWebhook = (url: string, sessionId: string, modelName: string, modifier: string) => {
-    const success = onUpdateWebhook(url, sessionId, modelName, modifier);
-    if (success) {
-      setIsSettingsOpen(false);
-    }
-    return success;
+    // Update the active companion with new settings
+    onUpdateCompanion(activeCompanion.id, {
+      sessionId,
+      modelName,
+      modifier
+    });
+    setIsSettingsOpen(false);
+    return true;
   };
 
   const handleCreateCompanion = () => {
@@ -100,8 +109,8 @@ const ChatContainer: React.FC<ChatContainerProps> = ({
     }
   };
 
-  const handleCreateCompanionSubmit = (name: string, personality: string, sessionId: string, avatar?: string) => {
-    onCreateCompanion(name, personality, sessionId, avatar);
+  const handleCreateCompanionSubmit = (name: string, personality: string, sessionId: string, avatar?: string, modelName?: string, modifier?: string) => {
+    onCreateCompanion(name, personality, sessionId, avatar, modelName, modifier);
   };
 
   const handleSendMessage = (message: string, requestType: 'text' | 'image', imageData?: string) => {
@@ -109,15 +118,17 @@ const ChatContainer: React.FC<ChatContainerProps> = ({
   };
 
   return (
-    <div className="flex flex-col h-full bg-zinc-800 overflow-hidden">
+    <div className="flex flex-col h-full bg-zinc-800 dark:bg-gray-50 overflow-hidden">
       <ChatHeader 
         onOpenSettings={handleOpenSettings}
         onClearChat={onClearChat}
-        webhookConfigured={webhookConfig.enabled && !!webhookConfig.url}
+        webhookConfigured={true} // Always show as configured since we use companion settings
         streamingState={streamingState}
         onStopStreaming={onStopStreaming}
         soundEnabled={soundEnabled}
         onToggleSound={toggleSound}
+        theme={theme}
+        onToggleTheme={onToggleTheme}
         companions={companions}
         activeCompanion={activeCompanion}
         onSwitchCompanion={onSwitchCompanion}
@@ -145,10 +156,16 @@ const ChatContainer: React.FC<ChatContainerProps> = ({
       <SettingsModal 
         isOpen={isSettingsOpen}
         onClose={handleCloseSettings}
-        config={webhookConfig}
+        config={{
+          url: '',
+          enabled: true,
+          sessionId: activeCompanion.sessionId,
+          modelName: activeCompanion.modelName,
+          modifier: activeCompanion.modifier
+        }}
         onSaveWebhook={handleSaveWebhook}
-        onToggleWebhook={onToggleWebhook}
-        error={webhookError}
+        onToggleWebhook={() => true}
+        error={null}
       />
 
       {/* Companion Editor Modal */}
@@ -161,18 +178,6 @@ const ChatContainer: React.FC<ChatContainerProps> = ({
         mode={companionEditorMode}
       />
 
-      {/* Setup Prompt for New Users */}
-      {!webhookConfig.url && !isSettingsOpen && (
-        <div 
-          className="fixed bottom-24 right-4 animate-bounce cursor-pointer z-40"
-          onClick={handleOpenSettings}
-        >
-          <div className="bg-indigo-600 text-white p-3 rounded-full shadow-lg flex items-center">
-            <MessageSquare className="mr-2" size={16} />
-            <span className="text-sm font-medium">Configure Webhook</span>
-          </div>
-        </div>
-      )}
     </div>
   );
 };
