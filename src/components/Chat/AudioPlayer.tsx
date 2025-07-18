@@ -122,7 +122,7 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ audioUrl }) => {
   }
 
   return (
-    <div className="bg-zinc-800/50 rounded-lg p-3 space-y-2">
+    <div className="bg-gray-100 dark:bg-zinc-800/50 rounded-lg p-3 space-y-2">
       <audio ref={audioRef} src={audioUrl} preload="metadata" />
       
       <div className="flex items-center space-x-3">
@@ -143,9 +143,9 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ audioUrl }) => {
             max={duration}
             value={currentTime}
             onChange={handleSeek}
-            className="w-full h-1 bg-zinc-600 rounded-lg appearance-none cursor-pointer slider"
+            className="w-full h-1 bg-gray-300 dark:bg-zinc-600 rounded-lg appearance-none cursor-pointer slider"
           />
-          <div className="flex justify-between text-xs text-zinc-400">
+          <div className="flex justify-between text-xs text-gray-600 dark:text-zinc-400">
             <span>{formatTime(currentTime)}</span>
             <span>{formatTime(duration)}</span>
           </div>
@@ -155,7 +155,7 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ audioUrl }) => {
         <div className="flex items-center space-x-1">
           <button
             onClick={toggleMute}
-            className="text-zinc-400 hover:text-zinc-200 transition-colors"
+            className="text-gray-600 dark:text-zinc-400 hover:text-gray-900 dark:hover:text-zinc-200 transition-colors"
           >
             {isMuted ? <VolumeX size={14} /> : <Volume2 size={14} />}
           </button>
@@ -166,7 +166,7 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ audioUrl }) => {
             step="0.1"
             value={isMuted ? 0 : volume}
             onChange={handleVolumeChange}
-            className="w-12 h-1 bg-zinc-600 rounded-lg appearance-none cursor-pointer slider"
+            className="w-12 h-1 bg-gray-300 dark:bg-zinc-600 rounded-lg appearance-none cursor-pointer slider"
           />
         </div>
       </div>

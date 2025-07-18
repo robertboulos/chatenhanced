@@ -44,14 +44,14 @@ const SettingsModal: React.FC<SettingsModalProps> = ({
             animate={{ y: 0, opacity: 1 }}
             exit={{ y: 20, opacity: 0 }}
             transition={{ type: 'spring', damping: 25 }}
-            className="bg-zinc-800 border border-zinc-700 rounded-lg shadow-xl max-w-md w-full"
+            className="bg-white dark:bg-zinc-800 border border-gray-300 dark:border-zinc-700 rounded-lg shadow-xl max-w-md w-full"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="flex justify-between items-center border-b border-zinc-700 p-4">
-              <h2 className="text-xl font-semibold text-zinc-100">Settings</h2>
+            <div className="flex justify-between items-center border-b border-gray-300 dark:border-zinc-700 p-4">
+              <h2 className="text-xl font-semibold text-gray-900 dark:text-zinc-100">Settings</h2>
               <button
                 onClick={onClose}
-                className="text-zinc-400 hover:text-zinc-200 transition-colors"
+                className="text-gray-600 dark:text-zinc-400 hover:text-gray-900 dark:hover:text-zinc-200 transition-colors"
               >
                 <X size={20} />
               </button>

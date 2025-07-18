@@ -78,21 +78,21 @@ const QuickGenerate: React.FC<QuickGenerateProps> = ({
   return (
     <div className="space-y-4">
       {/* Companion Info */}
-      <div className="flex items-center space-x-3 p-3 bg-zinc-800/50 rounded-lg border border-zinc-700">
+      <div className="flex items-center space-x-3 p-3 bg-gray-100 dark:bg-zinc-800/50 rounded-lg border border-gray-300 dark:border-zinc-700">
         <div className="flex-shrink-0">
           {companion.avatar ? (
             <span className="text-2xl">{companion.avatar}</span>
           ) : (
-            <div className="w-8 h-8 bg-zinc-700 rounded-full flex items-center justify-center">
-              <Sparkles size={16} className="text-zinc-400" />
+            <div className="w-8 h-8 bg-gray-300 dark:bg-zinc-700 rounded-full flex items-center justify-center">
+              <Sparkles size={16} className="text-gray-600 dark:text-zinc-400" />
             </div>
           )}
         </div>
         <div className="flex-1 min-w-0">
-          <h3 className="text-sm font-medium text-zinc-200 truncate">
+          <h3 className="text-sm font-medium text-gray-900 dark:text-zinc-200 truncate">
             {companion.name}
           </h3>
-          <p className="text-xs text-zinc-400 truncate">
+          <p className="text-xs text-gray-600 dark:text-zinc-400 truncate">
             {companion.defaultImageStyle}
           </p>
         </div>
@@ -100,7 +100,7 @@ const QuickGenerate: React.FC<QuickGenerateProps> = ({
 
       {/* Prompt Input */}
       <div className="space-y-2">
-        <label className="block text-sm font-medium text-zinc-300">
+        <label className="block text-sm font-medium text-gray-700 dark:text-zinc-300">
           Image Prompt
         </label>
         <textarea
@@ -109,7 +109,7 @@ const QuickGenerate: React.FC<QuickGenerateProps> = ({
           placeholder={`Describe the image you want ${companion.name} to create...`}
           disabled={disabled || isGenerating}
           rows={3}
-          className="w-full px-3 py-2 bg-zinc-700 text-zinc-100 rounded border border-zinc-600 focus:border-indigo-500 focus:outline-none resize-none transition-colors disabled:opacity-50"
+          className="w-full px-3 py-2 bg-white dark:bg-zinc-700 text-gray-900 dark:text-zinc-100 rounded border border-gray-300 dark:border-zinc-600 focus:border-indigo-500 focus:outline-none resize-none transition-colors disabled:opacity-50"
           onKeyDown={(e) => {
             if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) {
               e.preventDefault();
@@ -117,7 +117,7 @@ const QuickGenerate: React.FC<QuickGenerateProps> = ({
             }
           }}
         />
-        <p className="text-xs text-zinc-500">
+        <p className="text-xs text-gray-500 dark:text-zinc-500">
           Press Ctrl+Enter to generate • Using {companion.generationDefaults.style_preset} style
         </p>
       </div>
@@ -130,7 +130,7 @@ const QuickGenerate: React.FC<QuickGenerateProps> = ({
           disabled={disabled || isGenerating || !prompt.trim()}
           className={`w-full p-4 rounded-lg font-medium transition-all duration-200 flex items-center justify-center space-x-2 ${
             disabled || isGenerating || !prompt.trim()
-              ? 'bg-zinc-700 text-zinc-500 cursor-not-allowed'
+              ? 'bg-gray-300 dark:bg-zinc-700 text-gray-500 dark:text-zinc-500 cursor-not-allowed'
               : 'bg-indigo-600 hover:bg-indigo-700 text-white shadow-lg hover:shadow-xl'
           }`}
           whileHover={!disabled && !isGenerating && prompt.trim() ? { scale: 1.02 } : {}}
@@ -156,7 +156,7 @@ const QuickGenerate: React.FC<QuickGenerateProps> = ({
             disabled={disabled || isGenerating || !prompt.trim()}
             className={`w-full p-3 rounded-lg font-medium transition-all duration-200 flex items-center justify-center space-x-2 border-2 border-dashed ${
               disabled || isGenerating || !prompt.trim()
-                ? 'border-zinc-600 text-zinc-500 cursor-not-allowed'
+                ? 'border-gray-400 dark:border-zinc-600 text-gray-500 dark:text-zinc-500 cursor-not-allowed'
                 : 'border-amber-500 text-amber-400 hover:bg-amber-500/10'
             }`}
             whileHover={!disabled && !isGenerating && prompt.trim() ? { scale: 1.02 } : {}}
@@ -176,8 +176,8 @@ const QuickGenerate: React.FC<QuickGenerateProps> = ({
             dragOver
               ? 'border-indigo-500 bg-indigo-500/10 text-indigo-400'
               : disabled || isGenerating
-              ? 'border-zinc-600 text-zinc-500 cursor-not-allowed'
-              : 'border-zinc-600 text-zinc-400 hover:border-zinc-500'
+              ? 'border-gray-400 dark:border-zinc-600 text-gray-500 dark:text-zinc-500 cursor-not-allowed'
+              : 'border-gray-400 dark:border-zinc-600 text-gray-600 dark:text-zinc-400 hover:border-gray-500 dark:hover:border-zinc-500'
           }`}
         >
           <Upload size={18} />

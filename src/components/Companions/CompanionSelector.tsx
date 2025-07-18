@@ -54,8 +54,8 @@ const CompanionSelector: React.FC<CompanionSelectorProps> = ({
         disabled={disabled}
         className={`flex items-center space-x-2 px-3 py-2 rounded-lg transition-all duration-200 ${
           disabled
-            ? 'bg-zinc-700 text-zinc-500 cursor-not-allowed'
-            : 'bg-zinc-800 hover:bg-zinc-700 text-zinc-200 border border-zinc-600 hover:border-zinc-500'
+            ? 'bg-gray-300 dark:bg-zinc-700 text-gray-500 dark:text-zinc-500 cursor-not-allowed'
+            : 'bg-white dark:bg-zinc-800 hover:bg-gray-50 dark:hover:bg-zinc-700 text-gray-900 dark:text-zinc-200 border border-gray-300 dark:border-zinc-600 hover:border-gray-400 dark:hover:border-zinc-500'
         }`}
         whileHover={!disabled ? { scale: 1.02 } : {}}
         whileTap={!disabled ? { scale: 0.98 } : {}}
@@ -64,7 +64,7 @@ const CompanionSelector: React.FC<CompanionSelectorProps> = ({
           {activeCompanion.avatar ? (
             <span className="text-lg">{activeCompanion.avatar}</span>
           ) : (
-            <User size={16} className="text-zinc-400" />
+            <User size={16} className="text-gray-600 dark:text-zinc-400" />
           )}
           <span className="font-medium truncate max-w-32">
             {activeCompanion.name}
@@ -72,7 +72,7 @@ const CompanionSelector: React.FC<CompanionSelectorProps> = ({
         </div>
         <ChevronDown 
           size={16} 
-          className={`text-zinc-400 transition-transform ${isOpen ? 'rotate-180' : ''}`} 
+          className={`text-gray-600 dark:text-zinc-400 transition-transform ${isOpen ? 'rotate-180' : ''}`} 
         />
       </motion.button>
 
@@ -84,18 +84,18 @@ const CompanionSelector: React.FC<CompanionSelectorProps> = ({
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -10, scale: 0.95 }}
             transition={{ duration: 0.2 }}
-            className="absolute top-full left-0 mt-2 w-80 bg-zinc-800 border border-zinc-700 rounded-lg shadow-xl z-50 overflow-hidden"
+            className="absolute top-full left-0 mt-2 w-80 bg-white dark:bg-zinc-800 border border-gray-300 dark:border-zinc-700 rounded-lg shadow-xl z-50 overflow-hidden"
           >
             {/* Header */}
-            <div className="p-3 bg-zinc-900/50 border-b border-zinc-700">
+            <div className="p-3 bg-gray-100 dark:bg-zinc-900/50 border-b border-gray-300 dark:border-zinc-700">
               <div className="flex items-center justify-between">
-                <h3 className="text-sm font-medium text-zinc-200">AI Companions</h3>
+                <h3 className="text-sm font-medium text-gray-900 dark:text-zinc-200">AI Companions</h3>
                 <button
                   onClick={(e) => handleAction(onCreateCompanion, e)}
-                  className="p-1 hover:bg-zinc-700 rounded transition-colors"
+                  className="p-1 hover:bg-gray-200 dark:hover:bg-zinc-700 rounded transition-colors"
                   title="Create new companion"
                 >
-                  <Plus size={16} className="text-zinc-400" />
+                  <Plus size={16} className="text-gray-600 dark:text-zinc-400" />
                 </button>
               </div>
             </div>
@@ -120,13 +120,13 @@ const CompanionSelector: React.FC<CompanionSelectorProps> = ({
                         {companion.avatar ? (
                           <span className="text-lg">{companion.avatar}</span>
                         ) : (
-                          <User size={16} className="text-zinc-400" />
+                          <User size={16} className="text-gray-600 dark:text-zinc-400" />
                         )}
                       </div>
                       
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center justify-between">
-                          <h4 className="text-sm font-medium text-zinc-200 truncate">
+                          <h4 className="text-sm font-medium text-gray-900 dark:text-zinc-200 truncate">
                             {companion.name}
                           </h4>
                           {companion.id === activeCompanion.id && (
@@ -136,11 +136,11 @@ const CompanionSelector: React.FC<CompanionSelectorProps> = ({
                           )}
                         </div>
                         
-                        <p className="text-xs text-zinc-400 mt-1 line-clamp-2">
+                        <p className="text-xs text-gray-600 dark:text-zinc-400 mt-1 line-clamp-2">
                           {companion.personality}
                         </p>
                         
-                        <div className="flex items-center space-x-2 mt-2 text-xs text-zinc-500">
+                        <div className="flex items-center space-x-2 mt-2 text-xs text-gray-500 dark:text-zinc-500">
                           <Clock size={10} />
                           <span>
                             {formatDistanceToNow(companion.lastUsed, { addSuffix: true })}
@@ -155,18 +155,18 @@ const CompanionSelector: React.FC<CompanionSelectorProps> = ({
                     <div className="flex space-x-1">
                       <button
                         onClick={(e) => handleAction(() => onEditCompanion(companion), e)}
-                        className="p-1 hover:bg-zinc-600 rounded transition-colors"
+                        className="p-1 hover:bg-gray-200 dark:hover:bg-zinc-600 rounded transition-colors"
                         title="Edit companion"
                       >
-                        <Settings size={12} className="text-zinc-400" />
+                        <Settings size={12} className="text-gray-600 dark:text-zinc-400" />
                       </button>
                       
                       <button
                         onClick={(e) => handleAction(() => onDuplicateCompanion(companion.id), e)}
-                        className="p-1 hover:bg-zinc-600 rounded transition-colors"
+                        className="p-1 hover:bg-gray-200 dark:hover:bg-zinc-600 rounded transition-colors"
                         title="Duplicate companion"
                       >
-                        <Copy size={12} className="text-zinc-400" />
+                        <Copy size={12} className="text-gray-600 dark:text-zinc-400" />
                       </button>
                       
                       {companions.length > 1 && (
@@ -185,10 +185,10 @@ const CompanionSelector: React.FC<CompanionSelectorProps> = ({
             </div>
 
             {/* Footer */}
-            <div className="p-2 bg-zinc-900/30 border-t border-zinc-700">
+            <div className="p-2 bg-gray-100 dark:bg-zinc-900/30 border-t border-gray-300 dark:border-zinc-700">
               <button
-                onClick={(e) => handleAction(onCreateCompanion, e)}
-                className="w-full p-2 text-sm text-zinc-400 hover:text-zinc-200 hover:bg-zinc-700 rounded transition-colors flex items-center justify-center space-x-2"
+                    : 'hover:bg-gray-100 dark:hover:bg-zinc-700/50'
+                className="w-full p-2 text-sm text-gray-600 dark:text-zinc-400 hover:text-gray-900 dark:hover:text-zinc-200 hover:bg-gray-200 dark:hover:bg-zinc-700 rounded transition-colors flex items-center justify-center space-x-2"
               >
                 <Plus size={14} />
                 <span>Create New Companion</span>
