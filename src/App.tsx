@@ -47,7 +47,7 @@ function App() {
     clearMessages,
     updateMessageWithAudio,
     updateStreamingMessage,
-  } = useMessages(activeCompanion, addImage);
+  } = useMessages(activeCompanion, handleImageReceived);
 
   const { requestAudio } = useAudio(activeCompanion, updateMessageWithAudio);
   

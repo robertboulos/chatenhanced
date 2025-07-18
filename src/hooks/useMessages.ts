@@ -7,7 +7,7 @@ import { sendMessageToWebhook, retryFailedMessage } from '../services/webhookSer
 import { isImageUrl } from '../utils/validation';
 import toast from 'react-hot-toast';
 
-export const useMessages = (activeCompanion: CompanionPreset, onImageReceived?: (imageUrl: string) => void) => {
+export const useMessages = (activeCompanion: CompanionPreset | undefined, onImageReceived?: (imageUrl: string) => void) => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [loading, setLoading] = useState(true);
   const [waiting, setWaiting] = useState(false);
@@ -17,9 +17,9 @@ export const useMessages = (activeCompanion: CompanionPreset, onImageReceived?: 
   const webhookConfig: WebhookConfig = {
     url: '', // This will be managed through settings
     enabled: true,
-    sessionId: activeCompanion.sessionId,
-    modelName: activeCompanion.modelName,
-    modifier: activeCompanion.modifier
+    sessionId: activeCompanion?.sessionId || '',
+    modelName: activeCompanion?.modelName || '',
+    modifier: activeCompanion?.modifier || ''
   };
 
   useEffect(() => {
@@ -135,11 +135,11 @@ export const useMessages = (activeCompanion: CompanionPreset, onImageReceived?: 
           
           // Include generation parameters from active companion
           const generationParams = {
-            ...activeCompanion.generationDefaults,
-            lora_models: activeCompanion.generationDefaults.loras.map(lora => ({
+            ...activeCompanion?.generationDefaults,
+            lora_models: activeCompanion?.generationDefaults?.loras?.map(lora => ({
               id: lora.id,
               weight: lora.weight
-            }))
+            })) || []
           };
 
           const result = await sendMessageToWebhook(
