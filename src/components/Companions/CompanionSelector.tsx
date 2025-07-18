@@ -187,7 +187,6 @@ const CompanionSelector: React.FC<CompanionSelectorProps> = ({
             {/* Footer */}
             <div className="p-2 bg-gray-100 dark:bg-zinc-900/30 border-t border-gray-300 dark:border-zinc-700">
               <button
-                    : 'hover:bg-gray-100 dark:hover:bg-zinc-700/50'
                 className="w-full p-2 text-sm text-gray-600 dark:text-zinc-400 hover:text-gray-900 dark:hover:text-zinc-200 hover:bg-gray-200 dark:hover:bg-zinc-700 rounded transition-colors flex items-center justify-center space-x-2"
               >
                 <Plus size={14} />
