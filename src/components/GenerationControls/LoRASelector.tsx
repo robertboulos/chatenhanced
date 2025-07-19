@@ -284,4 +284,3 @@ export const LoRASelector: React.FC<LoRASelectorProps> = ({
   );
 };
 
-export default LoRASelector;

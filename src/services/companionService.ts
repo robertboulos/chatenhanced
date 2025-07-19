@@ -3,7 +3,7 @@ import { CompanionPreset } from '../types/companions';
 const COMPANIONS_KEY = 'ai-companions';
 const ACTIVE_COMPANION_KEY = 'active-companion-id';
 
-export const defaultCompanions: CompanionPreset[] = [
+const defaultCompanions: CompanionPreset[] = [
   {
     id: 'default-assistant',
     name: 'AI Assistant',

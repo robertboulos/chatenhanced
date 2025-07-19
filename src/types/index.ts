@@ -31,7 +31,7 @@ export interface WebhookPayload {
   generationParams?: any;
 }
 
-export interface AITask {
+interface AITask {
   id: string;
   type: 'analyze' | 'enhance' | 'search' | 'execute' | 'translate';
   status: 'pending' | 'processing' | 'completed' | 'failed';

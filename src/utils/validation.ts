@@ -1,6 +1,6 @@
 import { parse } from 'url';
 
-export const isValidUrl = (url: string): boolean => {
+const isValidUrl = (url: string): boolean => {
   try {
     new URL(url);
     return true;

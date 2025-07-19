@@ -17,7 +17,7 @@ export const loadMessages = (): Message[] => {
   }
 };
 
-export const saveWebhookConfig = (config: WebhookConfig): void => {
+const saveWebhookConfig = (config: WebhookConfig): void => {
   try {
     // Create a new object with all fields explicitly set
     const configToSave = {
@@ -35,7 +35,7 @@ export const saveWebhookConfig = (config: WebhookConfig): void => {
   }
 };
 
-export const loadWebhookConfig = (): WebhookConfig => {
+const loadWebhookConfig = (): WebhookConfig => {
   try {
     const data = localStorage.getItem(WEBHOOK_CONFIG_KEY);
     console.log('Raw stored config:', data);

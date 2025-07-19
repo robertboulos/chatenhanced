@@ -23,7 +23,7 @@ export interface CompanionPreset {
   lastUsed: number;
 }
 
-export interface GenerationRequest {
+interface GenerationRequest {
   type: 'text-to-image' | 'image-to-image' | 'upscale' | 'variation';
   prompt?: string;
   sourceImageUrl?: string;
