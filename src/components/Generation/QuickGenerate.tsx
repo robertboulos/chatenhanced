@@ -76,20 +76,20 @@ const QuickGenerate: React.FC<QuickGenerateProps> = ({
   };
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-3 sm:space-y-4">
       {/* Companion Info */}
-      <div className="flex items-center space-x-3 p-3 bg-gray-100 dark:bg-zinc-800/50 rounded-lg border border-gray-300 dark:border-zinc-700">
+      <div className="flex items-center space-x-2 sm:space-x-3 p-2 sm:p-3 bg-gray-100 dark:bg-zinc-800/50 rounded-lg border border-gray-300 dark:border-zinc-700">
         <div className="flex-shrink-0">
           {companion.avatar ? (
-            <span className="text-2xl">{companion.avatar}</span>
+            <span className="text-lg sm:text-2xl">{companion.avatar}</span>
           ) : (
-            <div className="w-8 h-8 bg-gray-300 dark:bg-zinc-700 rounded-full flex items-center justify-center">
-              <Sparkles size={16} className="text-gray-600 dark:text-zinc-400" />
+            <div className="w-6 h-6 sm:w-8 sm:h-8 bg-gray-300 dark:bg-zinc-700 rounded-full flex items-center justify-center">
+              <Sparkles size={12} className="sm:w-4 sm:h-4 text-gray-600 dark:text-zinc-400" />
             </div>
           )}
         </div>
         <div className="flex-1 min-w-0">
-          <h3 className="text-sm font-medium text-gray-900 dark:text-zinc-200 truncate">
+          <h3 className="text-xs sm:text-sm font-medium text-gray-900 dark:text-zinc-200 truncate">
             {companion.name}
           </h3>
           <p className="text-xs text-gray-600 dark:text-zinc-400 truncate">
@@ -100,7 +100,7 @@ const QuickGenerate: React.FC<QuickGenerateProps> = ({
 
       {/* Prompt Input */}
       <div className="space-y-2">
-        <label className="block text-sm font-medium text-gray-700 dark:text-zinc-300">
+        <label className="block text-xs sm:text-sm font-medium text-gray-700 dark:text-zinc-300">
           Image Prompt
         </label>
         <textarea
@@ -108,8 +108,8 @@ const QuickGenerate: React.FC<QuickGenerateProps> = ({
           onChange={(e) => setPrompt(e.target.value)}
           placeholder={`Describe the image you want ${companion.name} to create...`}
           disabled={disabled || isGenerating}
-          rows={3}
-          className="w-full px-3 py-2 bg-white dark:bg-zinc-700 text-gray-900 dark:text-zinc-100 rounded border border-gray-300 dark:border-zinc-600 focus:border-indigo-500 focus:outline-none resize-none transition-colors disabled:opacity-50"
+          rows={2}
+          className="w-full px-2 sm:px-3 py-2 text-sm sm:text-base bg-white dark:bg-zinc-700 text-gray-900 dark:text-zinc-100 rounded border border-gray-300 dark:border-zinc-600 focus:border-indigo-500 focus:outline-none resize-none transition-colors disabled:opacity-50"
           onKeyDown={(e) => {
             if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) {
               e.preventDefault();
@@ -118,17 +118,17 @@ const QuickGenerate: React.FC<QuickGenerateProps> = ({
           }}
         />
         <p className="text-xs text-gray-500 dark:text-zinc-500">
-          Press Ctrl+Enter to generate • Using {companion.generationDefaults.style_preset} style
+          <span className="hidden sm:inline">Press Ctrl+Enter to generate • </span>Using {companion.generationDefaults.style_preset} style
         </p>
       </div>
 
       {/* Generation Buttons */}
-      <div className="grid grid-cols-1 gap-3">
+      <div className="grid grid-cols-1 gap-2 sm:gap-3">
         {/* Text to Image */}
         <motion.button
           onClick={() => handleGenerate('text-to-image')}
           disabled={disabled || isGenerating || !prompt.trim()}
-          className={`w-full p-4 rounded-lg font-medium transition-all duration-200 flex items-center justify-center space-x-2 ${
+          className={`w-full p-3 sm:p-4 rounded-lg font-medium transition-all duration-200 flex items-center justify-center space-x-2 text-sm sm:text-base ${
             disabled || isGenerating || !prompt.trim()
               ? 'bg-gray-300 dark:bg-zinc-700 text-gray-500 dark:text-zinc-500 cursor-not-allowed'
               : 'bg-indigo-600 hover:bg-indigo-700 text-white shadow-lg hover:shadow-xl'
@@ -138,12 +138,12 @@ const QuickGenerate: React.FC<QuickGenerateProps> = ({
         >
           {isGenerating ? (
             <>
-              <Loader2 size={20} className="animate-spin" />
+              <Loader2 size={16} className="sm:w-5 sm:h-5 animate-spin" />
               <span>Generating...</span>
             </>
           ) : (
             <>
-              <Sparkles size={20} />
+              <Sparkles size={16} className="sm:w-5 sm:h-5" />
               <span>Generate Image</span>
             </>
           )}
@@ -154,7 +154,7 @@ const QuickGenerate: React.FC<QuickGenerateProps> = ({
           <motion.button
             onClick={() => handleGenerate('image-to-image')}
             disabled={disabled || isGenerating || !prompt.trim()}
-            className={`w-full p-3 rounded-lg font-medium transition-all duration-200 flex items-center justify-center space-x-2 border-2 border-dashed ${
+            className={`w-full p-2 sm:p-3 rounded-lg font-medium transition-all duration-200 flex items-center justify-center space-x-2 border-2 border-dashed text-sm sm:text-base ${
               disabled || isGenerating || !prompt.trim()
                 ? 'border-gray-400 dark:border-zinc-600 text-gray-500 dark:text-zinc-500 cursor-not-allowed'
                 : 'border-amber-500 text-amber-400 hover:bg-amber-500/10'
@@ -162,7 +162,7 @@ const QuickGenerate: React.FC<QuickGenerateProps> = ({
             whileHover={!disabled && !isGenerating && prompt.trim() ? { scale: 1.02 } : {}}
             whileTap={!disabled && !isGenerating && prompt.trim() ? { scale: 0.98 } : {}}
           >
-            <ImageIcon size={18} />
+            <ImageIcon size={16} className="sm:w-[18px] sm:h-[18px]" />
             <span>Transform Current Image</span>
           </motion.button>
         )}
@@ -172,7 +172,7 @@ const QuickGenerate: React.FC<QuickGenerateProps> = ({
           onDrop={handleDrop}
           onDragOver={handleDragOver}
           onDragLeave={handleDragLeave}
-          className={`w-full p-4 rounded-lg border-2 border-dashed transition-all duration-200 flex items-center justify-center space-x-2 ${
+          className={`w-full p-3 sm:p-4 rounded-lg border-2 border-dashed transition-all duration-200 flex items-center justify-center space-x-2 text-sm sm:text-base ${
             dragOver
               ? 'border-indigo-500 bg-indigo-500/10 text-indigo-400'
               : disabled || isGenerating
@@ -180,8 +180,8 @@ const QuickGenerate: React.FC<QuickGenerateProps> = ({
               : 'border-gray-400 dark:border-zinc-600 text-gray-600 dark:text-zinc-400 hover:border-gray-500 dark:hover:border-zinc-500'
           }`}
         >
-          <Upload size={18} />
-          <span className="text-sm">
+          <Upload size={16} className="sm:w-[18px] sm:h-[18px]" />
+          <span>
             {dragOver ? 'Drop image here' : 'Drop image to transform'}
           </span>
         </div>

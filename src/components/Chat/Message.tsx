@@ -109,20 +109,20 @@ const Message: React.FC<MessageProps> = ({ message, onRetry, onRequestAudio }) =
 
   return (
     <motion.div
-      className={`flex ${isSent ? 'justify-end' : 'justify-start'} mb-4 px-4`}
+      className={`flex ${isSent ? 'justify-end' : 'justify-start'} mb-3 sm:mb-4 px-2 sm:px-4`}
       initial="initial"
       animate="animate"
       variants={messageVariants}
     >
-      <div className={`max-w-[75%] ${isSent ? 'order-2' : 'order-1'}`}>
+      <div className={`max-w-[85%] sm:max-w-[75%] ${isSent ? 'order-2' : 'order-1'}`}>
         <div
-          className={`px-4 py-3 rounded-3xl shadow-sm ${
+          className={`px-3 sm:px-4 py-2 sm:py-3 rounded-2xl sm:rounded-3xl shadow-sm ${
             isSent
               ? 'bg-blue-500 text-white rounded-br-lg'
               : 'bg-gray-300 text-black rounded-bl-lg'
           }`}
         >
-          <div className="text-sm whitespace-pre-wrap break-words">
+          <div className="text-sm sm:text-base whitespace-pre-wrap break-words">
             {formatMessageContent(message.content, (message as any).imageData)}
           </div>
           
@@ -136,7 +136,7 @@ const Message: React.FC<MessageProps> = ({ message, onRetry, onRequestAudio }) =
           )}
         </div>
         
-        <div className={`flex items-center mt-1 text-xs text-zinc-400 ${
+        <div className={`flex items-center mt-1 text-xs text-gray-500 dark:text-zinc-400 ${
           isSent ? 'justify-end' : 'justify-start'
         }`}>
           <span>{formatTimestamp(message.timestamp)}</span>
@@ -146,7 +146,7 @@ const Message: React.FC<MessageProps> = ({ message, onRetry, onRequestAudio }) =
             <button
               onClick={handleRequestAudio}
               disabled={isRequestingAudio}
-              className="ml-2 text-blue-400 hover:text-blue-300 flex items-center transition-colors disabled:opacity-50"
+              className="ml-2 text-blue-500 dark:text-blue-400 hover:text-blue-600 dark:hover:text-blue-300 flex items-center transition-colors disabled:opacity-50"
               title="Convert to audio"
             >
               {isRequestingAudio ? (
@@ -154,7 +154,7 @@ const Message: React.FC<MessageProps> = ({ message, onRetry, onRequestAudio }) =
               ) : (
                 <Volume2 className="h-3 w-3 mr-1" />
               )}
-              <span>{isRequestingAudio ? 'Converting...' : 'Audio'}</span>
+              <span className="hidden sm:inline">{isRequestingAudio ? 'Converting...' : 'Audio'}</span>
             </button>
           )}
           
@@ -165,10 +165,10 @@ const Message: React.FC<MessageProps> = ({ message, onRetry, onRequestAudio }) =
               {message.status === 'failed' && (
                 <button
                   onClick={() => onRetry(message.id)}
-                  className="ml-2 text-blue-400 hover:text-blue-300 flex items-center transition-colors"
+                  className="ml-2 text-blue-500 dark:text-blue-400 hover:text-blue-600 dark:hover:text-blue-300 flex items-center transition-colors"
                 >
                   <RefreshCw className="h-3 w-3 mr-1" />
-                  <span>Retry</span>
+                  <span className="hidden sm:inline">Retry</span>
                 </button>
               )}
             </div>

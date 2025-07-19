@@ -108,14 +108,14 @@ function App() {
   // Show loading state while companions are loading
   if (companionsLoading) {
     return (
-      <div className="h-screen bg-zinc-900 dark:bg-gray-100 flex items-center justify-center">
-        <div className="text-zinc-400 dark:text-gray-600">Loading AI Companions...</div>
+      <div className="h-screen bg-gray-100 dark:bg-zinc-900 flex items-center justify-center">
+        <div className="text-gray-600 dark:text-zinc-400">Loading AI Companions...</div>
       </div>
     );
   }
 
   return (
-    <div className="h-screen bg-gray-100 dark:bg-zinc-900 flex flex-col md:flex-row overflow-hidden">
+    <div className="h-screen bg-gray-100 dark:bg-zinc-900 flex flex-col lg:flex-row overflow-hidden">
       <Toaster 
         position="top-right"
         toastOptions={{
@@ -127,9 +127,9 @@ function App() {
         }}
       />
       
-      {/* Left Section - Live View / Webcam Display */}
-      <div className="w-full md:w-96 flex flex-col flex-shrink-0 border-b md:border-b-0 md:border-r border-gray-300 dark:border-zinc-700 overflow-hidden">
-        <div className="flex-1 p-4 overflow-hidden">
+      {/* Left Section - Live View / Image Display */}
+      <div className="w-full lg:w-96 xl:w-[28rem] flex flex-col flex-shrink-0 border-b lg:border-b-0 lg:border-r border-gray-300 dark:border-zinc-700 overflow-hidden">
+        <div className="flex-1 p-2 sm:p-4 overflow-hidden">
           <LiveViewContainer
             images={images}
             currentIndex={currentIndex}
@@ -142,7 +142,7 @@ function App() {
         </div>
         
         {/* AI Generation Controls - Fixed at bottom */}
-        <div className="flex-shrink-0 p-4 pt-0">
+        <div className="flex-shrink-0 p-2 sm:p-4 pt-0">
           <AdvancedControls
             companion={activeCompanion}
             onGenerate={handleGenerate}

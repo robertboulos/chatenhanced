@@ -69,9 +69,9 @@ const LiveViewControls: React.FC<LiveViewControlsProps> = ({
   const buttonBaseClasses = "p-3 rounded-lg transition-all duration-200 flex flex-col items-center justify-center space-y-1 min-h-[60px] shadow-md";
 
   return (
-    <div className="bg-white dark:bg-zinc-800 rounded-lg border border-gray-300 dark:border-zinc-700 p-3 shadow-lg">
+    <div className="bg-white dark:bg-zinc-800 rounded-lg border border-gray-300 dark:border-zinc-700 p-2 sm:p-3 shadow-lg">
       <div className="flex items-center justify-between mb-3">
-        <h3 className="text-xs font-medium text-gray-700 dark:text-zinc-300">AI Controls</h3>
+        <h3 className="text-xs sm:text-sm font-medium text-gray-700 dark:text-zinc-300">AI Controls</h3>
         <div className="flex items-center space-x-1">
           <div className="w-1.5 h-1.5 bg-blue-500 rounded-full animate-pulse"></div>
           <span className="text-xs text-gray-600 dark:text-zinc-500">
@@ -80,7 +80,7 @@ const LiveViewControls: React.FC<LiveViewControlsProps> = ({
         </div>
       </div>
       
-      <div className="grid grid-cols-2 gap-3">
+      <div className="grid grid-cols-2 gap-2 sm:gap-3">
         {controlButtons.map((button) => {
           const Icon = button.icon;
           const isDisabled = disabled || !currentImageUrl;
@@ -90,7 +90,7 @@ const LiveViewControls: React.FC<LiveViewControlsProps> = ({
             <motion.button
               key={button.id}
               onClick={() => handleAction(button.label, button.requestType, button.message)}
-              className={`${buttonBaseClasses} ${
+              className={`p-2 sm:p-3 rounded-lg transition-all duration-200 flex flex-col items-center justify-center space-y-1 min-h-[50px] sm:min-h-[60px] shadow-md ${
                 isDisabled
                   ? 'bg-gray-300 dark:bg-zinc-700 text-gray-500 dark:text-zinc-500 cursor-not-allowed'
                   : `${button.color} text-white hover:shadow-lg`
@@ -101,11 +101,11 @@ const LiveViewControls: React.FC<LiveViewControlsProps> = ({
               title={isDisabled && !currentImageUrl ? 'No image available' : button.label}
             >
               {isProcessingThis ? (
-                <div className="w-4 h-4 border border-white border-t-transparent rounded-full animate-spin" />
+                <div className="w-3 h-3 sm:w-4 sm:h-4 border border-white border-t-transparent rounded-full animate-spin" />
               ) : (
-                <Icon size={16} />
+                <Icon size={14} className="sm:w-4 sm:h-4" />
               )}
-              <span className="text-sm font-medium">
+              <span className="text-xs sm:text-sm font-medium">
                 {button.label}
               </span>
             </motion.button>
@@ -115,7 +115,7 @@ const LiveViewControls: React.FC<LiveViewControlsProps> = ({
       
       {/* Debug info - shows current image URL (can be removed in production) */}
       {currentImageUrl && (
-        <div className="mt-2 p-2 bg-gray-100 dark:bg-zinc-900/50 rounded text-xs text-gray-600 dark:text-zinc-400 truncate">
+        <div className="mt-2 p-1.5 sm:p-2 bg-gray-100 dark:bg-zinc-900/50 rounded text-xs text-gray-600 dark:text-zinc-400 truncate">
           <span className="font-medium">Current: </span>
           <span className="opacity-75">{currentImageUrl}</span>
         </div>

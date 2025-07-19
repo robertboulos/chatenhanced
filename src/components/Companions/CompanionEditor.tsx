@@ -200,11 +200,12 @@ const CompanionEditor: React.FC<CompanionEditorProps> = ({
             exit={{ y: 20, opacity: 0, scale: 0.95 }}
             transition={{ type: 'spring', damping: 25 }}
             className="bg-white dark:bg-zinc-800 border border-gray-300 dark:border-zinc-700 rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] overflow-hidden"
+            className="bg-white dark:bg-zinc-800 border border-gray-300 dark:border-zinc-700 rounded-lg shadow-xl max-w-sm sm:max-w-2xl w-full max-h-[90vh] overflow-hidden mx-2 sm:mx-0"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Header */}
-            <div className="flex justify-between items-center border-b border-zinc-700 dark:border-gray-300 p-4">
-              <h2 className="text-xl font-semibold text-zinc-100 dark:text-gray-900 flex items-center space-x-2">
+            <div className="flex justify-between items-center border-b border-gray-300 dark:border-zinc-700 p-3 sm:p-4">
+              <h2 className="text-lg sm:text-xl font-semibold text-gray-900 dark:text-zinc-100 flex items-center space-x-2">
                 <Sparkles className="w-5 h-5 text-indigo-400" />
                 <span>{mode === 'create' ? 'Create' : 'Edit'} AI Companion</span>
               </h2>
@@ -212,30 +213,30 @@ const CompanionEditor: React.FC<CompanionEditorProps> = ({
                 onClick={onClose}
                 className="text-zinc-400 dark:text-gray-600 hover:text-zinc-200 dark:hover:text-gray-800 transition-colors"
               >
-                <X size={20} />
+                <X size={18} className="sm:w-5 sm:h-5" />
               </button>
             </div>
 
             {/* Form */}
             <form onSubmit={handleSubmit} className="overflow-y-auto max-h-[calc(90vh-120px)]">
-              <div className="p-4 space-y-6">
+              <div className="p-3 sm:p-4 space-y-4 sm:space-y-6">
                 {/* Basic Info */}
-                <div className="space-y-4">
-                  <h3 className="text-lg font-medium text-zinc-200 dark:text-gray-800 flex items-center space-x-2">
+                <div className="space-y-3 sm:space-y-4">
+                  <h3 className="text-base sm:text-lg font-medium text-gray-800 dark:text-zinc-200 flex items-center space-x-2">
                     <User className="w-4 h-4" />
                     <span>Basic Information</span>
                   </h3>
 
                   {/* Name */}
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-zinc-300 mb-2">
+                    <label className="block text-xs sm:text-sm font-medium text-gray-700 dark:text-zinc-300 mb-2">
                       Name *
                     </label>
                     <input
                       type="text"
                       value={formData.name}
                       onChange={(e) => updateFormData('name', e.target.value)}
-                      className={`w-full px-3 py-2 bg-gray-50 dark:bg-zinc-700 text-gray-900 dark:text-zinc-100 rounded border transition-colors ${
+                      className={`w-full px-2 sm:px-3 py-2 text-sm sm:text-base bg-gray-50 dark:bg-zinc-700 text-gray-900 dark:text-zinc-100 rounded border transition-colors ${
                         errors.name ? 'border-red-500' : 'border-gray-300 dark:border-zinc-600 focus:border-indigo-500'
                       } focus:outline-none`}
                       placeholder="Enter companion name"
@@ -247,16 +248,16 @@ const CompanionEditor: React.FC<CompanionEditorProps> = ({
 
                   {/* Avatar */}
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-zinc-300 mb-2">
+                    <label className="block text-xs sm:text-sm font-medium text-gray-700 dark:text-zinc-300 mb-2">
                       Avatar
                     </label>
-                    <div className="flex flex-wrap gap-2">
+                    <div className="grid grid-cols-6 sm:flex sm:flex-wrap gap-1.5 sm:gap-2">
                       {AVATAR_OPTIONS.map((avatar) => (
                         <button
                           key={avatar}
                           type="button"
                           onClick={() => updateFormData('avatar', avatar)}
-                          className={`p-2 text-lg rounded border transition-colors ${
+                          className={`p-1.5 sm:p-2 text-base sm:text-lg rounded border transition-colors ${
                             formData.avatar === avatar
                               ? 'border-indigo-500 bg-indigo-100 dark:bg-indigo-600/20'
                               : 'border-gray-300 dark:border-zinc-600 hover:border-gray-400 dark:hover:border-zinc-500'
@@ -270,14 +271,14 @@ const CompanionEditor: React.FC<CompanionEditorProps> = ({
 
                   {/* Personality */}
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-zinc-300 mb-2">
+                    <label className="block text-xs sm:text-sm font-medium text-gray-700 dark:text-zinc-300 mb-2">
                       Personality *
                     </label>
                     <textarea
                       value={formData.personality}
                       onChange={(e) => updateFormData('personality', e.target.value)}
-                      rows={3}
-                      className={`w-full px-3 py-2 bg-gray-50 dark:bg-zinc-700 text-gray-900 dark:text-zinc-100 rounded border transition-colors resize-none ${
+                      rows={2}
+                      className={`w-full px-2 sm:px-3 py-2 text-sm sm:text-base bg-gray-50 dark:bg-zinc-700 text-gray-900 dark:text-zinc-100 rounded border transition-colors resize-none ${
                         errors.personality ? 'border-red-500' : 'border-gray-300 dark:border-zinc-600 focus:border-indigo-500'
                       } focus:outline-none`}
                       placeholder="Describe the companion's personality and behavior"
@@ -289,14 +290,14 @@ const CompanionEditor: React.FC<CompanionEditorProps> = ({
 
                   {/* Session ID */}
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-zinc-300 mb-2">
+                    <label className="block text-xs sm:text-sm font-medium text-gray-700 dark:text-zinc-300 mb-2">
                       Session ID *
                     </label>
                     <input
                       type="text"
                       value={formData.sessionId}
                       onChange={(e) => updateFormData('sessionId', e.target.value)}
-                      className={`w-full px-3 py-2 bg-gray-50 dark:bg-zinc-700 text-gray-900 dark:text-zinc-100 rounded border transition-colors ${
+                      className={`w-full px-2 sm:px-3 py-2 text-sm sm:text-base bg-gray-50 dark:bg-zinc-700 text-gray-900 dark:text-zinc-100 rounded border transition-colors ${
                         errors.sessionId ? 'border-red-500' : 'border-gray-300 dark:border-zinc-600 focus:border-indigo-500'
                       } focus:outline-none`}
                       placeholder="unique-session-id"
@@ -311,13 +312,13 @@ const CompanionEditor: React.FC<CompanionEditorProps> = ({
 
                   {/* Model Name */}
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-zinc-300 mb-2">
+                    <label className="block text-xs sm:text-sm font-medium text-gray-700 dark:text-zinc-300 mb-2">
                       AI Model *
                     </label>
                     <select
                       value={formData.modelName}
                       onChange={(e) => updateFormData('modelName', e.target.value)}
-                      className={`w-full px-3 py-2 bg-gray-50 dark:bg-zinc-700 text-gray-900 dark:text-zinc-100 rounded border transition-colors ${
+                      className={`w-full px-2 sm:px-3 py-2 text-sm sm:text-base bg-gray-50 dark:bg-zinc-700 text-gray-900 dark:text-zinc-100 rounded border transition-colors ${
                         errors.modelName ? 'border-red-500' : 'border-gray-300 dark:border-zinc-600 focus:border-indigo-500'
                       } focus:outline-none`}
                     >
@@ -338,13 +339,13 @@ const CompanionEditor: React.FC<CompanionEditorProps> = ({
 
                   {/* Modifier */}
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-zinc-300 mb-2">
+                    <label className="block text-xs sm:text-sm font-medium text-gray-700 dark:text-zinc-300 mb-2">
                       Personality Modifier
                     </label>
                     <select
                       value={formData.modifier}
                       onChange={(e) => updateFormData('modifier', e.target.value)}
-                      className="w-full px-3 py-2 bg-gray-50 dark:bg-zinc-700 text-gray-900 dark:text-zinc-100 rounded border border-gray-300 dark:border-zinc-600 focus:border-indigo-500 focus:outline-none"
+                      className="w-full px-2 sm:px-3 py-2 text-sm sm:text-base bg-gray-50 dark:bg-zinc-700 text-gray-900 dark:text-zinc-100 rounded border border-gray-300 dark:border-zinc-600 focus:border-indigo-500 focus:outline-none"
                     >
                       <option value="balanced">Balanced</option>
                       <option value="creative">Creative</option>
@@ -361,21 +362,21 @@ const CompanionEditor: React.FC<CompanionEditorProps> = ({
                 </div>
 
                 {/* Generation Settings */}
-                <div className="space-y-4">
-                  <h3 className="text-lg font-medium text-gray-800 dark:text-zinc-200 flex items-center space-x-2">
+                <div className="space-y-3 sm:space-y-4">
+                  <h3 className="text-base sm:text-lg font-medium text-gray-800 dark:text-zinc-200 flex items-center space-x-2">
                     <Settings className="w-4 h-4" />
                     <span>Generation Defaults</span>
                   </h3>
 
                   {/* Style Preset */}
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-zinc-300 mb-2">
+                    <label className="block text-xs sm:text-sm font-medium text-gray-700 dark:text-zinc-300 mb-2">
                       Default Style
                     </label>
                     <select
                       value={formData.generationDefaults.style_preset}
                       onChange={(e) => updateGenerationDefaults('style_preset', e.target.value)}
-                      className="w-full px-3 py-2 bg-gray-50 dark:bg-zinc-700 text-gray-900 dark:text-zinc-100 rounded border border-gray-300 dark:border-zinc-600 focus:border-indigo-500 focus:outline-none"
+                      className="w-full px-2 sm:px-3 py-2 text-sm sm:text-base bg-gray-50 dark:bg-zinc-700 text-gray-900 dark:text-zinc-100 rounded border border-gray-300 dark:border-zinc-600 focus:border-indigo-500 focus:outline-none"
                     >
                       {STYLE_PRESETS.map((preset) => (
                         <option key={preset.id} value={preset.id}>
@@ -387,7 +388,7 @@ const CompanionEditor: React.FC<CompanionEditorProps> = ({
 
                   {/* LoRA Models */}
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-zinc-300 mb-2">
+                    <label className="block text-xs sm:text-sm font-medium text-gray-700 dark:text-zinc-300 mb-2">
                       LoRA Models
                     </label>
                     <LoRASelector
@@ -403,7 +404,7 @@ const CompanionEditor: React.FC<CompanionEditorProps> = ({
 
                   {/* CFG Scale */}
                   <div>
-                    <label className="flex items-center justify-between text-sm font-medium text-gray-700 dark:text-zinc-300 mb-2">
+                    <label className="flex items-center justify-between text-xs sm:text-sm font-medium text-gray-700 dark:text-zinc-300 mb-2">
                       <span>CFG Scale</span>
                       <span className="text-gray-600 dark:text-zinc-400">{formData.generationDefaults.cfg_scale}</span>
                     </label>
@@ -420,7 +421,7 @@ const CompanionEditor: React.FC<CompanionEditorProps> = ({
 
                   {/* Steps */}
                   <div>
-                    <label className="flex items-center justify-between text-sm font-medium text-gray-700 dark:text-zinc-300 mb-2">
+                    <label className="flex items-center justify-between text-xs sm:text-sm font-medium text-gray-700 dark:text-zinc-300 mb-2">
                       <span>Steps</span>
                       <span className="text-gray-600 dark:text-zinc-400">{formData.generationDefaults.steps}</span>
                     </label>
@@ -437,13 +438,13 @@ const CompanionEditor: React.FC<CompanionEditorProps> = ({
 
                   {/* Dimensions */}
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-zinc-300 mb-2">
+                    <label className="block text-xs sm:text-sm font-medium text-gray-700 dark:text-zinc-300 mb-2">
                       Default Dimensions
                     </label>
                     <select
                       value={formData.generationDefaults.dimensions}
                       onChange={(e) => updateGenerationDefaults('dimensions', e.target.value)}
-                      className="w-full px-3 py-2 bg-gray-50 dark:bg-zinc-700 text-gray-900 dark:text-zinc-100 rounded border border-gray-300 dark:border-zinc-600 focus:border-indigo-500 focus:outline-none"
+                      className="w-full px-2 sm:px-3 py-2 text-sm sm:text-base bg-gray-50 dark:bg-zinc-700 text-gray-900 dark:text-zinc-100 rounded border border-gray-300 dark:border-zinc-600 focus:border-indigo-500 focus:outline-none"
                     >
                       <option value="1024x1024">Square (1024x1024)</option>
                       <option value="1024x768">Landscape (1024x768)</option>
@@ -455,14 +456,14 @@ const CompanionEditor: React.FC<CompanionEditorProps> = ({
 
                   {/* Negative Prompt */}
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-zinc-300 mb-2">
+                    <label className="block text-xs sm:text-sm font-medium text-gray-700 dark:text-zinc-300 mb-2">
                       Negative Prompt
                     </label>
                     <textarea
                       value={formData.generationDefaults.negative_prompt}
                       onChange={(e) => updateGenerationDefaults('negative_prompt', e.target.value)}
-                      rows={3}
-                      className="w-full px-3 py-2 bg-gray-50 dark:bg-zinc-700 text-gray-900 dark:text-zinc-100 rounded border border-gray-300 dark:border-zinc-600 focus:border-indigo-500 focus:outline-none resize-none"
+                      rows={2}
+                      className="w-full px-2 sm:px-3 py-2 text-sm sm:text-base bg-gray-50 dark:bg-zinc-700 text-gray-900 dark:text-zinc-100 rounded border border-gray-300 dark:border-zinc-600 focus:border-indigo-500 focus:outline-none resize-none"
                       placeholder="Things to avoid in generated images..."
                     />
                     <p className="text-zinc-400 dark:text-gray-600 text-xs mt-1">
@@ -472,21 +473,21 @@ const CompanionEditor: React.FC<CompanionEditorProps> = ({
                 </div>
 
                 {/* Voice Settings */}
-                <div className="space-y-4">
-                  <h3 className="text-lg font-medium text-gray-800 dark:text-zinc-200 flex items-center space-x-2">
+                <div className="space-y-3 sm:space-y-4">
+                  <h3 className="text-base sm:text-lg font-medium text-gray-800 dark:text-zinc-200 flex items-center space-x-2">
                     <Volume2 className="w-4 h-4" />
                     <span>Voice Settings (Optional)</span>
                   </h3>
 
                   {/* Voice ID */}
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-zinc-300 mb-2">
+                    <label className="block text-xs sm:text-sm font-medium text-gray-700 dark:text-zinc-300 mb-2">
                       Voice ID
                     </label>
                     <select
                       value={formData.voiceSettings.voice_id}
                       onChange={(e) => updateVoiceSettings('voice_id', e.target.value)}
-                      className="w-full px-3 py-2 bg-gray-50 dark:bg-zinc-700 text-gray-900 dark:text-zinc-100 rounded border border-gray-300 dark:border-zinc-600 focus:border-indigo-500 focus:outline-none"
+                      className="w-full px-2 sm:px-3 py-2 text-sm sm:text-base bg-gray-50 dark:bg-zinc-700 text-gray-900 dark:text-zinc-100 rounded border border-gray-300 dark:border-zinc-600 focus:border-indigo-500 focus:outline-none"
                     >
                       <option value="">Select Voice</option>
                       <option value="alloy">Alloy (Neutral)</option>
@@ -500,7 +501,7 @@ const CompanionEditor: React.FC<CompanionEditorProps> = ({
 
                   {/* Speed */}
                   <div>
-                    <label className="flex items-center justify-between text-sm font-medium text-gray-700 dark:text-zinc-300 mb-2">
+                    <label className="flex items-center justify-between text-xs sm:text-sm font-medium text-gray-700 dark:text-zinc-300 mb-2">
                       <span>Speech Speed</span>
                       <span className="text-gray-600 dark:text-zinc-400">{formData.voiceSettings.speed}x</span>
                     </label>
@@ -518,21 +519,21 @@ const CompanionEditor: React.FC<CompanionEditorProps> = ({
               </div>
 
               {/* Footer */}
-              <div className="border-t border-zinc-700 dark:border-gray-300 p-4 flex justify-end space-x-3">
+              <div className="border-t border-gray-300 dark:border-zinc-700 p-3 sm:p-4 flex flex-col sm:flex-row justify-end space-y-2 sm:space-y-0 sm:space-x-3">
                 <button
                   type="button"
                   onClick={onClose}
-                  className="px-4 py-2 text-zinc-400 dark:text-gray-600 hover:text-zinc-200 dark:hover:text-gray-800 transition-colors"
+                  className="px-4 py-2 text-sm sm:text-base text-gray-600 dark:text-zinc-400 hover:text-gray-900 dark:hover:text-zinc-200 transition-colors order-2 sm:order-1"
                 >
                   Cancel
                 </button>
                 <motion.button
                   type="submit"
-                  className="px-6 py-2 bg-indigo-600 hover:bg-indigo-700 dark:bg-indigo-500 dark:hover:bg-indigo-600 text-white rounded-lg font-medium flex items-center space-x-2 transition-colors"
+                  className="px-4 sm:px-6 py-2 text-sm sm:text-base bg-indigo-600 hover:bg-indigo-700 dark:bg-indigo-500 dark:hover:bg-indigo-600 text-white rounded-lg font-medium flex items-center justify-center space-x-2 transition-colors order-1 sm:order-2"
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                 >
-                  <Save size={16} />
+                  <Save size={14} className="sm:w-4 sm:h-4" />
                   <span>{mode === 'create' ? 'Create' : 'Save'} Companion</span>
                 </motion.button>
               </div>

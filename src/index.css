@@ -11,16 +11,46 @@
   color-scheme: dark;
 }
 
+/* Mobile-first responsive design utilities */
+@media (max-width: 640px) {
+  .text-responsive {
+    font-size: 0.875rem; /* 14px */
+  }
+  
+  .p-responsive {
+    padding: 0.5rem; /* 8px */
+  }
+  
+  .space-responsive > * + * {
+    margin-left: 0.5rem; /* 8px */
+  }
+}
+
+/* Touch-friendly button sizes */
+@media (max-width: 768px) {
+  .btn-touch {
+    min-height: 44px;
+    min-width: 44px;
+  }
+}
+
 /* Custom slider styles for audio player */
 .slider::-webkit-slider-thumb {
   appearance: none;
-  height: 12px;
-  width: 12px;
+  height: 16px;
+  width: 16px;
   border-radius: 50%;
   background: #6366f1;
   cursor: pointer;
   border: 2px solid #ffffff;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+@media (max-width: 640px) {
+  .slider::-webkit-slider-thumb {
+    height: 20px;
+    width: 20px;
+  }
 }
 
 .dark .slider::-webkit-slider-thumb {
@@ -28,8 +58,8 @@
 }
 
 .slider::-moz-range-thumb {
-  height: 12px;
-  width: 12px;
+  height: 16px;
+  width: 16px;
   border-radius: 50%;
   background: #6366f1;
   cursor: pointer;
@@ -37,30 +67,49 @@
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
+@media (max-width: 640px) {
+  .slider::-moz-range-thumb {
+    height: 20px;
+    width: 20px;
+  }
+}
+
 .dark .slider::-moz-range-thumb {
   border: 2px solid #f9fafb;
 }
 
 .slider::-webkit-slider-track {
-  height: 4px;
+  height: 6px;
   cursor: pointer;
-  background: #52525b;
+  background: #d1d5db;
   border-radius: 2px;
+}
+
+@media (max-width: 640px) {
+  .slider::-webkit-slider-track {
+    height: 8px;
+  }
 }
 
 .dark .slider::-webkit-slider-track {
-  background: #d1d5db;
+  background: #52525b;
 }
 
 .slider::-moz-range-track {
-  height: 4px;
+  height: 6px;
   cursor: pointer;
-  background: #52525b;
+  background: #d1d5db;
   border-radius: 2px;
 }
 
+@media (max-width: 640px) {
+  .slider::-moz-range-track {
+    height: 8px;
+  }
+}
+
 .dark .slider::-moz-range-track {
-  background: #d1d5db;
+  background: #52525b;
 }
 
 /* Hide scrollbar for thumbnails */
@@ -71,4 +120,52 @@
 
 .scrollbar-hide::-webkit-scrollbar {
   display: none;
+}
+
+/* Mobile-optimized scrollbars */
+@media (max-width: 768px) {
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+  
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 4px;
+  }
+  
+  .dark ::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+  }
+}
+
+/* Improved touch targets for mobile */
+@media (hover: none) and (pointer: coarse) {
+  button, 
+  [role="button"],
+  input[type="button"],
+  input[type="submit"] {
+    min-height: 44px;
+    min-width: 44px;
+  }
+  
+  /* Larger tap targets for small icons */
+  .icon-button {
+    padding: 12px;
+  }
+}
+
+/* Prevent zoom on input focus on iOS */
+@media screen and (max-width: 768px) {
+  input[type="text"],
+  input[type="email"],
+  input[type="password"],
+  input[type="url"],
+  textarea,
+  select {
+    font-size: 16px;
+  }
 }

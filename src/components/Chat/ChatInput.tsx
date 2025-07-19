@@ -79,8 +79,8 @@ const ChatInput: React.FC<ChatInputProps> = ({ onSendMessage, disabled = false }
   const isTextDisabled = disabled || (!message.trim());
 
   return (
-    <div className="border-t border-gray-300 dark:border-zinc-700 p-4 bg-white dark:bg-zinc-800 shadow-lg">
-      <form className="flex items-center space-x-3">
+    <div className="border-t border-gray-300 dark:border-zinc-700 p-2 sm:p-4 bg-white dark:bg-zinc-800 shadow-lg">
+      <form className="flex items-center space-x-2 sm:space-x-3">
         {/* Upload Image Button - Moved to left side */}
         <motion.button
           type="button"
@@ -96,9 +96,9 @@ const ChatInput: React.FC<ChatInputProps> = ({ onSendMessage, disabled = false }
           title="Attach image"
         >
           {isUploading ? (
-            <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+            <div className="w-3 h-3 sm:w-4 sm:h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
           ) : (
-            <Upload size={18} />
+            <Upload size={16} className="sm:w-[18px] sm:h-[18px]" />
           )}
         </motion.button>
 
@@ -108,7 +108,7 @@ const ChatInput: React.FC<ChatInputProps> = ({ onSendMessage, disabled = false }
           value={message}
           onChange={(e) => setMessage(e.target.value)}
           placeholder="iMessage"
-          className="flex-1 p-3 border border-gray-300 dark:border-zinc-600 bg-gray-100 dark:bg-zinc-700 text-gray-900 dark:text-zinc-100 placeholder-gray-500 dark:placeholder-zinc-400 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+          className="flex-1 p-2 sm:p-3 text-sm sm:text-base border border-gray-300 dark:border-zinc-600 bg-gray-100 dark:bg-zinc-700 text-gray-900 dark:text-zinc-100 placeholder-gray-500 dark:placeholder-zinc-400 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
           disabled={disabled}
           onKeyDown={(e) => {
             if (e.key === 'Enter' && !e.shiftKey) {
@@ -134,7 +134,7 @@ const ChatInput: React.FC<ChatInputProps> = ({ onSendMessage, disabled = false }
           whileHover={!disabled ? { scale: 1.05 } : {}}
           title="Request image generation"
         >
-          <Image size={18} />
+          <Image size={16} className="sm:w-[18px] sm:h-[18px]" />
         </motion.button>
 
         {/* Text Message Button */}
@@ -151,7 +151,7 @@ const ChatInput: React.FC<ChatInputProps> = ({ onSendMessage, disabled = false }
           whileHover={!isTextDisabled ? { scale: 1.05 } : {}}
           title="Send text message"
         >
-          <MessageSquare size={18} />
+          <MessageSquare size={16} className="sm:w-[18px] sm:h-[18px]" />
         </motion.button>
 
         {/* Hidden file input */}

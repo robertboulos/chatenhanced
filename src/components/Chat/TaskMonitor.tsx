@@ -60,12 +60,12 @@ const TaskMonitor: React.FC<TaskMonitorProps> = ({ tasks, onClearCompleted }) =>
   if (tasks.length === 0) return null;
 
   return (
-    <div className="fixed bottom-4 right-4 w-72 max-w-[calc(100vw-2rem)] max-h-80 bg-white dark:bg-zinc-800 border border-gray-300 dark:border-zinc-700 rounded-lg shadow-xl overflow-hidden z-30">
+    <div className="fixed bottom-2 sm:bottom-4 right-2 sm:right-4 w-64 sm:w-72 max-w-[calc(100vw-1rem)] sm:max-w-[calc(100vw-2rem)] max-h-64 sm:max-h-80 bg-white dark:bg-zinc-800 border border-gray-300 dark:border-zinc-700 rounded-lg shadow-xl overflow-hidden z-30">
       {/* Header */}
-      <div className="flex items-center justify-between p-3 bg-gray-100 dark:bg-zinc-900/50 border-b border-gray-300 dark:border-zinc-700">
+      <div className="flex items-center justify-between p-2 sm:p-3 bg-gray-100 dark:bg-zinc-900/50 border-b border-gray-300 dark:border-zinc-700">
         <div className="flex items-center space-x-2">
           <Loader2 className="w-4 h-4 text-indigo-500 dark:text-indigo-400" />
-          <h3 className="text-sm font-medium text-gray-900 dark:text-zinc-200">AI Tasks</h3>
+          <h3 className="text-xs sm:text-sm font-medium text-gray-900 dark:text-zinc-200">AI Tasks</h3>
           {activeTasks.length > 0 && (
             <span className="px-2 py-0.5 bg-blue-600 text-white text-xs rounded-full">
               {activeTasks.length}
@@ -78,13 +78,14 @@ const TaskMonitor: React.FC<TaskMonitorProps> = ({ tasks, onClearCompleted }) =>
             onClick={onClearCompleted}
             className="text-xs text-gray-600 dark:text-zinc-400 hover:text-gray-900 dark:hover:text-zinc-200 transition-colors"
           >
-            Clear completed
+            <span className="hidden sm:inline">Clear completed</span>
+            <span className="sm:hidden">Clear</span>
           </button>
         )}
       </div>
 
       {/* Task List */}
-      <div className="max-h-64 overflow-y-auto">
+      <div className="max-h-48 sm:max-h-64 overflow-y-auto">
         <AnimatePresence>
           {tasks.slice(0, 5).map((task) => {
             const Icon = getTaskIcon(task.type);
@@ -95,32 +96,32 @@ const TaskMonitor: React.FC<TaskMonitorProps> = ({ tasks, onClearCompleted }) =>
                 initial={{ opacity: 0, x: 20 }}
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: -20 }}
-                className="p-3 border-b border-gray-300 dark:border-zinc-700 last:border-b-0"
+                className="p-2 sm:p-3 border-b border-gray-300 dark:border-zinc-700 last:border-b-0"
               >
-                <div className="flex items-center space-x-3">
+                <div className="flex items-center space-x-2 sm:space-x-3">
                   <div className="flex-shrink-0">
                     {task.status === 'processing' && (
-                      <Loader2 className="w-4 h-4 text-blue-500 animate-spin" />
+                      <Loader2 className="w-3 h-3 sm:w-4 sm:h-4 text-blue-500 animate-spin" />
                     )}
                     {task.status === 'completed' && (
-                      <CheckCircle className="w-4 h-4 text-green-500" />
+                      <CheckCircle className="w-3 h-3 sm:w-4 sm:h-4 text-green-500" />
                     )}
                     {task.status === 'failed' && (
-                      <XCircle className="w-4 h-4 text-red-500" />
+                      <XCircle className="w-3 h-3 sm:w-4 sm:h-4 text-red-500" />
                     )}
                   </div>
                   
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center space-x-2">
-                      <Icon className="w-3 h-3 text-gray-600 dark:text-zinc-400" />
-                      <span className="text-sm font-medium text-gray-900 dark:text-zinc-200 truncate">
+                      <Icon className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-gray-600 dark:text-zinc-400" />
+                      <span className="text-xs sm:text-sm font-medium text-gray-900 dark:text-zinc-200 truncate">
                         {getTaskLabel(task.type)}
                       </span>
                     </div>
                     
                     {task.status === 'processing' && task.progress !== undefined && (
                       <div className="mt-1">
-                        <div className="w-full bg-zinc-600 rounded-full h-1">
+                        <div className="w-full bg-gray-300 dark:bg-zinc-600 rounded-full h-1">
                           <motion.div
                             className="bg-blue-500 h-1 rounded-full"
                             initial={{ width: 0 }}

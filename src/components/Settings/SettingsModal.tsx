@@ -44,20 +44,20 @@ const SettingsModal: React.FC<SettingsModalProps> = ({
             animate={{ y: 0, opacity: 1 }}
             exit={{ y: 20, opacity: 0 }}
             transition={{ type: 'spring', damping: 25 }}
-            className="bg-white dark:bg-zinc-800 border border-gray-300 dark:border-zinc-700 rounded-lg shadow-xl max-w-md w-full"
+            className="bg-white dark:bg-zinc-800 border border-gray-300 dark:border-zinc-700 rounded-lg shadow-xl max-w-sm sm:max-w-md w-full mx-2 sm:mx-0"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="flex justify-between items-center border-b border-gray-300 dark:border-zinc-700 p-4">
-              <h2 className="text-xl font-semibold text-gray-900 dark:text-zinc-100">Settings</h2>
+            <div className="flex justify-between items-center border-b border-gray-300 dark:border-zinc-700 p-3 sm:p-4">
+              <h2 className="text-lg sm:text-xl font-semibold text-gray-900 dark:text-zinc-100">Settings</h2>
               <button
                 onClick={onClose}
                 className="text-gray-600 dark:text-zinc-400 hover:text-gray-900 dark:hover:text-zinc-200 transition-colors"
               >
-                <X size={20} />
+                <X size={18} className="sm:w-5 sm:h-5" />
               </button>
             </div>
             
-            <div className="p-4">
+            <div className="p-3 sm:p-4">
               <WebhookForm 
                 config={config}
                 onSave={handleSaveWebhook}
