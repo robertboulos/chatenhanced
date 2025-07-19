@@ -35,6 +35,7 @@ interface ChatContainerProps {
   onUpdateCompanion: (companionId: string, updates: Partial<CompanionPreset>) => void;
   onDuplicateCompanion: (companionId: string) => CompanionPreset | null;
   onDeleteCompanion: (companionId: string) => boolean;
+  onOpenAdvancedControls: () => void;
 }
 
 const ChatContainer: React.FC<ChatContainerProps> = ({
@@ -55,6 +56,7 @@ const ChatContainer: React.FC<ChatContainerProps> = ({
   onUpdateCompanion,
   onDuplicateCompanion,
   onDeleteCompanion,
+  onOpenAdvancedControls,
 }) => {
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [isCompanionEditorOpen, setIsCompanionEditorOpen] = useState(false);
@@ -150,6 +152,7 @@ const ChatContainer: React.FC<ChatContainerProps> = ({
       <ChatInput 
         onSendMessage={handleSendMessage}
         disabled={loading || streamingState?.isStreaming}
+        onOpenAdvancedControls={onOpenAdvancedControls}
       />
       
       {/* Settings Modal */}

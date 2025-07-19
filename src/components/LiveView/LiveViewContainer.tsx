@@ -1,6 +1,5 @@
 import React from 'react';
 import ProfileImageDisplay from '../ProfileDisplay/ProfileImageDisplay';
-import LiveViewControls from './LiveViewControls';
 
 interface LiveViewContainerProps {
   images: string[];
@@ -21,29 +20,16 @@ const LiveViewContainer: React.FC<LiveViewContainerProps> = ({
   onSendMessage,
   disabled = false,
 }) => {
-  const currentImageUrl = images[currentIndex];
 
   return (
-    <div className="h-full flex flex-col space-y-3 overflow-hidden">
-      {/* Profile Image Display - Takes most of the space */}
-      <div className="flex-1 min-h-0 overflow-hidden">
-        <ProfileImageDisplay
-          images={images}
-          currentIndex={currentIndex}
-          onImageChange={onImageChange}
-          pinnedIndex={pinnedIndex}
-          onTogglePin={onTogglePin}
-        />
-      </div>
-      
-      {/* Live View Controls - Compact at bottom */}
-      <div className="flex-shrink-0">
-        <LiveViewControls
-          onSendMessage={onSendMessage}
-          currentImageUrl={currentImageUrl}
-          disabled={disabled}
-        />
-      </div>
+    <div className="h-full overflow-hidden">
+      <ProfileImageDisplay
+        images={images}
+        currentIndex={currentIndex}
+        onImageChange={onImageChange}
+        pinnedIndex={pinnedIndex}
+        onTogglePin={onTogglePin}
+      />
     </div>
   );
 };

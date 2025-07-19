@@ -1,14 +1,15 @@
 import React, { useState, FormEvent, useRef, useEffect } from 'react';
-import { MessageSquare, Image, Upload } from 'lucide-react';
+import { MessageSquare, Image, Upload, Sliders } from 'lucide-react';
 import { motion } from 'framer-motion';
 import toast from 'react-hot-toast';
 
 interface ChatInputProps {
   onSendMessage: (message: string, requestType: 'text' | 'image', imageData?: string) => void;
   disabled?: boolean;
+  onOpenAdvancedControls: () => void;
 }
 
-const ChatInput: React.FC<ChatInputProps> = ({ onSendMessage, disabled = false }) => {
+const ChatInput: React.FC<ChatInputProps> = ({ onSendMessage, disabled = false, onOpenAdvancedControls }) => {
   const [message, setMessage] = useState('');
   const [isUploading, setIsUploading] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -81,7 +82,24 @@ const ChatInput: React.FC<ChatInputProps> = ({ onSendMessage, disabled = false }
   return (
     <div className="border-t border-gray-300 dark:border-zinc-700 p-2 sm:p-4 bg-white dark:bg-zinc-800 shadow-lg">
       <form className="flex items-center space-x-2 sm:space-x-3">
-        {/* Upload Image Button - Moved to left side */}
+        {/* AI Controls Button - Mobile only */}
+        <motion.button
+          type="button"
+          onClick={onOpenAdvancedControls}
+          className={`lg:hidden ${buttonBaseClasses} ${
+            disabled
+              ? 'bg-gray-400 dark:bg-zinc-600 text-gray-500 dark:text-zinc-400 cursor-not-allowed'
+              : 'bg-indigo-500 text-white hover:bg-indigo-600 shadow-md hover:shadow-lg'
+          }`}
+          disabled={disabled}
+          whileTap={!disabled ? { scale: 0.95 } : {}}
+          whileHover={!disabled ? { scale: 1.05 } : {}}
+          title="AI Generation Controls"
+        >
+          <Sliders size={16} className="sm:w-[18px] sm:h-[18px]" />
+        </motion.button>
+
+        {/* Upload Image Button */}
         <motion.button
           type="button"
           onClick={() => fileInputRef.current?.click()}

@@ -12,9 +12,11 @@ import { useCompanions } from './hooks/useCompanions';
 import { useTheme } from './hooks/useTheme';
 import { Toaster } from 'react-hot-toast';
 import { StylePreset } from './types/companions';
+import { motion, AnimatePresence } from 'framer-motion';
 
 function App() {
   const { theme, toggleTheme } = useTheme();
+  const [isAdvancedControlsOpen, setIsAdvancedControlsOpen] = React.useState(false);
   
   const {
     images,
@@ -87,6 +89,14 @@ function App() {
     sendMessage(message, requestType, imageData, currentImageUrl);
   };
 
+  const handleOpenAdvancedControls = () => {
+    setIsAdvancedControlsOpen(true);
+  };
+
+  const handleCloseAdvancedControls = () => {
+    setIsAdvancedControlsOpen(false);
+  };
+
   const handleGenerate = async (
     prompt: string, 
     type: 'text-to-image' | 'image-to-image', 
@@ -141,8 +151,8 @@ function App() {
           />
         </div>
         
-        {/* AI Generation Controls - Fixed at bottom */}
-        <div className="flex-shrink-0 p-2 sm:p-4 pt-0">
+        {/* Desktop AI Generation Controls - Fixed at bottom, hidden on mobile */}
+        <div className="hidden lg:block flex-shrink-0 p-2 sm:p-4 pt-0">
           <AdvancedControls
             companion={activeCompanion}
             onGenerate={handleGenerate}
@@ -152,6 +162,8 @@ function App() {
             onClearCompleted={clearCompletedGenerations}
             currentImageUrl={currentImageUrl}
             disabled={waiting}
+            isModal={false}
+            onClose={() => {}}
           />
         </div>
       </div>
@@ -176,8 +188,44 @@ function App() {
           onUpdateCompanion={updateCompanion}
           onDuplicateCompanion={duplicateCompanion}
           onDeleteCompanion={deleteCompanion}
+          onOpenAdvancedControls={handleOpenAdvancedControls}
         />
       </div>
+
+      {/* Mobile Advanced Controls Modal */}
+      <AnimatePresence>
+        {isAdvancedControlsOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black/50 z-50 lg:hidden"
+            onClick={handleCloseAdvancedControls}
+          >
+            <motion.div
+              initial={{ y: '100%' }}
+              animate={{ y: 0 }}
+              exit={{ y: '100%' }}
+              transition={{ type: 'spring', damping: 25, stiffness: 300 }}
+              className="absolute bottom-0 left-0 right-0 bg-white dark:bg-zinc-800 rounded-t-2xl max-h-[85vh] overflow-hidden"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <AdvancedControls
+                companion={activeCompanion}
+                onGenerate={handleGenerate}
+                generationQueue={generationQueue}
+                onCancelGeneration={cancelGeneration}
+                onRetryGeneration={retryGeneration}
+                onClearCompleted={clearCompletedGenerations}
+                currentImageUrl={currentImageUrl}
+                disabled={waiting}
+                isModal={true}
+                onClose={handleCloseAdvancedControls}
+              />
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Task Monitor - Fixed position overlay */}
       <TaskMonitor 
