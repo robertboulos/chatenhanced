@@ -16,9 +16,16 @@ const defaultCompanions: CompanionPreset[] = [
       cfg_scale: 7.5,
       steps: 30,
       dimensions: '1024x1024',
+      sampler: 'DPM++ 2M Karras',
+      seed: -1,
       style_preset: 'photographic',
       loras: [],
       negative_prompt: 'blurry, low quality, distorted'
+    },
+    voiceSettings: {
+      voice_id: 'alloy',
+      speed: 1.0,
+      format: 'mp3'
     },
     createdAt: Date.now(),
     lastUsed: Date.now()
@@ -36,9 +43,16 @@ const defaultCompanions: CompanionPreset[] = [
       cfg_scale: 8.5,
       steps: 50,
       dimensions: '1024x1024',
+      sampler: 'Euler a',
+      seed: -1,
       style_preset: 'artistic',
       loras: [],
       negative_prompt: 'ugly, deformed, low quality'
+    },
+    voiceSettings: {
+      voice_id: 'nova',
+      speed: 1.1,
+      format: 'mp3'
     },
     createdAt: Date.now(),
     lastUsed: Date.now()
@@ -56,9 +70,16 @@ const defaultCompanions: CompanionPreset[] = [
       cfg_scale: 7.0,
       steps: 40,
       dimensions: '1024x1024',
+      sampler: 'DPM++ SDE Karras',
+      seed: -1,
       style_preset: 'photographic',
       loras: [],
       negative_prompt: 'cartoon, anime, painting, sketch'
+    },
+    voiceSettings: {
+      voice_id: 'onyx',
+      speed: 0.9,
+      format: 'mp3'
     },
     createdAt: Date.now(),
     lastUsed: Date.now()
@@ -133,9 +154,16 @@ export const createCompanion = (
       cfg_scale: 7.5,
       steps: 30,
       dimensions: '1024x1024',
+      sampler: 'DPM++ 2M Karras',
+      seed: -1,
       style_preset: 'balanced',
       loras: [],
       negative_prompt: 'low quality, blurry'
+    },
+    voiceSettings: {
+      voice_id: 'alloy',
+      speed: 1.0,
+      format: 'mp3'
     },
     createdAt: Date.now(),
     lastUsed: Date.now()

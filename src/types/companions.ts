@@ -11,6 +11,8 @@ export interface CompanionPreset {
     cfg_scale: number;
     steps: number;
     dimensions: string;
+    sampler: string;
+    seed: number;
     loras: Array<{ id: number; weight: number; }>;
     negative_prompt: string;
     style_preset?: string;
@@ -18,6 +20,7 @@ export interface CompanionPreset {
   voiceSettings?: {
     voice_id: string;
     speed: number;
+    format: string;
   };
   createdAt: number;
   lastUsed: number;

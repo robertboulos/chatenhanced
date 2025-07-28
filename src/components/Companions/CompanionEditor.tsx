@@ -24,6 +24,23 @@ const STYLE_PRESETS = [
   { id: 'cinematic', name: 'Cinematic', description: 'Movie-like quality' },
 ];
 
+const SAMPLER_OPTIONS = [
+  { id: 'DPM++ 2M Karras', name: 'DPM++ 2M Karras', description: 'Balanced quality and speed' },
+  { id: 'Euler a', name: 'Euler a', description: 'Fast and creative' },
+  { id: 'DPM++ SDE Karras', name: 'DPM++ SDE Karras', description: 'High quality, slower' },
+  { id: 'DDIM', name: 'DDIM', description: 'Deterministic sampling' },
+  { id: 'UniPC', name: 'UniPC', description: 'Fast convergence' },
+];
+
+const VOICE_OPTIONS = [
+  { id: 'alloy', name: 'Alloy', description: 'Neutral and clear' },
+  { id: 'echo', name: 'Echo', description: 'Male voice' },
+  { id: 'fable', name: 'Fable', description: 'British male' },
+  { id: 'onyx', name: 'Onyx', description: 'Deep male voice' },
+  { id: 'nova', name: 'Nova', description: 'Female voice' },
+  { id: 'shimmer', name: 'Shimmer', description: 'Soft female voice' },
+];
+
 const CompanionEditor: React.FC<CompanionEditorProps> = ({
   isOpen,
   onClose,
@@ -44,6 +61,8 @@ const CompanionEditor: React.FC<CompanionEditorProps> = ({
       cfg_scale: 7.5,
       steps: 30,
       dimensions: '1024x1024',
+      sampler: 'DPM++ 2M Karras',
+      seed: -1,
       style_preset: 'photographic',
       loras: [] as Array<{ id: number; weight: number; }>,
       negative_prompt: '',
@@ -51,6 +70,7 @@ const CompanionEditor: React.FC<CompanionEditorProps> = ({
     voiceSettings: {
       voice_id: '',
       speed: 1.0,
+      format: 'mp3',
     },
   });
 
@@ -83,6 +103,8 @@ const CompanionEditor: React.FC<CompanionEditorProps> = ({
           cfg_scale: 7.5,
           steps: 30,
           dimensions: '1024x1024',
+          sampler: 'DPM++ 2M Karras',
+          seed: -1,
           style_preset: 'photographic',
           loras: [],
           negative_prompt: 'low quality, blurry',
@@ -90,6 +112,7 @@ const CompanionEditor: React.FC<CompanionEditorProps> = ({
         voiceSettings: {
           voice_id: '',
           speed: 1.0,
+          format: 'mp3',
         },
       });
     }
@@ -386,6 +409,59 @@ const CompanionEditor: React.FC<CompanionEditorProps> = ({
                     </select>
                   </div>
 
+                  {/* Sampler */}
+                  <div>
+                    <label className="block text-xs sm:text-sm font-medium text-gray-700 dark:text-zinc-300 mb-2">
+                      Sampler
+                    </label>
+                    <select
+                      value={formData.generationDefaults.sampler}
+                      onChange={(e) => updateGenerationDefaults('sampler', e.target.value)}
+                      className="w-full px-2 sm:px-3 py-2 text-sm sm:text-base bg-gray-50 dark:bg-zinc-700 text-gray-900 dark:text-zinc-100 rounded border border-gray-300 dark:border-zinc-600 focus:border-indigo-500 focus:outline-none"
+                    >
+                      {SAMPLER_OPTIONS.map((sampler) => (
+                        <option key={sampler.id} value={sampler.id}>
+                          {sampler.name} - {sampler.description}
+                        </option>
+                      ))}
+                    </select>
+                    <p className="text-zinc-400 dark:text-gray-600 text-xs mt-1">
+                      Sampling method affects image quality and generation speed
+                    </p>
+                  </div>
+
+                  {/* Seed */}
+                  <div>
+                    <label className="flex items-center justify-between text-xs sm:text-sm font-medium text-gray-700 dark:text-zinc-300 mb-2">
+                      <span>Seed</span>
+                      <span className="text-gray-600 dark:text-zinc-400">
+                        {formData.generationDefaults.seed === -1 ? 'Random' : formData.generationDefaults.seed}
+                      </span>
+                    </label>
+                    <div className="flex space-x-2">
+                      <input
+                        type="number"
+                        value={formData.generationDefaults.seed === -1 ? '' : formData.generationDefaults.seed}
+                        onChange={(e) => {
+                          const value = e.target.value === '' ? -1 : parseInt(e.target.value);
+                          updateGenerationDefaults('seed', value);
+                        }}
+                        placeholder="Random"
+                        className="flex-1 px-2 sm:px-3 py-2 text-sm sm:text-base bg-gray-50 dark:bg-zinc-700 text-gray-900 dark:text-zinc-100 rounded border border-gray-300 dark:border-zinc-600 focus:border-indigo-500 focus:outline-none"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => updateGenerationDefaults('seed', Math.floor(Math.random() * 2147483647))}
+                        className="px-3 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded text-sm transition-colors"
+                      >
+                        Random
+                      </button>
+                    </div>
+                    <p className="text-zinc-400 dark:text-gray-600 text-xs mt-1">
+                      Use -1 for random seed, or specify a number for reproducible results
+                    </p>
+                  </div>
+
                   {/* LoRA Models */}
                   <div>
                     <label className="block text-xs sm:text-sm font-medium text-gray-700 dark:text-zinc-300 mb-2">
@@ -490,13 +566,15 @@ const CompanionEditor: React.FC<CompanionEditorProps> = ({
                       className="w-full px-2 sm:px-3 py-2 text-sm sm:text-base bg-gray-50 dark:bg-zinc-700 text-gray-900 dark:text-zinc-100 rounded border border-gray-300 dark:border-zinc-600 focus:border-indigo-500 focus:outline-none"
                     >
                       <option value="">Select Voice</option>
-                      <option value="alloy">Alloy (Neutral)</option>
-                      <option value="echo">Echo (Male)</option>
-                      <option value="fable">Fable (British Male)</option>
-                      <option value="onyx">Onyx (Deep Male)</option>
-                      <option value="nova">Nova (Female)</option>
-                      <option value="shimmer">Shimmer (Soft Female)</option>
+                      {VOICE_OPTIONS.map((voice) => (
+                        <option key={voice.id} value={voice.id}>
+                          {voice.name} - {voice.description}
+                        </option>
+                      ))}
                     </select>
+                    <p className="text-zinc-400 dark:text-gray-600 text-xs mt-1">
+                      Choose the voice for this companion's audio responses
+                    </p>
                   </div>
 
                   {/* Speed */}
@@ -514,6 +592,31 @@ const CompanionEditor: React.FC<CompanionEditorProps> = ({
                       onChange={(e) => updateVoiceSettings('speed', parseFloat(e.target.value))}
                       className="w-full h-2 bg-gray-300 dark:bg-zinc-700 rounded-lg appearance-none cursor-pointer slider"
                     />
+                    <div className="flex justify-between text-xs text-gray-500 dark:text-zinc-500 mt-1">
+                      <span>0.5x</span>
+                      <span>Normal</span>
+                      <span>2.0x</span>
+                    </div>
+                  </div>
+
+                  {/* Audio Format */}
+                  <div>
+                    <label className="block text-xs sm:text-sm font-medium text-gray-700 dark:text-zinc-300 mb-2">
+                      Audio Format
+                    </label>
+                    <select
+                      value={formData.voiceSettings.format}
+                      onChange={(e) => updateVoiceSettings('format', e.target.value)}
+                      className="w-full px-2 sm:px-3 py-2 text-sm sm:text-base bg-gray-50 dark:bg-zinc-700 text-gray-900 dark:text-zinc-100 rounded border border-gray-300 dark:border-zinc-600 focus:border-indigo-500 focus:outline-none"
+                    >
+                      <option value="mp3">MP3 (Recommended)</option>
+                      <option value="opus">Opus (High Quality)</option>
+                      <option value="aac">AAC (Apple Compatible)</option>
+                      <option value="flac">FLAC (Lossless)</option>
+                    </select>
+                    <p className="text-zinc-400 dark:text-gray-600 text-xs mt-1">
+                      Audio format for voice responses
+                    </p>
                   </div>
                 </div>
               </div>
